@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: '刷题测试' });
+  res.render('perques', { title: '单页面刷' });
 });
 
 module.exports = router;

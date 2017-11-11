@@ -11,6 +11,7 @@ var config = {
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var perques = require('./routes/perquestion');
 
 var app = express();
 
@@ -28,12 +29,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/perques', perques);
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {
   // 微信输入信息都在req.weixin上
   var message = req.weixin;
   console.log(message)
+  //console.log(req)
+  //console.log(req.wechat_token)
   var cnt = message.Content
   if (cnt === 'hehe') {
     // 回复屌丝(普通回复)
@@ -43,15 +47,19 @@ app.use('/wechat', wechat(config, function (req, res, next) {
   } else if (cnt === 'text') {
     //你也可以这样回复text类型的信息
     res.reply({
-      content: 'text object',
+      content: 'https://github.com/ruanee',
       type: 'text'
     });
   } else if (cnt === '刷题') {
     // 回复一段音乐
-    res.reply({
-      content: '1. 下面哪些是Thread类的方法（） \r\n A start()       B run()       C exit()       D getPriority()',
-      type: 'text'
-    });
+    res.reply([
+      {
+        title: '全屏答题',
+        description: '选择题',
+        picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
+        url: 'http://ruanee.hk1.mofasuidao.cn/perques'
+      }
+    ]);
   } else {
     // 回复高富帅(图文回复)
     res.reply([

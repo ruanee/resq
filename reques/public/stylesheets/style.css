@@ -1,8 +1,13 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.page__code {
+    margin-left: 8px;
+    background-color: #fbedbb!important;
+    border: #c0c0c0 1px solid;
+    border-radius: 6px 6px 6px 6px;
+    padding: 5px;
 }
-
-a {
-  color: #00B7FF;
+.page__code pre {
+    font-family: Courier New !important;
+    font-size: 12px !important;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
