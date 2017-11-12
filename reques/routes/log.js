@@ -29,8 +29,8 @@ exports.saveQuestion = function(data) {
 		data.id = guid();
 	}
 	console.log(data)
-	db.asyncInsert('insert into questions(id, type, title, code, choices, answer,  mod_date) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title, type=EXCLUDED.type, code=EXCLUDED.code, choices=EXCLUDED.choices, answer=EXCLUDED.answer, mod_date=EXCLUDED.mod_date', 
-			[data.id,data.type,data.title,data.code,data.choices,data.answer,new Date()])
+	db.asyncInsert('insert into questions(id, type, title, code, choices, answer,active, create_date, mod_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title, type=EXCLUDED.type, code=EXCLUDED.code, choices=EXCLUDED.choices, answer=EXCLUDED.answer,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
+			[data.id,data.type,data.title,data.code,data.choices,data.answer,data.active,new Date(),new Date()])
 	return data;
 };
 function buildParams(req, type) {

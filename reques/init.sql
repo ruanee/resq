@@ -25,9 +25,12 @@ CREATE TABLE public.questions
   type character varying(255),
   title text,
   code text,
+  choices jsonb,
   answer jsonb,
   user_name character varying(255),
+  create_date timestamp with time zone,
   mod_date timestamp with time zone,
+  active character varying(1),
   CONSTRAINT questions_pkey PRIMARY KEY (id)
 )
 WITH (

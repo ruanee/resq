@@ -31,6 +31,8 @@ function saveQuestion() {
 	answer['explain'] = document.getElementById('explain').value;
 	data.answer = answer;
 	
+	data.active='T';
+	
 	postData("questions", data);
 	
 	return data;
