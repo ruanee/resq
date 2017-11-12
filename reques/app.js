@@ -12,6 +12,7 @@ var config = {
 var index = require('./routes/index');
 var users = require('./routes/users');
 var perques = require('./routes/perquestion');
+var questions = require('./routes/questions');
 
 var app = express();
 
@@ -26,10 +27,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'files')));
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/perques', perques);
+app.use('/questions', questions);
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {
