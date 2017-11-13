@@ -1,0 +1,36 @@
+extends header
+
+block content
+    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+      h2 试卷
+      div
+          textarea(id="items",style="display:none;")= JSON.stringify(rows)
+      div(class="table-responsive")
+        table(id="table1" class="table table-hover")
+          thead
+            tr
+              th
+                  button(class="btn btn-info" onclick="paper(this)") 添加
+              th 编号
+              th 考题
+              th 创建时间
+          tbody
+            each row in rows
+                tr
+                each val, key in row
+                    if key == 'seq'
+                        td(scope="row",style="min-width:20px;max-width:40px;white-space:nowrap;overflow:hidden;") 
+                            button(id=row['id'],class="btn btn-info" onclick="paper(this)")= val
+                    else if key == 'code'
+                        td(scope="row",style="min-width:160px;max-width:300px;white-space:nowrap;overflow:hidden;")= val
+                    else if key == 'id' || key == 'answer'
+                        //td(scope="row",style="display:none;")= val
+                    else
+                        td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
+    
+        //include footer
+    script(src="/javascripts/quest.js")
+    script(src="/javascripts/jquery321min.js")
+    script(src="/javascripts/popper.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+    

@@ -1,0 +1,21 @@
+extends header
+
+block content
+    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+      h2 试卷
+      div
+          textarea(id="items",style="display:none;")= JSON.stringify(rows)
+      div.form-group
+        label 题目1
+        span volatile关键字是否能保证线程安全？
+      each row in rows
+        each val, key in row
+          div.form-group
+            label key
+            span val
+
+        //include footer
+    script(src="/javascripts/quest.js")
+    script(src="/javascripts/jquery321min.js")
+    script(src="/javascripts/popper.min.js")
+    script(src="/javascripts/bootstrap.min.js")

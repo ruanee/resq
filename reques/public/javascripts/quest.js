@@ -101,6 +101,9 @@ function postData(action,url, data, callback) {
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.send(data);
 }
+function paper(obj) {
+	window.location.href='/paper/id';
+}
 function editQuestion() {
 	  var buf = [];
 	  buf.push('<input id="id" type=hidden>');

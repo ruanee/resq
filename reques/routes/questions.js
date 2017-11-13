@@ -28,7 +28,7 @@ router.post('/', function(req, res, next) {
 //	console.log(req.body)
 	var data = log.save(req, 'edit')
 	log.saveQuestion(data);
-	res.jsonp({message: "Question is updated succesfully", code: data['title']});
+	res.jsonp({message: "Question is saved/updated succesfully", code: data['title']});
 });
 router.delete('/', function(req, res, next) {
 	console.log(req.body)
