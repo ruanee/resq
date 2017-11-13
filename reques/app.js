@@ -13,6 +13,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var perques = require('./routes/perquestion');
 var questions = require('./routes/questions');
+var paper = require('./routes/paper');
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/perques', perques);
 app.use('/questions', questions);
+app.use('/paper', paper);
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {

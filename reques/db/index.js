@@ -16,6 +16,7 @@ pool.on('error', (err, client) => {
   process.exit(-1)
 })
 module.exports = {
+  pool: pool,
   query: async (text, params) => {
 	  const client = await pool.connect()
 	  try {
@@ -25,6 +26,40 @@ module.exports = {
 	  } finally {
 		client.release()
 	  }
+	  return null;
+  },
+  querySync: (text, params) => {
+	  var rows = null;
+	  pool.connect()
+	  .then(client => {
+	    return client.query(text, params)
+	      .then(res => {
+	        client.release()
+	        console.log(res.rows[0])
+	        rows = res.rows;
+	      })
+	      .catch(e => {
+	        client.release()
+	        console.log(err.stack)
+	      })
+	  })
+	  return rows;
+  },
+  querySync2: (text, params) => {
+	  pool.connect((err, client, done) => {
+		  if (err) throw err
+		  client.query(text, params, (err, res) => {
+		    done()
+
+		    if (err) {
+		      console.log(err.stack)
+		    } else {
+//		      console.log(res.rows[0])
+		      return res.rows;
+		    }
+		  })
+		})
+	  
 	  return null;
   },
   asyncInsert: (text, params) => {

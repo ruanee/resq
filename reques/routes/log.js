@@ -24,6 +24,9 @@ exports.update = function(id, status, message) {
 		db.query('insert into request_log(id,status, msg) values ($1,$2,$3) ON CONFLICT (id) DO UPDATE SET status=EXCLUDED.status,msg=EXCLUDED.msg', [id, status, message])
 	}
 };
+exports.listQuestions = function() {
+	return db.querySync("SELECT title,code,choices,create_date FROM questions where active='T' order by type,create_date desc limit 5", [])
+};
 exports.saveQuestion = function(data) {
 	if(!data.id) {
 		data.id = guid();
@@ -33,9 +36,17 @@ exports.saveQuestion = function(data) {
 			[data.id,data.type,data.title,data.code,data.choices,data.answer,data.active,new Date(),new Date()])
 	return data;
 };
+exports.deleteQuestion = function(data) {
+	if(!data.id) {
+		return data;
+	}
+	console.log(data)
+	db.asyncInsert("update questions set active='F',mod_date=$1 where id=$2", [new Date(),data.id])
+	return data;
+};
 function buildParams(req, type) {
 	var data = {};
-	if(req.method == 'POST') {
+	if(req.method == 'POST' || req.method == 'DELETE') {
 		data = req.body
 	} else {
 		data = req.params
