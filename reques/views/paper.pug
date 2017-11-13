@@ -5,9 +5,16 @@ block content
       h2 试卷
       div
           textarea(id="items",style="display:none;")= JSON.stringify(rows)
-      div.form-group
+      div(class="form-group")
         label 题目1
-        span volatile关键字是否能保证线程安全？
+        textarea(class="form-control" rows="5") volatile关键字是否能保证线程安全？
+      div(class="input-group")
+        span(class="basic-addon1") A
+        input(class="form-control", value="能")
+      div(class="form-group row")
+        label(class="col-sm-2 col-form-label") B
+        div(class="col-sm-10")
+           input(class="form-control", value="不能")
       each row in rows
         each val, key in row
           div.form-group
