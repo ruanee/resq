@@ -11,11 +11,11 @@ router.get('/', function(req, res, next) {
 //  console.log(log.listQuestions())
 //  var ques = log.listQuestions();
    db.pool.connect().then(client => {
-    return client.query("SELECT row_number() OVER(ORDER BY create_date desc) seq,id,title,code,choices,answer,to_char(create_date,'yyyy-MM-dd') FROM questions where active='T'  order by type,create_date desc limit 5", [])
+    return client.query("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,title,code,choices,answer,to_char(create_date,'yyyy-MM-dd') FROM questions where active='T'  order by type,create_date desc limit 5", [])
       .then(result => {
         client.release()
-        console.log(result.rows[0])
-        res.render('questions', { title: '题目列表' , rows: result.rows, rowstr: JSON.stringify(result.rows)});
+        console.log(JSON.stringify(result.rows))
+        res.render('questions', { title: '题目列表' , rows: result.rows});
       })
       .catch(e => {
         client.release()

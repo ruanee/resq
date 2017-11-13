@@ -19,26 +19,59 @@ function submit() {
 function saveQuestion() {
 	var data = {}, choices = {}, answer = {};
 	data.type ='期末考题';
-	data.title = document.getElementById('title').value;
+	data.title = trimSpecial(document.getElementById('title').value);
 	data.code = '';
 //		document.getElementById('code').value;
 	var inputs = document.getElementsByTagName("INPUT");
 	for (var i = 0; i < inputs.length; i++) {
 		var id = inputs[i].id;
 		if(inputs[i].placeholder && id !='答案' && id !='id') {
-			choices[inputs[i].id] = inputs[i].value;
+			choices[inputs[i].id] = trimSpecial(inputs[i].value);
 		}
 	}
 	data.choices = choices;
-	answer['ans'] = document.getElementById('答案').value;
-	answer['explain'] = document.getElementById('explain').value;
+	answer['ans'] = trimSpecial(document.getElementById('答案').value);
+	answer['explain'] = trimSpecial(document.getElementById('explain').value);
 	data.answer = answer;
 	data.id = document.getElementById('id').value;
 	data.active='T';
 	
-	postData("POST", "questions", data);
+	postData("POST", "questions", data, function(obj) {
+		alert(JSON.parse(obj.response).message);
+		closePopup();
+		window.location.reload();
+	});
 	
 	return data;
+}
+function populateData(id) {
+	if(!id || id =='') return;
+	var row={}
+	  var rows = JSON.parse(document.getElementById('items').value);
+	  for (var i = 0; i < rows.length; i++) {
+		if(rows[i]['id'] == id) {
+			row = rows[i];
+			document.getElementById('id').value = row.id;
+			document.getElementById('title').value=row.title;
+			document.getElementById('答案').value=row.answer.ans;
+			document.getElementById('explain').value=row.answer.explain;
+			var choices = row.choices;
+			var inputs = document.getElementsByTagName("INPUT");
+			for (var i = 0; i < inputs.length; i++) {
+				var id = inputs[i].id;
+				if(inputs[i].placeholder && id !='答案' && id !='id') {
+					inputs[i].value=choices[inputs[i].id];
+				}
+			}
+			break;
+		}
+	  }
+}
+function trimSpecial(str) {
+	if(str) {
+		str = str.replaceAll("'", "\"");
+	}
+	return str;
 }
 function deleteQuestion() {
 	var data = {};
@@ -47,6 +80,8 @@ function deleteQuestion() {
 	postData("delete", "questions", data);
 	
 	closePopup();
+	
+	window.location.reload()
 	
 	return data;
 }
@@ -106,28 +141,6 @@ function editQuestion() {
       div.innerHTML = buf.join("");
       
       return div;
-}
-function populateData(id) {
-	var row={}
-	  var rows = JSON.parse(myDecodeURI(items.replaceAll('\"','')));
-	  for (var i = 0; i < rows.length; i++) {
-		if(rows[i]['id'] == id) {
-			row = rows[i];
-			document.getElementById('id').value = row.id;
-			document.getElementById('title').value=row.title;
-			document.getElementById('答案').value=row.answer.ans;
-			document.getElementById('explain').value=row.answer.explain;
-			var choices = row.choices;
-			var inputs = document.getElementsByTagName("INPUT");
-			for (var i = 0; i < inputs.length; i++) {
-				var id = inputs[i].id;
-				if(inputs[i].placeholder && id !='答案' && id !='id') {
-					inputs[i].value=choices[inputs[i].id];
-				}
-			}
-			break;
-		}
-	  }
 }
 function closePopup() {
 	var bgObj = document.getElementById("bgDiv");
@@ -274,7 +287,9 @@ function myDecodeURI(iStr) {
 	oStr = oStr.replace(/%7E/g,"~");
 	
 	oStr = oStr.replace(/%2C/g,",");
-	oStr = oStr.replace(/&quot;/g,"\"");
+	oStr = oStr.replace(/&quot;/g,'"');
+	oStr = oStr.replace(/\n/g,'\\n');
+	oStr = oStr.replace(/,/g,'\,');
 	oStr = decodeURI(oStr);
 	return oStr;
 }

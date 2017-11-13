@@ -1,14 +1,16 @@
 extends header
 
 block content
-    script var items= "#{rowstr}"
     main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
       h2 考题
+      div
+          textarea(id="items",style="display:none;")= JSON.stringify(rows)
       div(class="table-responsive")
         table(id="table1" class="table table-hover")
           thead
             tr
-              th #
+              th
+                  button(class="btn btn-info" onclick="popup(this)") 添加
               //th(style="display:none;") id
               th 题目
               //th 代码
