@@ -36,3 +36,19 @@ CREATE TABLE public.questions
 WITH (
   OIDS=FALSE
 );
+
+CREATE TABLE public.paper
+(
+  id character varying(255) NOT NULL,
+  type character varying(255),
+  code text,
+  questions jsonb,
+  user_name character varying(255),
+  create_date timestamp with time zone,
+  mod_date timestamp with time zone,
+  active character varying(1),
+  CONSTRAINT paper_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
