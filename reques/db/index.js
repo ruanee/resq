@@ -70,7 +70,7 @@ module.exports = {
 				await client.query(text, params,
 					function(err, result) {
 					  if(err)  {
-						  
+						  console.error(err)
 					  } else {
 //						  console.log(result.rowCount)
 					  }

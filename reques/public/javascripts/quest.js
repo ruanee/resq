@@ -25,7 +25,7 @@ function saveQuestion() {
 	var inputs = document.getElementsByTagName("INPUT");
 	for (var i = 0; i < inputs.length; i++) {
 		var id = inputs[i].id;
-		if(inputs[i].placeholder && id !='答案' && id !='id') {
+		if(inputs[i].placeholder && id !='答案' && id !='id' && inputs[i].id !='' && inputs[i].value !='') {
 			choices[inputs[i].id] = trimSpecial(inputs[i].value);
 		}
 	}
@@ -102,7 +102,7 @@ function postData(action,url, data, callback) {
     xhttp.send(data);
 }
 function paper(obj) {
-	window.location.href='/paper/id';
+	window.location.href='/paper/id?id='+obj.id;
 }
 function editQuestion() {
 	  var buf = [];

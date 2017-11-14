@@ -14,6 +14,7 @@ var users = require('./routes/users');
 var perques = require('./routes/perquestion');
 var questions = require('./routes/questions');
 var paper = require('./routes/paper');
+var exam = require('./routes/exam');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/users', users);
 app.use('/perques', perques);
 app.use('/questions', questions);
 app.use('/paper', paper);
+app.use('/exam', exam);
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {

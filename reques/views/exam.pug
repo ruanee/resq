@@ -10,9 +10,12 @@ html
     <script type="text/javascript" src="/javascripts/quest.js"></script>
     </head>
   <body ontouchstart>
+    div
+        textarea(id="items",style="display:none;")= JSON.stringify(rows)
     <p id="bear"></p>
     <div id="form">
         <div >
+            h2= rows.message
             <h3>6. 下面程序的运行结果：（）</h3>
             <div class="page__code">
             <pre>

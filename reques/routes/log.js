@@ -1,5 +1,6 @@
 const db = require('../db')
 const globals = require('../globals');
+var url = require('url');
 
 function guid() {
   function s4() {
@@ -44,12 +45,25 @@ exports.deleteQuestion = function(data) {
 	db.asyncInsert("update questions set active='F',mod_date=$1 where id=$2", [new Date(),data.id])
 	return data;
 };
+exports.savePaper = function(data) {
+	if(!data.id) {
+		data.id = guid();
+	}
+	console.log(data)
+	db.asyncInsert('insert into paper(id, type, title, questions,active, create_date, mod_date) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title,type=EXCLUDED.type, questions=EXCLUDED.questions,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
+			[data.id,data.type,data.title,data.questions,'T',new Date(),new Date()])
+	return data;
+};
 function buildParams(req, type) {
 	var data = {};
 	if(req.method == 'POST' || req.method == 'DELETE') {
 		data = req.body
 	} else {
 		data = req.params
+	}
+	var arg = url.parse(decodeURI(req.url),true).query;
+	for(var p in arg) {
+		data[p] = arg[p];
 	}
 //	data['__code'] = getCode(data, type);
 	data['__id'] = guid();
