@@ -12,7 +12,7 @@ block content
                   -idx++
                   div(style="margin-top: 15px;")
                       div(class="form-group")
-                        label 题目#{idx}
+                        h5 题目#{idx}
                         textarea(class="form-control" rows="5")= ques.title
                       div(class="row")
                           each chv, ch in ques.choices

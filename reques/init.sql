@@ -41,7 +41,7 @@ CREATE TABLE public.paper
 (
   id character varying(255) NOT NULL,
   type character varying(255),
-  code text,
+  title text,
   questions jsonb,
   user_name character varying(255),
   create_date timestamp with time zone,
