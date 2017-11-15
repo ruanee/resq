@@ -54,6 +54,15 @@ exports.savePaper = function(data) {
 			[data.id,data.type,data.title,data.questions,'T',new Date(),new Date()])
 	return data;
 };
+exports.saveExam = function(data) {
+	if(!data.id) {
+		data.id = guid();
+	}
+	console.log(data)
+	db.asyncInsert('insert into exam(paper, answer, token, user_name, create_date, mod_date) values ($1,$2,$3,$4,$5,$6) ON CONFLICT (paper,token) DO UPDATE SET answer=exam.answer || EXCLUDED.answer::jsonb, mod_date=EXCLUDED.mod_date', 
+			[data.paper,data.answer,data.token,'who',new Date(),new Date()])
+			return data;
+};
 function buildParams(req, type) {
 	var data = {};
 	if(req.method == 'POST' || req.method == 'DELETE') {

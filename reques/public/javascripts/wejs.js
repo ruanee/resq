@@ -1,6 +1,7 @@
 window.onload=function() {
 	submit('');
 }
+var ans = {}, qid="",token="";
 function populate(jst) {
 //	var data = JSON.parse(document.getElementById('items').innerHTML).data;
 	if(jst == '') return;
@@ -11,12 +12,44 @@ function populate(jst) {
 	} else {
 		data = row.rows.data;
 	}
-	document.getElementById('id').value = data.id;
+	clear();
+	//document.getElementById('id').value = data.id;
 	document.getElementById('page').value = row.page;
 	document.getElementById('title').innerHTML= (parseInt(row.page) + 1) + "." + data.title;
+	ans = data.answer;
+	qid = data.id;
+	token= row.token;
 	for (var p in data.choices) {
-		if(p && document.getElementById(p))
-			document.getElementById(p).innerHTML = data.choices[p];
+		if(p && document.getElementById(p)) {
+			document.getElementById('d'+p).innerHTML = data.choices[p];
+			document.getElementById('c'+p).style.display = '';
+		}
+	}
+	if(row.rows.uanswer && row.rows.uanswer[data.id]) {
+		var uans = row.rows.uanswer[data.id];
+		if(uans.ans) {
+			document.getElementById(uans.ans).checked = true;
+		}
+	}
+}
+function clear() {
+	ans = {};
+	qid="";
+	token="";
+	var inputs = document.getElementsByTagName('input');
+	for (var i = 0; i < inputs.length; i++) {
+		var it = inputs[i];
+		if(it.type =='checkbox') {
+			it.checked=false;
+		}
+	}
+	var chos = document.getElementsByClassName('weui-cell__bd');
+	for (var i = 0; i < chos.length; i++) {
+		chos[i].innerHTML = '';
+	}
+	var chos = document.getElementsByClassName('weui-cell weui-check__label');
+	for (var i = 0; i < chos.length; i++) {
+		chos[i].style.display = 'none';
 	}
 }
 function prev(){
@@ -30,12 +63,29 @@ function submit(direc) {
         if (!error) {
             var loading = weui.loading('提交中...');
             var data = {};
-            data.id = '6b592b36-d42a-6f5a-8a72-b809a76f9b83';
-//            	document.getElementById('id').value;
+//            data.id = '29ec671a-0e71-1bbd-f9a1-115ed2e01d95';
+            data.id = document.getElementById('id').value;
             data.page = document.getElementById('page').value;
             if(data.page == '')
             	data.page = 0;
             data.direction = direc;
+            var answer = "", anc = ""; 
+            var inputElements = document.getElementsByClassName('weui-check');
+            for(var i=0; inputElements[i]; ++i){
+                  if(inputElements[i].checked){
+                	  answer += inputElements[i].id;
+                	  anc += document.getElementById('d'+inputElements[i].id).innerHTML;
+                  }
+            }
+            data.answer=answer;
+            data.anc=anc;
+            data.qid=qid;
+            data.token=token;
+            if(direc && direc=='next' && ans.ans && answer != ans.ans) {
+        		weui.toast('正确答案是'+ans.ans, 1000);
+        		loading.hide();
+        		return;
+            }
             ajax('GET','/exam/go',data,function (obj) {
             	populate(obj.response)
                 loading.hide();
@@ -62,7 +112,6 @@ function ajax(action,url, data, callback) {
     	url = url +"?" + Object.keys(data).map(function(k) {
     	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
     	}).join('&');
-    	console.log(url);
     	data = null;
     } else {
     	data = JSON.stringify(data);

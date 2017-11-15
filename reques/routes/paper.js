@@ -9,7 +9,7 @@ const db = require('../db')
 		var data = log.save(req, 'paper')
    		db.pool.connect((err, client, done) => {
 		   if (err) throw err
-		   client.query("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,create_date desc limit 5", 
+		   client.query("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,create_date desc limit 20", 
 				   [], (err, result) => {
 			    done()
 			    if (err) {
@@ -43,17 +43,26 @@ const db = require('../db')
 	});
 	router.get('/generate', function(req, res, next) {
 		var data = log.save(req, 'paper')
+		console.log(data)
+		if(!data.type) {
+			res.render('paper', { title: 'type is required' , rows: {}});
+			return;
+		}
 		db.pool.connect((err, client, done) => {
 			if (err) throw err
-			client.query("select id,title,code,choices,answer FROM questions where active='T'", [], (err, result) => {
+			client.query("select id,title,code,choices,answer FROM questions where active='T' and type=$1", [data.type], (err, result) => {
 				done()
 				if (err) {
 					console.log(err.stack)
 				} else {
+			        if(result.rows.length == 0) {
+						res.render('paper', { title: 'no questions found' , rows: {}});
+			    	    return;
+			        }
 					console.log(result.rows[0])
 					var paper = {},questions=[], rows = result.rows;
-					paper.type="电商期末";
-					paper.title="卷B";
+					paper.type=data.type;
+					paper.title=data.type;
 //					for (var i = 0; i < rows.length; i++) {
 //						var jso = {};
 //						jso.id = rows[i].id;
@@ -70,7 +79,8 @@ const db = require('../db')
 					
 					log.savePaper(paper);
 					
-					res.render('paper', { title: '试卷' , rows: rows});
+//					res.render('papers', { title: '试卷列表' , rows: rows});
+					res.redirect('/paper');
 				}
 			})
 		})

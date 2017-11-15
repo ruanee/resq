@@ -124,6 +124,7 @@ function editQuestion() {
       buf.push(createChoice({code:'B'}));
       buf.push(createChoice({code:'C'}));
       buf.push(createChoice({code:'D'}));
+      buf.push(createChoice({code:'E'}));
       
       buf.push('</div>');
       
@@ -180,7 +181,7 @@ function createChoice(args) {
 function popup(obj){ 
 	   var msgw,msgh,bordercolor;
 	   msgw=400;//Width
-	   msgh=640;//Height 
+	   msgh=680;//Height 
 //	   titleheight=25 //title Height
 	   bordercolor="#336699";//boder color
 	   titlecolor="#99CCFF";//title color
@@ -206,7 +207,7 @@ function popup(obj){
 	   msgObj.style.border="1px solid " + bordercolor; 
 	   msgObj.style.position = "absolute"; 
 	   msgObj.style.left = "55%"; 
-	   msgObj.style.top = "20%"; 
+	   msgObj.style.top = "10%"; 
 	   msgObj.style.font="12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif"; 
 	   msgObj.style.marginLeft = "-225px" ; 
 	   msgObj.style.marginTop = -75+document.documentElement.scrollTop+"px"; 

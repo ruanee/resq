@@ -11,14 +11,14 @@ html
     </head>
   <body ontouchstart>
     div
-        textarea(id="items",style="display:none;")= JSON.stringify(rows)
-        input(id="page",type="hidden",value=page)
-        input(id="id",type="hidden")
+        textarea(id="items",style="display:none;")= JSON.stringify(pid)
+        input(id="page",type="hidden",value= page)
+        input(id="id",type="hidden",value= pid)
     <p id="bear"></p>
     <div id="form">
         <div>
             h2= message
-            <h3 id='title'>6. 下面程序的运行结果：（）</h3>
+            <h3 id='title'>题目</h3>
             <div class="page__code" id='code' style="display:none;">
             <pre>
             <span>public static void main(String args[]) {</span>
@@ -38,35 +38,42 @@ html
         </div>
 
 
-        <div class="weui-cells__title">请选择(1-2个)</div>
+        <div class="weui-cells__title">请选择</div>
         <div id='choHeader' class="weui-cells weui-cells_checkbox">
-            <label class="weui-cell weui-check__label" for="c1">
+            <label class="weui-cell weui-check__label" for="A" id="cA">
                 <div class="weui-cell__hd">
-                    <input type="checkbox" tips="请勾选1-2个答案" class="weui-check" name="assistance" id="c1">
+                    <input type="checkbox" tips="请勾选1个答案" class="weui-check" name="assistance" id="A">
                     <i class="weui-icon-checked"></i>
                 </div>
-                <div class="weui-cell__bd" id='A'>A. pingpong</div>
+                <div class="weui-cell__bd" id='dA'>A</div>
             </label>
-            <label class="weui-cell weui-check__label" for="c2">
+            <label class="weui-cell weui-check__label" for="B" id="cB">
                 <div class="weui-cell__hd">
-                    <input type="checkbox" name="assistance" class="weui-check" id="c2">
+                    <input type="checkbox" name="assistance" class="weui-check" id="B">
                     <i class="weui-icon-checked"></i>
                 </div>
-                <div class="weui-cell__bd" id='B'>B. pongping</div>
+                <div class="weui-cell__bd" id='dB'>B</div>
             </label>
-            <label class="weui-cell weui-check__label" for="c3">
+            <label class="weui-cell weui-check__label" for="C" id="cC">
                 <div class="weui-cell__hd">
-                    <input type="checkbox" name="assistance" class="weui-check" id="c3">
+                    <input type="checkbox" name="assistance" class="weui-check" id="C">
                     <i class="weui-icon-checked"></i>
                 </div>
-                <div class="weui-cell__bd" id='C'>C. pingpong和pongping都有可能 </div>
+                <div class="weui-cell__bd" id='dC'>C </div>
             </label>
-            <label class="weui-cell weui-check__label" for="c4">
+            <label class="weui-cell weui-check__label" for="D" id="cD">
                 <div class="weui-cell__hd">
-                    <input type="checkbox" name="assistance" class="weui-check" id="c4">
+                    <input type="checkbox" name="assistance" class="weui-check" id="D">
                     <i class="weui-icon-checked"></i>
                 </div>
-                <div class="weui-cell__bd" id='D'>D. 都不输出</div>
+                <div class="weui-cell__bd" id='dD'>D</div>
+            </label>
+            <label class="weui-cell weui-check__label" for="E" id="cE">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="assistance" class="weui-check" id="E">
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd" id='dE'>E</div>
             </label>
         </div>
         <div class="weui-btn-area">
