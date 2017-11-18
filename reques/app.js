@@ -5,7 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var wechat = require('wechat');
+var path = require('path');
+var auth = require('./auth');
+var session = require('express-session');
 var config = {
+  token: 'xinshui',
+  appid: 'wx00ad3e22984ee70b',
+  encodingAESKey: 'wCRhH2d913fTmWjENXirLU2Z0ECYguFYwvoLds5Ii1x',
   checkSignature: true // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
 };
 
@@ -15,6 +21,7 @@ var perques = require('./routes/perquestion');
 var questions = require('./routes/questions');
 var paper = require('./routes/paper');
 var exam = require('./routes/exam');
+var login = require('./routes/login');
 
 var app = express();
 
@@ -28,8 +35,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  resave: false, // don't save session if unmodified
+  saveUninitialized: false, // don't create session until something stored
+  secret: 'keyboard cat'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'files')));
+app.use(auth);
 
 app.use('/', index);
 app.use('/users', users);
@@ -37,6 +50,7 @@ app.use('/perques', perques);
 app.use('/questions', questions);
 app.use('/paper', paper);
 app.use('/exam', exam);
+app.use('/login', login);
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {
@@ -64,7 +78,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
         title: '全屏答题',
         description: '选择题',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
-        url: 'http://ruanee.hk1.mofasuidao.cn/perques'
+        url: 'http://ruanee.hk1.mofasuidao.cn/exam'
       }
     ]);
   } else {
@@ -74,7 +88,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
         title: '精选30道Java笔试题解答',
         description: '都是一些非常非常基础的题',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1flcae8n6zzj20qo0zkgwc.jpg',
-        url: 'http://www.cnblogs.com/lanxuezaipiao/p/3371224.html'
+        url: 'http://ruanee.hk1.mofasuidao.cn'
       }
     ]);
   }
