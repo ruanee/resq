@@ -16,6 +16,7 @@ module.exports = function(req, res, next) {
 				}
 			});
 	}
+	
 	var url = req.url;
 	if (url =="/" || url.indexOf("/?") >= 0 || url.indexOf("/login") >= 0 || url.indexOf('wechat?signature') >= 0) {
 		return next();
@@ -24,7 +25,7 @@ module.exports = function(req, res, next) {
 		res.redirect('/login');
 		return;
 	}
-
+	
 	if (req.session.user != 'admin' 
 			&& (url.indexOf("/users") >= 0 || url.indexOf("/paper") >= 0 || url.indexOf("/questions") >= 0) ) {
 		console.log(req.session.user +' unauthorized '+url);
