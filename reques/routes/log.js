@@ -11,13 +11,17 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+exports.guid = function()  {
+  return guid();
+}
 exports.list = function() {
 	const { rows } = db.query('SELECT url,request_date,params FROM request_log order by request_log desc limit 5', [])
 };
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
-	db.asyncInsert('insert into request_log(id,url,params,"type",request_date) values ($1,$2,$3,$4,$5) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
-			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date()])
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	db.asyncInsert('insert into request_log(id,url,params,session_id,remote_addr,user_name,"type",request_date) values ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
+			[data['__id'],req.method +" "+req.baseUrl+req.url, JSON.stringify(data), req.session.sessionId,ip, req.session.user,type,new Date()])
 	return data;
 };
 exports.update = function(id, status, message) {
@@ -76,6 +80,10 @@ function buildParams(req, type) {
 	}
 //	data['__code'] = getCode(data, type);
 	data['__id'] = guid();
+	if(type == 'home' && !req.session.FromUserName) {
+		req.session.FromUserName= data.FromUserName
+	}
+	data.FromUserName=req.session.FromUserName;
 	return data;
 }
 function getCode(data, type) {

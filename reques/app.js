@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'keyboard cat'
+  secret: 'keyboard cat', cookie: { maxAge: 7200000 }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'files')));
@@ -57,6 +57,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
   // 微信输入信息都在req.weixin上
   var message = req.weixin;
   console.log(message)
+   var fromUserName=message.FromUserName
   //console.log(req)
   //console.log(req.wechat_token)
   var cnt = message.Content
@@ -78,7 +79,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
         title: '全屏答题',
         description: '选择题',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
-        url: 'http://ruanee.hk1.mofasuidao.cn/exam'
+        url: 'http://ruanee.hk1.mofasuidao.cn/exam?FromUserName='+fromUserName
       }
     ]);
   } else {
@@ -88,7 +89,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
         title: '精选30道Java笔试题解答',
         description: '都是一些非常非常基础的题',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1flcae8n6zzj20qo0zkgwc.jpg',
-        url: 'http://ruanee.hk1.mofasuidao.cn'
+        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
       }
     ]);
   }

@@ -45,18 +45,17 @@ module.exports = {
 	  })
 	  return rows;
   },
-  querySync2: (text, params) => {
+  query2: (text, params, fn) => {
 	  pool.connect((err, client, done) => {
 		  if (err) throw err
-		  client.query(text, params, (err, res) => {
+		  	client.query(text, params, (err, res) => {
 		    done()
-
-		    if (err) {
-		      console.log(err.stack)
-		    } else {
-//		      console.log(res.rows[0])
-		      return res.rows;
-		    }
+		    fn(err, res.rows);
+//		    if (err) {
+//		      console.log(err.stack)
+//		    } else {
+//		      return res.rows;
+//		    }
 		  })
 		})
 	  
