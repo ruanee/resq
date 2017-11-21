@@ -108,8 +108,8 @@ function editQuestion() {
 	  var buf = [];
 	  buf.push('<input id="id" type=hidden>');
       buf.push('<div class="form-group">');
-      buf.push('	<label for="title">题目</label>');
-      buf.push('	<textarea id="title" class="form-control" placeholder="请输入题目描述" rows="8"></textarea>');
+//      buf.push('	<label for="title">题目</label>');
+      buf.push('	<textarea id="title" class="form-control" placeholder="请输入题目描述" rows="6"></textarea>');
       buf.push('</div>');
 
 //      buf.push('<div class="form-group">');
@@ -131,7 +131,7 @@ function editQuestion() {
       buf.push(createChoice({code:'答案', placeholder:'请输入答案'}));
       
       buf.push('<div class="form-group">');
-      buf.push('	<label for="explain">解释</label>');
+//      buf.push('	<label for="explain">解释</label>');
       buf.push('	<textarea id="explain" class="form-control" placeholder="请输入解释" rows="3"></textarea>');
       buf.push('</div>');
       
@@ -180,8 +180,8 @@ function createChoice(args) {
 
 function popup(obj){ 
 	   var msgw,msgh,bordercolor;
-	   msgw=400;//Width
-	   msgh=680;//Height 
+	   msgw=360;//Width
+	   msgh=600;//Height 
 //	   titleheight=25 //title Height
 	   bordercolor="#336699";//boder color
 	   titlecolor="#99CCFF";//title color
@@ -206,11 +206,11 @@ function popup(obj){
 	   msgObj.style.background="white"; 
 	   msgObj.style.border="1px solid " + bordercolor; 
 	   msgObj.style.position = "absolute"; 
-	   msgObj.style.left = "55%"; 
-	   msgObj.style.top = "10%"; 
+	   msgObj.style.left = "2%"; 
+	   msgObj.style.top = "2%"; 
 	   msgObj.style.font="12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif"; 
-	   msgObj.style.marginLeft = "-225px" ; 
-	   msgObj.style.marginTop = -75+document.documentElement.scrollTop+"px"; 
+//	   msgObj.style.marginLeft = "-225px" ; 
+//	   msgObj.style.marginTop = -75+document.documentElement.scrollTop+"px"; 
 	   msgObj.style.width = msgw + "px"; 
 	   msgObj.style.height =msgh + "px"; 
 	   msgObj.style.textAlign = "center"; 
