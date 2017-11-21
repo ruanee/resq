@@ -3,10 +3,33 @@ var router = express.Router();
 var log = require('./log.js');
 const globals = require('../globals');
 const db = require('../db')
+var fs = require('fs'),
+    path = require('path');
+
 
 /* GET home page. */
 	router.get('/', function(req, res, next) {
-		var data = log.save(req, 'paper')
+		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pmo_',s2=' PARTITION OF item_price_pmo FOR VALUES IN ('
+//		fs.readFile('F:/work/FE/B2B/sync/data-1510803713738.csv', {encoding: 'utf-8'}, function(err,data){
+//		    if (!err) {
+//		    	var lines = data.split("\n");
+//		    	for (var i = 0; i < lines.length; i++) {
+//			    	var bp=lines[i].split(',')
+//			    	if(bp.length > 1 && bp[0] != 'id') {
+//				    	sum = sum + parseInt(bp[1]);
+//				    	s = s + ",'" + bp[0]+"'";
+//				        if(sum > 200) {
+//				        	console.log(s1 + (idx++) +s2+s+');');
+//				        	sum=0;
+//				        	s="";
+//				        }
+//			    	}
+//				}
+//		    	console.log(s1 + (idx++) +s2+s+');');
+//		    } else {
+//		        console.log(err);
+//		    }
+//		});
    		db.pool.connect((err, client, done) => {
 		   if (err) throw err
 		   client.query("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,create_date desc limit 20", 
@@ -15,7 +38,7 @@ const db = require('../db')
 			    if (err) {
 			      console.log(err.stack)
 			    } else {
-			      console.log(result.rows[0])
+//			      console.log(result.rows[0])
 			        res.render('papers', { title: '试卷列表' , rows: result.rows});
 			    }
 		   })

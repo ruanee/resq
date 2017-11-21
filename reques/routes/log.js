@@ -11,6 +11,10 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+exports.replaceAll = function (str, find, replace) {
+	  var find = find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	  return str.replace(new RegExp(find, 'g'), replace);
+}
 exports.list = function() {
 	const { rows } = db.query('SELECT url,request_date,params FROM request_log order by request_log desc limit 5', [])
 };
