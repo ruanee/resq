@@ -1,3 +1,8 @@
 eclipse.preferences.version=1
+encoding//views/*.pug=UTF-8
+encoding//views/header.pug=UTF-8
+encoding//views/login.pug=UTF-8
+encoding//views/paper.pug=UTF-8
 encoding//views/perques.pug=UTF-8
 encoding/<project>=UTF-8
+encoding/views=UTF-8

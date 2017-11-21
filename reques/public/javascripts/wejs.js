@@ -5,7 +5,12 @@ var ans = {}, qid="",token="";
 function populate(jst) {
 //	var data = JSON.parse(document.getElementById('items').innerHTML).data;
 	if(jst == '') return;
-	var row = JSON.parse(jst), data = {};
+	var row = null, data = {};
+	try {
+		row = JSON.parse(jst);
+	} catch(e) {
+		window.location.href='/login';
+	}
 	if(row.message=='end' || row.message=='prevend') {
 		weui.toast('没有了', 1000);
 		return;
@@ -100,13 +105,18 @@ function submit(direc) {
     });
 }
 function ajax(action,url, data, callback) {
-    var xhttp = new XMLHttpRequest();
+    var xhttp = null;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+	} else if (window.ActiveXObject) {
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
     xhttp.onreadystatechange = function() {
-//      if (this.readyState == 4 && this.status == 200) {
+      if (this.readyState == 4 && this.status == 200) {
     	  if(callback) {
     		  callback.call(this, xhttp);
     	  }
-//      }
+      }
     };
     if(action=='GET') {
     	url = url +"?" + Object.keys(data).map(function(k) {
