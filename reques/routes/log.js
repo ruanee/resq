@@ -17,7 +17,7 @@ exports.replaceAll = function (str, find, replace) {
 }
 exports.guid = function()  {
   return guid();
-}
+};
 exports.list = function() {
 	const { rows } = db.query('SELECT url,request_date,params FROM request_log order by request_log desc limit 5', [])
 };

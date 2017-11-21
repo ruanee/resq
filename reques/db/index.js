@@ -50,11 +50,20 @@ module.exports = {
 		  if (err) throw err
 		  	client.query(text, params, (err, res) => {
 		    done()
+<<<<<<< HEAD
 		    if (err) {
 		      console.log(err.stack)
 		    } else {
 		      fn(err, res.rows);;
 		    }
+=======
+		    fn(err, res.rows);
+//		    if (err) {
+//		      console.log(err.stack)
+//		    } else {
+//		      return res.rows;
+//		    }
+>>>>>>> branch 'master' of https://github.com/ruanee/resq.git
 		  })
 		})
 	  
