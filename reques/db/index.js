@@ -3,7 +3,7 @@ const { Pool} = require('pg')
 const globals = require('../globals');
 //const copyTo = copy.to
 //const copyFrom = copy.from
-var fs = require('fs')
+var fs = require('fs');
 
 /** postgresql */
 const connectionString = globals.connectionString
@@ -50,12 +50,11 @@ module.exports = {
 		  if (err) throw err
 		  	client.query(text, params, (err, res) => {
 		    done()
-		    fn(err, res.rows);
-//		    if (err) {
-//		      console.log(err.stack)
-//		    } else {
-//		      return res.rows;
-//		    }
+		    if (err) {
+		      console.log(err.stack)
+		    } else {
+		      fn(err, res.rows);;
+		    }
 		  })
 		})
 	  
