@@ -33,7 +33,12 @@ function populate(jst) {
 	if(row.rows.uanswer && row.rows.uanswer[data.id]) {
 		var uans = row.rows.uanswer[data.id];
 		if(uans.ans) {
-			document.getElementById(uans.ans).checked = true;
+			for (var i = 0; i < uans.ans.length; i++) {
+				var elm = uans.ans[i];
+				if(elm)
+					document.getElementById(elm).checked = true;
+			}
+			
 		}
 	}
 }
