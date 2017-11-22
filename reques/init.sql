@@ -1,4 +1,5 @@
 create extension "uuid-ossp";
+create extension pgcrypto;
 
 -- log db
 --drop table public.request_log;
@@ -88,6 +89,9 @@ WITH (
   OIDS=FALSE
 );
 /**
+select encode(hmac('miaomiao', '123', 'sha256'), 'hex'),
+		encode(hmac('miaomiao', 'pass@123', 'sha256'), 'hex');
+		
 INSERT INTO public.users( id, type, status, user_name, password, create_date, mod_date, active)
     VALUES (uuid_generate_v4(), 'test','Active', 'admin', 'pass@123', now(), now(),'T');
 
@@ -99,8 +103,10 @@ update users set password='ce6f0af232270c52eace2ec2ac949e93f4f85cf291f8d9913f554
 update users set password='4c61e0aa42c9fc5c52a69909c8c0b4dcfc14b53112c988ff4a29753ed3b2a7b3' where user_name='test';
  */
 --drop TABLE public.tempquest;
+--delete from tempquest;
 CREATE TABLE public.tempquest
 (
+  code text,
   title text,
   item1 text,
   item2 text,
@@ -116,11 +122,14 @@ WITH (
   OIDS=FALSE
 );
 /**
-COPY public.tempquest(title,item1,item2,item3,item4,item5,answer)
+
+delete  from paper;
+
+COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5)
  FROM 'F:/work/quest/SETEST/SETEST.csv' WITH (FORMAT csv);
  
- insert into questions(id, type, title, choices, answer,active, create_date, mod_date)
-(select uuid_generate_v4(),'SETEST',title, jsonb_object('{A,B,C,D,E}'::text[],ARRAY[item1,item2,item3,item4,item5]) choices,
+ insert into questions(id, type,code, title, choices, answer,active, create_date, mod_date)
+(select uuid_generate_v4(),type,code,title, jsonb_object('{A,B,C,D,E}'::text[],ARRAY[item1,item2,item3,item4,item5]) choices,
 	jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()
 	from public.tempquest where title!='﻿title')
 */

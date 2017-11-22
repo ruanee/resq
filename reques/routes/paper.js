@@ -73,7 +73,7 @@ var fs = require('fs'),
 		}
 		db.pool.connect((err, client, done) => {
 			if (err) throw err
-			client.query("select id,title,code,choices,answer FROM questions where active='T' and type=$1", [data.type], (err, result) => {
+			client.query("select id,title,code,choices,answer FROM questions where active='T' and type=$1 order by cast(code as integer) ", [data.type], (err, result) => {
 				done()
 				if (err) {
 					console.log(err.stack)
@@ -107,6 +107,24 @@ var fs = require('fs'),
 				}
 			})
 		})
+	});
+	router.get('/generate2', function(req, res, next) {
+		var data = log.save(req, 'paper')
+		console.log(data)
+		db.query2("select distinct type from tempquest where  type not in (select type from paper)", [], function(error, rows) {
+			for (var i = 0; i < rows.length; i++) {
+				console.log(rows[i])
+				db.query2("select id,title,code,choices,answer,type FROM questions where active='T' and type=$1 order by cast(code as integer) ", [rows[i].type], function(error, rows2) {
+					var paper = {},questions=[];
+					paper.type=rows2[0].type;
+					paper.title=rows2[0].type;
+					paper.questions=JSON.stringify(rows2);
+					log.savePaper(paper);
+				})
+			}
+			res.redirect('/paper');
+		})
+
 	});
 	router.post('/', function(req, res, next) {
 //		console.log(req.body)

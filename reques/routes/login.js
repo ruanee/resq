@@ -15,7 +15,7 @@ router.get('/logout', function(req, res, next) {
 });
 router.post('/', function(req, res, next) {
 	var uname = req.body.username;
-	const hash = crypto.createHmac('sha256', req.body.password).update('miaomiao').digest('hex');
+	const hash = crypto.createHmac('sha256', req.body.password).update(globals.hashKey).digest('hex');
 	console.log(hash);
 	if(uname && globals.userData && globals.userData[uname] && globals.userData[uname]["password"] == hash) {
 		req.session.user = uname;
