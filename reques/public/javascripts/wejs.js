@@ -2,6 +2,14 @@ window.onload=function() {
 	submit('');
 }
 var ans = {}, qid="",token="";
+var Strings = {};
+Strings.isEmpty = function (iStr) {
+    if (typeof (iStr) == "undefined"
+    		|| iStr == null 
+    		|| iStr.toString().length == 0
+    		|| iStr.toString().trim() == "")return true;
+	return false;
+};
 function populate(jst) {
 //	var data = JSON.parse(document.getElementById('items').innerHTML).data;
 	if(jst == '') return;
@@ -25,7 +33,7 @@ function populate(jst) {
 	qid = data.id;
 	token= row.token;
 	for (var p in data.choices) {
-		if(p && document.getElementById(p)) {
+		if(p && document.getElementById(p) && !Strings.isEmpty(data.choices[p])) {
 			document.getElementById('d'+p).innerHTML = data.choices[p];
 			document.getElementById('c'+p).style.display = '';
 		}

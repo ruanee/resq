@@ -23,7 +23,7 @@ router.get('/list', function(req, res, next) {
 });
 router.get('/go', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0, token ="";
-	console.log(data)
+//	console.log(data)
 	var dback = { title: '考试中' }, first = true;
 	if(!data.id) {
 		dback.message = '请先选择章节';
@@ -48,7 +48,8 @@ router.get('/go', function(req, res, next) {
 		page = page - 1;
 	} else {
 		//TODO; generate token for each exam
-		token = data['__id'];
+//		token = data['__id'];
+		token = req.session.sessionId;
 	}
 	if(page < 0) {
 		dback.message = 'prevend';
@@ -57,7 +58,7 @@ router.get('/go', function(req, res, next) {
 	}
 	dback.page = page;
 	dback.token = token;
-	console.log(dback)
+//	console.log(dback)
 	db.pool.connect((err, client, done) => {
     if (err) throw err
     client.query("SELECT *,(SELECT answer FROM exam where paper=A.id and token=$1) as uanswer FROM (SELECT id,title,jsonb_array_elements(questions) as data FROM paper where id=$2 offset $3 limit 1) A ", [token, data.id, page], (err, result) => {

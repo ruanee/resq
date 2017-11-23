@@ -125,11 +125,11 @@ WITH (
 
 delete  from paper;
 
-COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5)
- FROM 'F:/work/quest/SETEST/SETEST.csv' WITH (FORMAT csv);
+COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,item9)
+ FROM 'F:/work/quest/samples/data.csv' WITH (FORMAT csv);
  
  insert into questions(id, type,code, title, choices, answer,active, create_date, mod_date)
-(select uuid_generate_v4(),type,code,title, jsonb_object('{A,B,C,D,E}'::text[],ARRAY[item1,item2,item3,item4,item5]) choices,
+(select uuid_generate_v4(),type,code,title, jsonb_object('{A,B,C,D,E,F,G,H,I}'::text[],ARRAY[item1,item2,item3,item4,item5,item6,item7,item8,item9]) choices,
 	jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()
 	from public.tempquest where title!='﻿title')
 */

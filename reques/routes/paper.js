@@ -46,7 +46,7 @@ var fs = require('fs'),
 	});
 	router.get('/id', function(req, res, next) {
 		var data = log.save(req, 'paper')
-		console.log(data)
+//		console.log(data)
 		if(!data.id) {
 			res.render('paper', { title: '试卷' , rows: {}});
 			return;
@@ -58,7 +58,7 @@ var fs = require('fs'),
 			    if (err) {
 			      console.log(err.stack)
 			    } else {
-			      console.log(result.rows[0])
+//			      console.log(result.rows[0])
 			      res.render('paper', { title: '试卷' , rows: result.rows[0]});
 			    }
 		   })
@@ -66,7 +66,7 @@ var fs = require('fs'),
 	});
 	router.get('/generate', function(req, res, next) {
 		var data = log.save(req, 'paper')
-		console.log(data)
+//		console.log(data)
 		if(!data.type) {
 			res.render('paper', { title: 'type is required' , rows: {}});
 			return;
@@ -110,10 +110,10 @@ var fs = require('fs'),
 	});
 	router.get('/generate2', function(req, res, next) {
 		var data = log.save(req, 'paper')
-		console.log(data)
+//		console.log(data)
 		db.query2("select distinct type from tempquest where  type not in (select type from paper)", [], function(error, rows) {
 			for (var i = 0; i < rows.length; i++) {
-				console.log(rows[i])
+//				console.log(rows[i])
 				db.query2("select id,title,code,choices,answer,type FROM questions where active='T' and type=$1 order by cast(code as integer) ", [rows[i].type], function(error, rows2) {
 					var paper = {},questions=[];
 					paper.type=rows2[0].type;

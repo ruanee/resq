@@ -72,16 +72,16 @@ app.use('/wechat', wechat(config, function (req, res, next) {
       content: 'https://github.com/ruanee',
       type: 'text'
     });
-  } else if (cnt === '刷题') {
-    // 回复一段音乐
-    res.reply([
-      {
-        title: '全屏答题',
-        description: '选择题',
-        picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
-        url: 'http://ruanee.hk1.mofasuidao.cn/exam?FromUserName='+fromUserName
-      }
-    ]);
+//  } else if (cnt === '刷题') {
+//    // 回复一段音乐
+//    res.reply([
+//      {
+//        title: '全屏答题',
+//        description: '选择题',
+//        picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
+//        url: 'http://ruanee.hk1.mofasuidao.cn/exam?FromUserName='+fromUserName
+//      }
+//    ]);
   } else {
     // 回复高富帅(图文回复)
     res.reply([
