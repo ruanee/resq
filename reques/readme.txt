@@ -46,9 +46,11 @@ sudo apt-get install postgresql-9.6
 --- install git
 sudo apt install git
 
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name" 
+git config --global user.email "xiaogang.ruan@gmail.com"
+git config --global user.name "Xiao Gang" 
 
-git init --bare /path/to/repository
+git init --bare /root/node
 
-git clone hostname:/path/to/repository
+git clone https://github.com/ruanee/resq.git
+
+cd /root/node/resq/reques
