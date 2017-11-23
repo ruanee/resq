@@ -104,6 +104,9 @@ function postData(action,url, data, callback) {
 function paper(obj) {
 	window.location.href='/paper/id?id='+obj.id;
 }
+function exam(obj) {
+	window.location.href='/exam?id='+obj.id;
+}
 function editQuestion() {
 	  var buf = [];
 	  buf.push('<input id="id" type=hidden>');

@@ -13,6 +13,14 @@ router.get('/', function(req, res, next) {
 	dback.pid = data.id;
 	res.render('exam', dback);
 });
+router.get('/list', function(req, res, next) {
+	var data = log.save(req, 'exam'), page = 0;
+	var dback = { title: '章节' };
+	db.query2("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') createdate FROM paper where active='T'  order by type,create_date desc", [], function(error, rows) {
+		dback.rows = rows;
+		res.render('chapter', dback);
+	})
+});
 router.get('/go', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0, token ="";
 	console.log(data)

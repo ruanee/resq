@@ -1,0 +1,30 @@
+extends header
+
+block content
+    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+      h2 章节
+      div(class="table-responsive")
+        table(id="table1" class="table table-hover")
+          thead
+            tr
+              th #
+              th chapter
+          tbody
+            each row in rows
+                tr
+                each val, key in row
+                    if key == 'seq'
+                        td(scope="row",style="min-width:20px;max-width:60px;white-space:nowrap;overflow:hidden;") 
+                            button(id=row['id'],class="btn btn-info" onclick="exam(this)")= val
+                    else if key == 'title'
+                        td(scope="row",style="min-width:160px;max-width:300px;white-space:nowrap;overflow:hidden;")= val
+                    else if key == 'id' || key == 'answer' || key == 'type'  || key == 'createdate'
+                        //td(scope="row",style="display:none;")= val
+                    else
+                        td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
+    
+        //include footer
+    script(src="/javascripts/quest.js")
+    script(src="/javascripts/jquery321min.js")
+    script(src="/javascripts/popper.min.js")
+    script(src="/javascripts/bootstrap.min.js")
