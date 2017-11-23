@@ -11,6 +11,11 @@ set DEBUG=ques:* & npm start
 or
 npm start
 
+cd /root/node/resq/reques
+
+killall -KILL node
+
+
 --- install nodejs
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt-get install -y nodejs
@@ -60,4 +65,3 @@ git init --bare /root/node
 
 git clone https://github.com/ruanee/resq.git
 
-cd /root/node/resq/reques
