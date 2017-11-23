@@ -42,12 +42,19 @@ sudo apt-get install postgresql-9.6
 
           restart server:
           sudo service postgresql restart 9.6
-          
+
+sudo -u postgres createdb test
+sudo -u postgres psql test
+pg_restore -h localhost -p 5432 -U postgres -d test -v "/root/pg/db.backup"
+
 --- install git
 sudo apt install git
 
 git config --global user.email "xiaogang.ruan@gmail.com"
 git config --global user.name "Xiao Gang" 
+
+https://help.ubuntu.com/community/PostgreSQL
+https://filezilla-project.org/download.php?type=client
 
 git init --bare /root/node
 
