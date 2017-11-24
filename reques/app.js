@@ -86,8 +86,8 @@ app.use('/wechat', wechat(config, function (req, res, next) {
     // 回复高富帅(图文回复)
     res.reply([
       {
-        title: '精选30道Java笔试题解答',
-        description: '都是一些非常非常基础的题',
+        title: '必过考题',
+        description: '经常练习',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1flcae8n6zzj20qo0zkgwc.jpg',
         url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
       }

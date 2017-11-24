@@ -6,7 +6,7 @@ const globals = require('../globals');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   log.save(req, 'home')
-  res.render('index', { title: '刷题测试' });
+  res.render('index', { title: '刷题测试', username:req.session.user });
 });
 
 module.exports = router;

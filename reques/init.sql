@@ -89,11 +89,14 @@ WITH (
   OIDS=FALSE
 );
 /**
+
+update users set status ='Active' where user_name='test';
+
 select encode(hmac('miaomiao', '123', 'sha256'), 'hex'),
 		encode(hmac('miaomiao', 'pass@123', 'sha256'), 'hex');
 		
 INSERT INTO public.users( id, type, status, user_name, password, create_date, mod_date, active)
-    VALUES (uuid_generate_v4(), 'test','Active', 'admin', 'pass@123', now(), now(),'T');
+    VALUES (uuid_generate_v4(), 'main','Active', 'admin', 'pass@123', now(), now(),'T');
 
 update users set password='ce6f0af232270c52eace2ec2ac949e93f4f85cf291f8d9913f5543e37838f6c3' where user_name='admin';
  

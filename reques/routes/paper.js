@@ -9,23 +9,28 @@ var fs = require('fs'),
 
 /* GET home page. */
 	router.get('/', function(req, res, next) {
-		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pmo_',s2=' PARTITION OF item_price_pmo FOR VALUES IN ('
-//		fs.readFile('F:/work/FE/B2B/sync/data-1510803713738.csv', {encoding: 'utf-8'}, function(err,data){
+		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pm_',s2=' PARTITION OF item_price_pm2 FOR VALUES FROM ('
+//		fs.readFile('F:/work/FE/B2B/sync/pm.txt', {encoding: 'utf-8'}, function(err,data){
 //		    if (!err) {
 //		    	var lines = data.split("\n");
+//		    	var from = 0, to =0;
 //		    	for (var i = 0; i < lines.length; i++) {
 //			    	var bp=lines[i].split(',')
 //			    	if(bp.length > 1 && bp[0] != 'id') {
+//			    		if(from == 0) from = bp[0];
+//			    		to = bp[0]; // for last one
 //				    	sum = sum + parseInt(bp[1]);
 //				    	s = s + ",'" + bp[0]+"'";
-//				        if(sum > 200) {
-//				        	console.log(s1 + (idx++) +s2+s+');');
+//				        if(sum >= 100) {
+//				        	to = bp[0];
+//				        	console.log(s1 + (idx++) +s2+from+') TO ('+to +');');
 //				        	sum=0;
 //				        	s="";
+//				        	from = to;
 //				        }
 //			    	}
 //				}
-//		    	console.log(s1 + (idx++) +s2+s+');');
+//		    	console.log(s1 + (idx++) +s2+from+') TO ('+to +');');
 //		    } else {
 //		        console.log(err);
 //		    }

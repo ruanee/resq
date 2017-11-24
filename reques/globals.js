@@ -1,5 +1,5 @@
 var Globals = {
-	connectionString:'postgresql://dbadmin:dl123@localhost:5432/quest',
+	connectionString:'postgresql://dbadmin:dl123@localhost:5434/quest',
 	sourceFolder: 'F:/work/FE/export files/',
 	outputFolder: 'F:/work/FE/B2B/test/',
 	hashKey:'miaomiao',
