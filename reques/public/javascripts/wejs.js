@@ -17,7 +17,7 @@ function populate(jst) {
 	try {
 		row = JSON.parse(jst);
 	} catch(e) {
-		window.location.href='/login';
+		window.location.href='/';
 	}
 	if(row.message=='end' || row.message=='prevend') {
 		weui.toast('没有了', 1000);

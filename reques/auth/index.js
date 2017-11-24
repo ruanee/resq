@@ -18,10 +18,11 @@ module.exports = function(req, res, next) {
 	}
 	
 	var url = req.url;
-	if (url =="/" || url.indexOf("/?") >= 0 || url.indexOf("/login") >= 0 || url.indexOf('wechat?signature') >= 0) {
+	if (url =="/" || url.indexOf("/?") >= 0 || url.indexOf("/captcha") >= 0 || url.indexOf("/users/new") >= 0 
+			|| url.indexOf("/login") >= 0 || url.indexOf('wechat?signature') >= 0) {
 		return next();
 	}
-	if(!req.session.user) {
+	if(!req.session.user || !globals.userData || globals.userData && !globals.userData[req.session.user]) {
 		res.redirect('/login');
 		return;
 	}
