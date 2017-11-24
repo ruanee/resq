@@ -7,18 +7,29 @@ var log = require('./log.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+	var data = log.save(req, 'user')
 	db.query2("select row_number() OVER(ORDER BY user_name) seq,user_name username,status,to_char(mod_date,'yyyy-MM-dd') mod_date from public.users where active='T' ", [], function(error, rows) {
 		res.render('users', { title: 'Users' , rows: rows});
 	})
 //	res.sendFile('weiui.html')
 });
-router.get('/:id', function(req, res, next) {
-	db.query2("select user_name username,status,to_char(mod_date,'yyyy-MM-dd') mod_date from public.users where active='T' ", [], function(error, rows) {
-		res.render('user', { title: 'Profile' , rows: rows});
+router.get('/show', function(req, res, next) {
+	var data = log.save(req, 'user')
+	if(!data.id || data.id.trim() == '') {
+		res.redirect('/login');
+		return;
+	}
+	db.query2("select user_name username,status,to_char(mod_date,'yyyy-MM-dd') mod_date from public.users where id =$1 ", [data.id], function(error, rows) {
+		if(rows.length == 0) {
+			res.redirect('/login');
+			return;
+		}
+		res.render('user', { title: 'Profile' , username: rows[0].username, status: rows[0].status });
 	})
 //	res.sendFile('weiui.html')
 });
 router.get('/new', function(req, res, next) {
+	var data = log.save(req, 'user')
 	res.render('user', { title: 'Profile' });
 });
 router.get('/reset', function(req, res, next) {
@@ -27,6 +38,8 @@ router.get('/reset', function(req, res, next) {
 });
 router.post('/new', function(req, res, next) {
 	var data = log.save(req, 'user')
+	console.log(data.password);
+	console.log(crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'));
 	var dback = {title: 'Profile'};
 	if(!data.captcha || !req.session.captcha || (data.captcha.toLowerCase() != req.session.captcha.toLowerCase())) {
 		dback.message = "验证码不匹配";
