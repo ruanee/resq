@@ -20,7 +20,11 @@ router.post('/', function(req, res, next) {
 	if(uname && globals.userData && globals.userData[uname] && globals.userData[uname]["password"] == hash) {
 		req.session.user = uname;
 		req.session.sessionId=log.guid();
-		res.render('index', {username:uname, message:"successfully"});
+		if(req.session.referer) {
+			res.redirect(req.session.referer);
+		} else {
+			res.render('index', {username:uname, message:"successfully"});
+		}
 		return;
 	}
 	res.render('login', { title: '登录', message:"用户名或者密码错误!"});
