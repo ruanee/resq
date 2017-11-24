@@ -113,6 +113,10 @@ CREATE TABLE public.tempquest
   item3 text,
   item4 text,
   item5 text,
+  item6 text,
+  item7 text,
+  item8 text,
+  item9 text,
   answer text,
   explains text default '',
   type text,
@@ -124,6 +128,10 @@ WITH (
 /**
 
 delete  from paper;
+delete  from questions;
+
+select distinct type from questions;
+update questions set type='01 Scope of Software Engineerin' where position('01' in type)>=1;
 
 COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,item9)
  FROM 'F:/work/quest/samples/data.csv' WITH (FORMAT csv);

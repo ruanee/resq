@@ -115,11 +115,13 @@ var fs = require('fs'),
 			for (var i = 0; i < rows.length; i++) {
 //				console.log(rows[i])
 				db.query2("select id,title,code,choices,answer,type FROM questions where active='T' and type=$1 order by cast(code as integer) ", [rows[i].type], function(error, rows2) {
-					var paper = {},questions=[];
-					paper.type=rows2[0].type;
-					paper.title=rows2[0].type;
-					paper.questions=JSON.stringify(rows2);
-					log.savePaper(paper);
+					if(rows2 && rows2[0]) {
+						var paper = {},questions=[];
+						paper.type=rows2[0].type;
+						paper.title=rows2[0].type;
+						paper.questions=JSON.stringify(rows2);
+						log.savePaper(paper);
+					}
 				})
 			}
 			res.redirect('/paper');
