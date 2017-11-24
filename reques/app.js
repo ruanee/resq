@@ -8,6 +8,8 @@ var wechat = require('wechat');
 var path = require('path');
 var auth = require('./auth');
 var session = require('express-session');
+var svgCaptcha = require('svg-captcha');
+
 var config = {
   token: 'xinshui',
   appid: 'wx00ad3e22984ee70b',
@@ -51,6 +53,14 @@ app.use('/questions', questions);
 app.use('/paper', paper);
 app.use('/exam', exam);
 app.use('/login', login);
+
+app.get('/captcha', function (req, res) {
+	var captcha = svgCaptcha.create({noise: 3,color:true,background: '#CCFFFF'});
+	req.session.captcha = captcha.text;
+	
+	res.type('svg');
+	res.status(200).send(captcha.data);
+});
 
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {

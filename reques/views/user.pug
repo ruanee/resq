@@ -1,0 +1,29 @@
+extends header
+
+block content
+
+    <div class="container" id="main">
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">注册信息</h2>
+        <label for="inputEmail" class="sr-only">User Name</label>
+        <input type="input" id="username" name="username" value="#{username}" class="form-control" placeholder="User Name" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="password"  class="form-control" placeholder="Password" required>
+        <input type="password" id="inputPassword2" name="password2" class="form-control" placeholder="Confirm Password" required>
+        <label for="captcha" class="sr-only">User Name</label>
+        <input type="input" id="captcha" name="captcha" class="form-control" placeholder="校验码" required>
+        <a href='javascript:refresh()'> <img id='code' src='/captcha' /></a>
+        <button class="btn btn-lg btn-primary btn-block" onclick="saveUser(this)">注册</button>
+          h5(class="form-signin-heading" ,style="color:red;")= message
+      </form>
+
+    </div> <!-- /container -->
+
+    link(href="/stylesheets/signin.css" rel="stylesheet")
+    script(src="/javascripts/jquery321min.js")
+    script(src="/javascripts/popper.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+    script(src="/javascripts/quest.js")
+    script
+        |document.getElementById('left').style.display='none';

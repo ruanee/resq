@@ -166,7 +166,29 @@ function addChoice(args) {
     
     return div;
 }
-
+function refresh() { $("#code")[0].src="/captcha?"+Math.random(10);};
+function saveUser() {
+	var inputs = $('#main').find('input');
+	for (var i = 0; i < inputs.length; i++) {
+		if(Strings.isEmpty(inputs[i].value)) {
+			inputs[i].setCustomValidity('请输入这个字段.');
+			return false;
+		} else {
+			inputs[i].setCustomValidity('');
+		}
+	}
+	var p1 = document.getElementById('inputPassword'), p2=document.getElementById('inputPassword2');
+    if (p1.value != p2.value) { 
+    	p2.setCustomValidity('密码不匹配.');
+    	return false;
+    } else {
+    	p2.setCustomValidity('');
+    }
+    var form = document.forms[1];
+    form.method="post";
+    form.action="/users/new";
+    form.submit();
+}
 function createChoice(args) {
 	  var buf = [];
 	  var placeholder = "请输入选项";
@@ -302,4 +324,12 @@ function myDecodeURI(iStr) {
 }
 String.prototype.replaceAll = function(s1,s2) {   
 	return this.replace(new RegExp(s1,"gm"),s2);   
-}; 
+};
+var Strings = {};
+Strings.isEmpty = function (iStr) {
+    if (typeof (iStr) == "undefined"
+    		|| iStr == null 
+    		|| iStr.toString().length == 0
+    		|| iStr.toString().trim() == "")return true;
+	return false;
+};

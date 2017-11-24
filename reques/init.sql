@@ -88,6 +88,7 @@ CREATE TABLE public.users
 WITH (
   OIDS=FALSE
 );
+ALTER TABLE users ADD CONSTRAINT users_user_name UNIQUE (user_name);
 /**
 
 update users set status ='Active' where user_name='test';
