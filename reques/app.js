@@ -99,7 +99,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
         title: '必过考题',
         description: '经常练习',
         picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1flcae8n6zzj20qo0zkgwc.jpg',
-        url: 'http://47.93.245.177?FromUserName='+fromUserName
+        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
       }
     ]);
   }
