@@ -20,7 +20,8 @@ router.post('/', function(req, res, next) {
 	if(uname && globals.userData && globals.userData[uname] && globals.userData[uname]["password"] == hash) {
 		req.session.user = uname;
 		req.session.sessionId=log.guid();
-		if(req.session.referer) {
+		var refer = req.session.referer;
+		if(refer && refer.indexOf("css.map") == -1 && refer.indexOf("favicon") == -1) {
 			res.redirect(req.session.referer);
 		} else {
 			res.render('index', {username:uname, message:"successfully"});

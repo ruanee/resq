@@ -23,8 +23,8 @@ exports.list = function() {
 };
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
-	db.asyncInsert('insert into request_log(id,url,params,"type",request_date) values ($1,$2,$3,$4,$5) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
-			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date()])
+	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name) values ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
+			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user])
 	return data;
 };
 exports.update = function(id, status, message) {
@@ -67,7 +67,7 @@ exports.saveExam = function(data) {
 	}
 	console.log(data)
 	db.asyncInsert('insert into exam(paper, answer, token, user_name, create_date, mod_date) values ($1,$2,$3,$4,$5,$6) ON CONFLICT (paper,token) DO UPDATE SET answer=exam.answer || EXCLUDED.answer::jsonb, mod_date=EXCLUDED.mod_date', 
-			[data.paper,data.answer,data.token,'who',new Date(),new Date()])
+			[data.paper,data.answer,data.token, data.user,new Date(),new Date()])
 			return data;
 };
 function buildParams(req, type) {
@@ -87,10 +87,5 @@ function buildParams(req, type) {
 }
 function getCode(data, type) {
 	var code = "";
-	if(type == globals.QUEUE_SUBMIT_SO) {
-		code = data["Order Number"];
-	} else if(type == globals.QUEUE_SUBMIT_QUOTATION) {
-		code = data["Quote Number"];
-	}
 	return code;
 }

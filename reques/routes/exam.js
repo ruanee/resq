@@ -6,7 +6,7 @@ const db = require('../db')
 
 router.get('/', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
-	var dback = { title: '考试中' };
+	var dback = { title: '考试中', username:req.session.user };
 	if(!data.id) {
 		dback.message = '请先选择章节';
 	}
@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 router.get('/list', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
-	var dback = { title: '章节' };
+	var dback = { title: '章节', username:req.session.user };
 	db.query2("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') createdate FROM paper where active='T'  order by type,create_date desc", [], function(error, rows) {
 		dback.rows = rows;
 		res.render('chapter', dback);
@@ -24,7 +24,7 @@ router.get('/list', function(req, res, next) {
 router.get('/go', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0, token ="";
 //	console.log(data)
-	var dback = { title: '考试中' }, first = true;
+	var dback = { title: '考试中', username:req.session.user }, first = true;
 	if(!data.id) {
 		dback.message = '请先选择章节';
 		res.jsonp(dback);
@@ -43,6 +43,7 @@ router.get('/go', function(req, res, next) {
 		exm.paper = data.id;
 		answ[data.qid]={ans: data.answer, anc:data.anc};
 		exm.answer=JSON.stringify(answ);
+		exm.user=req.session.user;
 		log.saveExam(exm);
 	} else if(data.direction == 'prev') {
 		page = page - 1;

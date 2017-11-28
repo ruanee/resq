@@ -1,3 +1,9 @@
+//window.onload=function() {
+//	if(!Strings.isEmpty($("#user")[0].innerHTML)) 
+//		$("#reg")[0].style.display='none'; 
+//	else 
+//		$("#user")[0].style.display='none';
+//}
 function submit() {
 	popup();
     weui.form.validate('#form', function (error) {
@@ -15,6 +21,18 @@ function submit() {
             VCODE: /^.{4}$/
         }
     });
+}
+function chapter() {
+	var trs = $('tr');
+	for (var i = 0; i < trs.length; i++) {
+		var tr = trs[i];
+		var button = $(tr).children("td:first").children("button")[0];
+		if(tr.innerHTML) {
+			tr.onclick=function(a,b){
+				button.click();
+			};
+		}
+	}
 }
 function saveQuestion() {
 	var data = {}, choices = {}, answer = {};

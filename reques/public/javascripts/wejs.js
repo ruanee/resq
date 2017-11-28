@@ -21,6 +21,8 @@ function populate(jst) {
 	}
 	if(row.message=='end' || row.message=='prevend') {
 		weui.toast('没有了', 1000);
+		document.getElementById('close').style.display = '';
+		window.scrollTo(0,document.body.scrollHeight);
 		return;
 	} else {
 		data = row.rows.data;
@@ -54,6 +56,7 @@ function clear() {
 	ans = {};
 	qid="";
 	token="";
+	document.getElementById('close').style.display = 'none';
 	var inputs = document.getElementsByTagName('input');
 	for (var i = 0; i < inputs.length; i++) {
 		var it = inputs[i];
@@ -75,6 +78,9 @@ function prev(){
 }
 function next(){
 	submit('next');
+}
+function close(){
+	window.location.href='/';
 }
 function submit(direc) {
     weui.form.validate('#form', function (error) {
