@@ -6,6 +6,11 @@ html
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
     <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <style type="text/css" media="all">
+        |#direction{margin-bottom:23px;}
+        |#close{margin-bottom:23px;}
+        |#footer{position:fixed;right:0;bottom:0;left:0;z-index:1030;height:25px;text-align:center!important;color:#0056b3;background-color:#343a40!important;}
+    </style>
     <script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.3/weui.min.js"></script>
     <script type="text/javascript" src="/javascripts/wejs.js"></script>
     </head>
@@ -97,7 +102,7 @@ html
                 <div class="weui-cell__bd" id='dH'>H</div>
             </label>
         </div>
-        <div class="weui-btn-area">
+        <div id="direction" class="weui-btn-area">
             <a id="prev" href="javascript:prev()" class="weui-btn weui-btn_mini weui-btn_primary weui-btn_plain-default">上一个</a>
             <a id="next" href="javascript:next(this)" class="weui-btn weui-btn_mini weui-btn_primary weui-btn_primary">下一个</a>
         </div>
@@ -107,4 +112,4 @@ html
 </div>
 
 </body>
-    
+    include footer
