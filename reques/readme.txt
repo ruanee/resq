@@ -13,6 +13,8 @@ npm start
 
 cd /root/node/resq/reques
 
+curl localhost:3000
+
 killall -KILL node
 
 

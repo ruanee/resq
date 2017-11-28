@@ -3,19 +3,24 @@ html
   head
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
-    meta(name="description" content="")
-    meta(name="author" content="")
+    meta(name="description" content="a practise web site")
+    meta(name="author" content="Xiao Gang")
     link(rel="icon" href="favicon.ico")
 
     title= title
 
+    script(src="/javascripts/quest.js")
+    script(src="/javascripts/jquery321min.js")
+    script(src="/javascripts/popper.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+    
     link(href="/stylesheets/bootstrap.min.css" rel="stylesheet")
     link(href="/stylesheets/dashboard.css" rel="stylesheet")
 
   body
     header
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">#{username}</a>
+        <a class="navbar-brand" id="user" href="#">#{username}</a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
