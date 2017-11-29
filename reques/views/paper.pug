@@ -1,27 +1,27 @@
 extends header
 
 block content
-    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
-      h2 试卷
-      div
-          textarea(id="items",style="display:none;")= JSON.stringify(rows)
-      each val, key in rows
-          if key == 'questions'
-              -var idx = 0
-              each ques in val
-                  -idx++
-                  div(style="margin-top: 15px;")
-                      div(class="form-group")
-                        h5 题目#{idx}
-                        textarea(class="form-control" rows="5")= ques.title
-                      div(class="row")
-                          each chv, ch in ques.choices
-                              if ch != ""
-                                  div(class="col-sm-6")
-                                      div(class="input-group input-group-sm")
-                                          span(class="input-group-addon")= ch
-                                          input(class="form-control", value= chv)
-                      div(class="input-group input-group-sm")
-                          span(class="input-group-addon") 答案
-                          input(class="form-control", value=ques.answer.ans)
-            include footer
+	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+		h2 试卷
+		div
+			textarea(id="items",style="display:none;")= JSON.stringify(rows)
+		each val, key in rows
+			if key == 'questions'
+				-var idx = 0
+				each ques in val
+					-idx++
+					div(style="margin-top: 15px;")
+						div(class="form-group")
+							h5 题目#{idx}
+							textarea(class="form-control" rows="5")= ques.title
+						div(class="row")
+							each chv, ch in ques.choices
+								if ch != ""
+									div(class="col-sm-6")
+										div(class="input-group input-group-sm")
+											span(class="input-group-addon")= ch
+											input(class="form-control", value= chv)
+						div(class="input-group input-group-sm")
+							span(class="input-group-addon") 答案
+							input(class="form-control", value=ques.answer.ans)
+			include footer
