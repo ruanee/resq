@@ -70,39 +70,56 @@ app.use('/wechat', wechat(config, function (req, res, next) {
    var fromUserName=message.FromUserName
   //console.log(req)
   //console.log(req.wechat_token)
-  var cnt = message.Content
-  if (cnt === 'hehe') {
-    // 回复屌丝(普通回复)
-    res.reply('呵呵');
-  } else if (cnt === '呵呵') {
-  	res.reply('hehe');
-  } else if (cnt === 'text') {
-    //你也可以这样回复text类型的信息
-    res.reply({
-      content: 'https://github.com/ruanee',
-      type: 'text'
-    });
-//  } else if (cnt === '刷题') {
-//    // 回复一段音乐
-//    res.reply([
-//      {
-//        title: '全屏答题',
-//        description: '选择题',
-//        picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1fkjcji86cuj20qo0zkdm8.jpg',
-//        url: 'http://ruanee.hk1.mofasuidao.cn/exam?FromUserName='+fromUserName
-//      }
-//    ]);
-  } else {
-    // 回复高富帅(图文回复)
-    res.reply([
-      {
-        title: '软件，技术，笔试',
-        description: '经常练习',
-        picurl: 'https://wx2.sinaimg.cn/mw690/69be932aly1flcae8n6zzj20qo0zkgwc.jpg',
-        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
-      }
-    ]);
-  }
+   if (message && message.MsgType == 'text') {
+	  var cnt = message.Content
+	  if (cnt === 'hehe') {
+     	    res.reply([
+	      	      {
+	      	        title: '刷刷刷',
+	      	        description: '我爱刷题',
+	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
+	      	        url: 'https://weidian.com/?userid=1291725186'
+	      	      }
+	      	    ]);
+	  } else if (cnt === '呵呵') {
+	  	res.reply('hehe');
+	  } else if (cnt === 'text') {
+	    res.reply({
+	      content: 'https://github.com/ruanee',
+	      type: 'text'
+	    });
+	  } else {
+	    res.reply([
+	      {
+	        title: '软件，技术，笔试',
+	        description: '经常练习',
+	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
+	        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
+	      }
+	    ]);
+	  }
+   } else if (message && message.Event) {
+       switch (message.Event) {
+           case 'subscribe':
+	       	    res.reply([
+	      	      {
+	      	        title: '多谢关注',
+	      	        description: '我爱刷题',
+	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
+	      	        url: 'https://weidian.com/?userid=1291725186'
+	      	      }
+	      	    ]);
+               break;
+           case 'unsubscribe':    //取消关注
+               break;
+           default:
+               res.reply({
+                   content: 'O(∩_∩)O~',
+                   type: 'text'
+               });
+               break;
+       }
+   } 
 }));
 
 // catch 404 and forward to error handler
