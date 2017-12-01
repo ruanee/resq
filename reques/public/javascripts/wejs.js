@@ -1,7 +1,7 @@
 window.onload=function() {
 	submit('');
 }
-var ans = {}, qid="",token="";
+var ans = {}, qid="",token="", rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 var Strings = {};
 Strings.isEmpty = function (iStr) {
     if (typeof (iStr) == "undefined"
@@ -9,6 +9,9 @@ Strings.isEmpty = function (iStr) {
     		|| iStr.toString().length == 0
     		|| iStr.toString().trim() == "")return true;
 	return false;
+};
+Strings.trim = function (iStr) {
+    return iStr ? iStr.replace(rtrim, '') : '';
 };
 function populate(jst) {
 //	var data = JSON.parse(document.getElementById('items').innerHTML).data;
@@ -105,7 +108,7 @@ function submit(direc) {
             data.anc=anc;
             data.qid=qid;
             data.token=token;
-            if(direc && direc=='next' && ans.ans && answer != ans.ans) {
+            if(direc && direc=='next' && Strings.trim(ans.ans) != '' && answer != Strings.trim(ans.ans)) {
         		weui.toast('正确答案是'+ans.ans, 1000);
         		loading.hide();
         		return;

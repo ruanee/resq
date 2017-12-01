@@ -19,7 +19,6 @@ var config = {
   encodingAESKey: 'wCRhH2d913fTmWjENXirLU2Z0ECYguFYwvoLds5Ii1x',
   checkSignature: true // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
 };
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var perques = require('./routes/perquestion');
@@ -148,12 +147,12 @@ app.post('/upload', function(req, res, next) {
 				//console.log(data)
 				var idx = 1;
 				for(var i =0;i<data.length; i++) {
-					if(data[i][1] == '' || data[i][1] == '') continue;
+					if(data[i][1].trim() == '') continue;
 					console.log(i)
 					var col = 0;
 					var len = data[i].length
 					db.asyncInsert('insert into tempquest(type,chapter,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,create_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', 
-						['Java','Chapter 02',(idx++) + '',data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),new Date()])	
+						[req.body.type,req.body.chapter,(idx++) + '',data[i][col++].trim(),data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),new Date()])	
 				}
 			});
 			res.render('import', { title : '导入' });
