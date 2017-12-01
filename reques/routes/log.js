@@ -23,8 +23,8 @@ exports.list = function() {
 };
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
-	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name) values ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
-			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user])
+	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
+			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user,req.session.sessionId])
 	return data;
 };
 exports.update = function(id, status, message) {
@@ -39,7 +39,7 @@ exports.saveQuestion = function(data) {
 	if(!data.id) {
 		data.id = guid();
 	}
-	console.log(data)
+//	console.log(data)
 	db.asyncInsert('insert into questions(id, type, title, code, choices, answer,active, create_date, mod_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title, type=EXCLUDED.type, code=EXCLUDED.code, choices=EXCLUDED.choices, answer=EXCLUDED.answer,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
 			[data.id,data.type,data.title,data.code,data.choices,data.answer,data.active,new Date(),new Date()])
 	return data;
@@ -48,7 +48,7 @@ exports.deleteQuestion = function(data) {
 	if(!data.id) {
 		return data;
 	}
-	console.log(data)
+//	console.log(data)
 	db.asyncInsert("update questions set active='F',mod_date=$1 where id=$2", [new Date(),data.id])
 	return data;
 };
@@ -56,15 +56,15 @@ exports.savePaper = function(data) {
 	if(!data.id) {
 		data.id = guid();
 	}
-	db.asyncInsert('insert into paper(id, type, title, questions,active, create_date, mod_date) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title,type=EXCLUDED.type, questions=EXCLUDED.questions,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
-			[data.id,data.type,data.title,data.questions,'T',new Date(),new Date()])
+	db.asyncInsert('insert into paper(id, type, title, questions,active, create_date, mod_date,chapter) values ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title,type=EXCLUDED.type,chapter=EXCLUDED.chapter, questions=EXCLUDED.questions,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
+			[data.id,data.type,data.title,data.questions,'T',new Date(),new Date(),data.chapter])
 	return data;
 };
 exports.saveExam = function(data) {
 	if(!data.id) {
 		data.id = guid();
 	}
-	console.log(data)
+//	console.log(data)
 	db.asyncInsert('insert into exam(paper, answer, token, user_name, create_date, mod_date) values ($1,$2,$3,$4,$5,$6) ON CONFLICT (paper,token) DO UPDATE SET answer=exam.answer || EXCLUDED.answer::jsonb, mod_date=EXCLUDED.mod_date', 
 			[data.paper,data.answer,data.token, data.user,new Date(),new Date()])
 			return data;

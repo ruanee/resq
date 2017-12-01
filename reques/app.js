@@ -9,6 +9,9 @@ var path = require('path');
 var auth = require('./auth');
 var session = require('express-session');
 var svgCaptcha = require('svg-captcha');
+var fileUpload = require('express-fileupload');
+var parseXlsx = require('excel');
+var db = require('./db');
 
 var config = {
   token: 'xinshui',
@@ -24,6 +27,7 @@ var questions = require('./routes/questions');
 var paper = require('./routes/paper');
 var exam = require('./routes/exam');
 var login = require('./routes/login');
+var imp = require('./routes/import');
 
 var app = express();
 
@@ -36,6 +40,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileUpload({  limits: { fileSize: 50 * 1024 * 1024 },safeFileNames: true}));
 app.use(cookieParser());
 app.use(session({
   resave: false, // don't save session if unmodified
@@ -53,6 +58,7 @@ app.use('/questions', questions);
 app.use('/paper', paper);
 app.use('/exam', exam);
 app.use('/login', login);
+app.use('/import', imp);
 
 app.get('/captcha', function (req, res) {
 	var captcha = svgCaptcha.create({noise: 3,color:true,background: '#CCFFFF'});
@@ -106,7 +112,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	      	        title: '多谢关注',
 	      	        description: '我爱刷题',
 	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
-	      	        url: 'https://weidian.com/?userid=1291725186'
+	      	        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
 	      	      }
 	      	    ]);
                break;
@@ -121,7 +127,41 @@ app.use('/wechat', wechat(config, function (req, res, next) {
        }
    } 
 }));
+app.post('/upload', function(req, res, next) {
+	if (!req.files)
+		return res.status(400).send('No files were uploaded.');
 
+	// The name of the input field (i.e. "sampleFile") is used to retrieve the
+	// uploaded file
+	let sampleFile = req.files.sampleFile;
+
+	try {
+		db.asyncInsert('delete from tempquest',[])
+		
+		// Use the mv() method to place the file somewhere on your server
+		var filePath = path.join(__dirname, 'public')+'/files/abc.xlsx';
+		sampleFile.mv(filePath, function(err) {
+			if (err)
+				return res.status(500).send(err);
+			parseXlsx(filePath, '1', function(err, data) {
+				if(err) throw err;
+				//console.log(data)
+				var idx = 1;
+				for(var i =0;i<data.length; i++) {
+					if(data[i][1] == '' || data[i][1] == '') continue;
+					console.log(i)
+					var col = 0;
+					var len = data[i].length
+					db.asyncInsert('insert into tempquest(type,chapter,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,create_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', 
+						['Java','Chapter 02',(idx++) + '',data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),new Date()])	
+				}
+			});
+			res.render('import', { title : '导入' });
+		});
+	} catch(e) {
+		console.error(e)
+	}
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

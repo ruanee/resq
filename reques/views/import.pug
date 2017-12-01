@@ -1,8 +1,10 @@
 extends header
 
 block content
-    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
-      h2 考题
-      div
-          button(class="btn btn-info" onclick="createMenu(this)") 生成菜单
-   
+	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+		h2 上传文件
+		form(id='uploadForm' action='/upload' method='post' encType="multipart/form-data")
+			input(type='file' name='sampleFile')
+			input(type='submit' value='Upload!' class="btn btn-info")
+			
+	include footer
