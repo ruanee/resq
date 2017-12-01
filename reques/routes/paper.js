@@ -37,7 +37,7 @@ var fs = require('fs'),
 //		});
    		db.pool.connect((err, client, done) => {
 		   if (err) throw err
-		   client.query("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,create_date desc limit 20", 
+		   client.query("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,chapter,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,chapter,create_date desc limit 20", 
 				   [], (err, result) => {
 			    done()
 			    if (err) {
@@ -116,14 +116,16 @@ var fs = require('fs'),
 	router.get('/generate2', function(req, res, next) {
 		var data = log.save(req, 'paper')
 //		console.log(data)
-		db.query2("select distinct type from tempquest where  type not in (select type from paper)", [], function(error, rows) {
+		db.query2("select distinct type,chapter from questions where (type,chapter) not in (select type,chapter from paper)", [], function(error, rows) {
 			for (var i = 0; i < rows.length; i++) {
-//				console.log(rows[i])
-				db.query2("select id,title,code,choices,answer,type FROM questions where active='T' and type=$1 order by cast(code as integer) ", [rows[i].type], function(error, rows2) {
+				console.log(rows[i].type +";"+rows[i].chapter)
+				db.query2("select id,title,code,choices,answer,type,chapter FROM questions where active='T' and type=$1 and chapter=$2 order by cast(code as integer) ", [rows[i].type,rows[i].chapter], function(error, rows2) {
 					if(rows2 && rows2[0]) {
+						console.log(rows2[0])
 						var paper = {},questions=[];
+						paper.chapter=rows2[0].chapter;
 						paper.type=rows2[0].type;
-						paper.title=rows2[0].type;
+						paper.title=rows2[0].chapter;
 						paper.questions=JSON.stringify(rows2);
 						log.savePaper(paper);
 					}

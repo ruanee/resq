@@ -110,6 +110,8 @@ update users set password='4c61e0aa42c9fc5c52a69909c8c0b4dcfc14b53112c988ff4a297
 --delete from tempquest;
 CREATE TABLE public.tempquest
 (
+  type text,
+  chapter text,
   code text,
   title text,
   item1 text,
@@ -123,7 +125,6 @@ CREATE TABLE public.tempquest
   item9 text,
   answer text,
   explains text default '',
-  type text,
   create_date timestamp with time zone default now()
 )
 WITH (
@@ -144,4 +145,16 @@ COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5,item6
 (select uuid_generate_v4(),type,code,title, jsonb_object('{A,B,C,D,E,F,G,H,I}'::text[],ARRAY[item1,item2,item3,item4,item5,item6,item7,item8,item9]) choices,
 	jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()
 	from public.tempquest where title!='﻿title')
+	
+
+alter table public.questions add column chapter text;
+alter table public.paper add column chapter text;
+update paper set type='Software Enginerring',chapter=title;
+update questions set chapter=type, type='Software Enginerring' where create_date<'2017-11-29';
+update paper set chapter=title;
+
+delete from paper where chapter is null
+
+select distinct code,type,chapter from questions where (type,chapter) not in (select type,chapter from paper)
+
 */

@@ -56,7 +56,6 @@ exports.savePaper = function(data) {
 	if(!data.id) {
 		data.id = guid();
 	}
-	console.log(data)
 	db.asyncInsert('insert into paper(id, type, title, questions,active, create_date, mod_date) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title,type=EXCLUDED.type, questions=EXCLUDED.questions,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date', 
 			[data.id,data.type,data.title,data.questions,'T',new Date(),new Date()])
 	return data;

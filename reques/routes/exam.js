@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 router.get('/list', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
 	var dback = { title: '章节', username:req.session.user };
-	db.query2("SELECT row_number() OVER(ORDER BY type,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') createdate FROM paper where active='T'  order by type,create_date desc", [], function(error, rows) {
+	db.query2("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') createdate FROM paper where active='T' and type=$1 order by type,chapter,create_date desc", [data.type], function(error, rows) {
 		dback.rows = rows;
 		res.render('chapter', dback);
 	})

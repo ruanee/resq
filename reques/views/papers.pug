@@ -21,7 +21,7 @@ block content
                     if key == 'seq'
                         td(scope="row",style="min-width:20px;max-width:40px;white-space:nowrap;overflow:hidden;") 
                             button(id=row['id'],class="btn btn-info" onclick="paper(this)")= val
-                    else if key == 'title'
+                    else if key == 'chapter'
                         td(scope="row",style="min-width:160px;max-width:300px;white-space:nowrap;overflow:hidden;")= val
                     else if key == 'id' || key == 'answer'
                         //td(scope="row",style="display:none;")= val
