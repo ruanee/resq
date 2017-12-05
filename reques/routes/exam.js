@@ -89,16 +89,18 @@ function exam(req,res,next,dback, data) {
 //	console.log(dback)
 	db.pool.connect((err, client, done) => {
 	    if (err) throw err
-	    client.query("SELECT *,(SELECT answer FROM exam where paper=A.id and token=$1) as uanswer FROM (SELECT id,title,jsonb_array_elements(questions) as data FROM paper where id=$2 offset $3 limit 1) A ", [token, data.id, page], (err, result) => {
+	    client.query("SELECT *,(SELECT answer FROM exam where paper=A.id and token=$1) as uanswer FROM (SELECT id,type,title,jsonb_array_elements(questions) as data FROM paper where id=$2 offset $3 limit 1) A ", [token, data.id, page], (err, result) => {
 	    	done()
 	    	if (err) {
 		      console.log(err.stack)
 		      dback.message = '出错了';
 		      res.jsonp(dback);
 		    } else {
-	//	      console.log(result.rows[0])
+		    	var user = globals.userData[req.session.user];
 		      if(result.rows.length == 0) {
 		    	  dback.message = 'end';
+		      } else if(user.roles.indexOf(result.rows[0].type) == -1) {
+		    	  dback.message = '系统察觉你没有购买此章节';
 		      } else {
 		    	  dback.message = '';
 		    	  dback.rows = result.rows[0];

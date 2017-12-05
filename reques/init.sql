@@ -92,6 +92,10 @@ WITH (
 ALTER TABLE users ADD CONSTRAINT users_user_name UNIQUE (user_name);
 /**
 
+select * from request_log order by request_date desc limit 100;
+
+update users set roles='Software Enginerring;Java;sql;SSH;NTC' where user_name ='test';
+
 update users set status ='Active' where user_name='test';
 
 select encode(hmac('miaomiao', '123', 'sha256'), 'hex'),

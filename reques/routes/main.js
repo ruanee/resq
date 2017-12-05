@@ -4,11 +4,11 @@ var log = require('./log.js');
 const globals = require('../globals');
 
 /* GET home page. */
+//router.get('/', function(req, res, next) {
+//  log.save(req, 'home')
+//  res.render('index', { title: 'quiz', username:req.session.user });
+//});
 router.get('/', function(req, res, next) {
-  log.save(req, 'home')
-  res.render('index', { title: 'quiz', username:req.session.user });
-});
-router.get('/test', function(req, res, next) {
 	log.save(req, 'home');
 	var dback = log.common(req);
 	dback.title='quiz';

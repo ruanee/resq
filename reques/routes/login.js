@@ -21,11 +21,11 @@ router.post('/', function(req, res, next) {
 		req.session.user = uname;
 		req.session.sessionId=log.guid();
 		var refer = req.session.referer;
-		if(refer && refer.indexOf("css.map") == -1 && refer.indexOf("favicon") == -1) {
-			res.redirect(req.session.referer);
-		} else {
-			res.render('index', {username:uname, message:"successfully"});
-		}
+//		if(refer && refer.indexOf("css.map") == -1 && refer.indexOf("favicon") == -1) {
+//			res.redirect(req.session.referer);
+//		} else {
+			res.redirect('/');
+//		}
 		return;
 	}
 	res.render('login', { title: '登录', message:"用户名或者密码错误!"});
