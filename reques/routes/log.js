@@ -21,11 +21,16 @@ exports.guid = function()  {
 exports.list = function() {
 	const { rows } = db.query('SELECT url,request_date,params FROM request_log order by request_log desc limit 5', [])
 };
+exports.common = function(req) {
+	var data = {};
+	data.username=req.session.user;
+	return data;
+};
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
 	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
 			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user,req.session.sessionId])
-	return data;
+			return data;
 };
 exports.update = function(id, status, message) {
 	if(id) {

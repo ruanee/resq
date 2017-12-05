@@ -27,6 +27,11 @@ function populate(jst) {
 		document.getElementById('close').style.display = '';
 		window.scrollTo(0,document.body.scrollHeight);
 		return;
+	} else if(!Strings.isEmpty(row.message)) {
+		weui.toast(row.message, 1500);
+		document.getElementById('close').style.display = '';
+		window.scrollTo(0,document.body.scrollHeight);
+		return;
 	} else {
 		data = row.rows.data;
 	}

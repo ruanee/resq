@@ -91,23 +91,9 @@ var fs = require('fs'),
 					var paper = {},questions=[], rows = result.rows;
 					paper.type=data.type;
 					paper.title=data.type;
-//					for (var i = 0; i < rows.length; i++) {
-//						var jso = {};
-//						jso.id = rows[i].id;
-//						jso.title = rows[i].title;
-//						jso.choices = rows[i].choices;
-////						var answer = {};
-////						for(var p in rows[i].answer) {
-////							answer[p] = rows[i].answer[p];
-////						}
-//						jso.answer = rows[i].answer;
-//						questions.push(jso);
-//					}
 					paper.questions=JSON.stringify(rows);
 					
 					log.savePaper(paper);
-					
-//					res.render('papers', { title: '试卷列表' , rows: rows});
 					res.redirect('/paper');
 				}
 			})
