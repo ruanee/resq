@@ -80,6 +80,7 @@ CREATE TABLE public.users
   status text,
   user_name text,
   password text,
+  roles text,
   create_date timestamp with time zone,
   mod_date timestamp with time zone,
   active character varying(1),

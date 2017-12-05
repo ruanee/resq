@@ -5,7 +5,7 @@ const db = require('../db')
 module.exports = function(req, res, next) {
 //	console.log("req.url by auth==============>" + req.url );
 	if(!globals.userData) {
-		db.query2("select user_name username,password,type from public.users where active='T' and status ='Active'", [], 
+		db.query2("select user_name username,password,type,roles from public.users where active='T' and status ='Active'", [], 
 			function(error, rows) {
 				if(!error) {
 					globals.userData = {};
@@ -29,7 +29,7 @@ module.exports = function(req, res, next) {
 	}
 	
 	if (req.session.user != 'admin' 
-			&& (url.indexOf("/users") >= 0 || url.indexOf("/paper") >= 0 || url.indexOf("/questions") >= 0) ) {
+			&& (url.indexOf("/users") >= 0 || url.indexOf("/paper") >= 0 || url.indexOf("/questions") >= 0 || url.indexOf("/import") >= 0) ) {
 		console.log(req.session.user +' unauthorized '+url);
 	    res.setHeader('Content-Type', 'text/html')
 	    res.write('<p>User: ' + req.session.user + '</p>')

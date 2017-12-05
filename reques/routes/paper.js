@@ -37,7 +37,7 @@ var fs = require('fs'),
 //		});
    		db.pool.connect((err, client, done) => {
 		   if (err) throw err
-		   client.query("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,chapter,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,chapter,create_date desc limit 20", 
+		   client.query("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,chapter,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,chapter,create_date desc limit 30", 
 				   [], (err, result) => {
 			    done()
 			    if (err) {
@@ -106,24 +106,25 @@ var fs = require('fs'),
 		sql = sql + " (select uuid_generate_v4(),type,chapter,code,title, jsonb_object('{A,B,C,D,E,F,G,H,I}'::text[],ARRAY[item1,item2,item3,item4,item5,item6,item7,item8,item9]) choices,";
 		sql = sql + "    jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()";
 		sql = sql + "    from public.tempquest where title!='﻿title' and (type,chapter) not in (select type,chapter from questions))";
-		db.query2(sql,[],function(){});
-		db.query2("select distinct type,chapter from questions where (type,chapter) not in (select type,chapter from paper)", [], function(error, rows) {
-			for (var i = 0; i < rows.length; i++) {
-				console.log(rows[i].type +";"+rows[i].chapter)
-				db.query2("select id,title,code,choices,answer,type,chapter FROM questions where active='T' and type=$1 and chapter=$2 order by cast(code as integer) ", [rows[i].type,rows[i].chapter], function(error, rows2) {
-					if(rows2 && rows2[0]) {
-						console.log(rows2[0])
-						var paper = {},questions=[];
-						paper.chapter=rows2[0].chapter;
-						paper.type=rows2[0].type;
-						paper.title=rows2[0].chapter;
-						paper.questions=JSON.stringify(rows2);
-						log.savePaper(paper);
-					}
-				})
-			}
-			res.redirect('/paper');
-		})
+		db.query2(sql,[],function(){
+			db.query2("select distinct type,chapter from questions where (type,chapter) not in (select type,chapter from paper)", [], function(error, rows) {
+				for (var i = 0; i < rows.length; i++) {
+					console.log(rows[i].type +";"+rows[i].chapter)
+					db.query2("select id,title,code,choices,answer,type,chapter FROM questions where active='T' and type=$1 and chapter=$2 order by cast(code as integer) ", [rows[i].type,rows[i].chapter], function(error, rows2) {
+						if(rows2 && rows2[0]) {
+							console.log(rows2[0])
+							var paper = {},questions=[];
+							paper.chapter=rows2[0].chapter;
+							paper.type=rows2[0].type;
+							paper.title=rows2[0].chapter;
+							paper.questions=JSON.stringify(rows2);
+							log.savePaper(paper);
+						}
+					})
+				}
+				res.redirect('/paper');
+			})
+		});
 
 	});
 	router.post('/', function(req, res, next) {
