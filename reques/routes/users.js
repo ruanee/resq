@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 router.get('/show', function(req, res, next) {
 	var data = log.save(req, 'user')
 	if(!data.id || data.id.trim() == '') {
-		res.redirect('/login');
+		res.redirect('/users/new');
 		return;
 	}
 	db.query2("select id,user_name username,status,roles from public.users where id =$1 ", [data.id], function(error, rows) {
