@@ -125,6 +125,9 @@ function paper(obj) {
 function exam(obj) {
 	window.location.href='/exam?id='+obj.id;
 }
+function user(obj) {
+	window.location.href='/users/show?id='+obj.id;
+}
 function editQuestion() {
 	  var buf = [];
 	  buf.push('<input id="id" type=hidden>');
@@ -205,6 +208,27 @@ function saveUser() {
     var form = document.forms[1];
     form.method="post";
     form.action="/users/new";
+    form.submit();
+}
+function updateUser() {
+	var inputs = $('#main').find('input');
+	$('#roles')[0].value = "zz";
+	var roles = "";
+	for (var i = 0; i < inputs.length; i++) {
+		if(Strings.isEmpty(inputs[i].value)) {
+			inputs[i].setCustomValidity('请输入这个字段.');
+			return false;
+		} else {
+			inputs[i].setCustomValidity('');
+		}
+		if(inputs[i].type =='checkbox' && inputs[i].checked) {
+			roles = roles + ";" + inputs[i].value;
+		}
+	}
+	$('#roles')[0].value = roles;
+    var form = document.forms[1];
+    form.method="post";
+    form.action="/users/update";
     form.submit();
 }
 function createChoice(args) {

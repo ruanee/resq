@@ -8,7 +8,7 @@ var log = require('./log.js');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	var data = log.save(req, 'user')
-	db.query2("select row_number() OVER(ORDER BY user_name) seq,user_name username,status,to_char(mod_date,'yyyy-MM-dd') mod_date from public.users where active='T' ", [], function(error, rows) {
+	db.query2("select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,roles from public.users where active='T' ", [], function(error, rows) {
 		res.render('users', { title: 'Users' , rows: rows});
 	})
 //	res.sendFile('weiui.html')
@@ -19,14 +19,36 @@ router.get('/show', function(req, res, next) {
 		res.redirect('/login');
 		return;
 	}
-	db.query2("select user_name username,status,to_char(mod_date,'yyyy-MM-dd') mod_date from public.users where id =$1 ", [data.id], function(error, rows) {
+	db.query2("select id,user_name username,status,roles from public.users where id =$1 ", [data.id], function(error, rows) {
 		if(rows.length == 0) {
 			res.redirect('/login');
 			return;
 		}
-		res.render('user', { title: 'Profile' , username: rows[0].username, status: rows[0].status });
+		var arr = [];
+		for (var i = 0; i < globals.menus.length; i++) {
+			var menu = globals.menus[i];
+			if(rows[0].roles && rows[0].roles.indexOf(menu.type) > -1) {
+				menu.checked='yes';
+			} else {
+				menu.checked='no';
+			}
+			arr.push(menu);
+		}
+//		console.log(arr);
+		res.render('userDetail', { title: 'Profile' , row: rows[0], menus: arr});
 	})
-//	res.sendFile('weiui.html')
+});
+router.post('/update', function(req, res, next) {
+	var data = log.save(req, 'user')
+	if(!data.id || data.id.trim() == '') {
+		res.redirect('/login');
+		return;
+	}
+	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3 where id=$4",
+			[data.status, data.roles, new Date(), data.id], function(error, rows) {
+		res.redirect('/users');
+	});
+	
 });
 router.get('/new', function(req, res, next) {
 	var data = log.save(req, 'user')
