@@ -1,0 +1,31 @@
+extends header
+
+block content
+
+	div(class="container" id="main")
+		form(class="form-signin" id="user")
+			input(type="hidden" id="id" name="id" value= row['id'])
+			h2(class="form-signin-heading") 用户信息
+			div(class="form-group")
+				label(for="username") 用户名
+				input(type="input" id="username" name="username" value= row['username'] class="form-control" placeholder="User Name" readonly)
+			div(class="form-group")
+				label(for="roles") 状态
+				select(class="form-control" name="status")
+					option(selected= row['status'] == 'Active') Active
+					option(selected= row['status'] != 'Active') Inactive
+			div(class="form-group")
+				label(for="roles") 权限
+				input(type="hidden" id="roles" name="roles" value= row['roles'] class="form-control" placeholder="Roles")
+			div(class="form-group")
+				each menu in menus
+					div(class="checkbox")
+						label(class="checkbox-inline")
+							input(type="checkbox" name="menu" id= menu['type'] value= menu['type'] checked=(menu['checked']==='yes' ? "checked" : undefined))
+							= menu['title']
+			
+			button(class="btn btn-lg btn-primary btn-block" onclick="updateUser(this)" ) 提交 
+
+	link(href="/stylesheets/signin.css" rel="stylesheet")
+	script(type="javascript")
+		|document.getElementById('left').style.display='none';

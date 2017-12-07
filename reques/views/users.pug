@@ -10,17 +10,17 @@ block content
           thead
             tr
               th
-                  button(class="btn btn-info" onclick="paper(this)") 添加
+                  button(class="btn btn-info" onclick="user(this)") 添加
               th 用户名
-              th 状体
-              th 修改时间
+              th 状态
+              th 权限
           tbody
             each row in rows
                 tr
                 each val, key in row
                     if key == 'seq'
                         td(scope="row",style="min-width:20px;max-width:40px;white-space:nowrap;overflow:hidden;") 
-                            button(id=row['id'],class="btn btn-info" onclick="paper(this)")= val
+                            button(id=row['id'],class="btn btn-info" onclick="user(this)")= val
                     else if key == 'id' || key == 'answer'
                         //td(scope="row",style="display:none;")= val
                     else

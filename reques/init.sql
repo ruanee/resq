@@ -101,13 +101,13 @@ update users set status ='Active' where user_name='test';
 select encode(hmac('miaomiao', '123', 'sha256'), 'hex'),
 		encode(hmac('miaomiao', 'pass@123', 'sha256'), 'hex');
 		
-INSERT INTO public.users( id, type, status, user_name, password, create_date, mod_date, active)
-    VALUES (uuid_generate_v4(), 'main','Active', 'admin', 'pass@123', now(), now(),'T');
+INSERT INTO public.users( id, type, status, user_name,  create_date, mod_date, active)
+    VALUES (uuid_generate_v4(), 'main','Active', 'admin',  now(), now(),'T');
 
 update users set password='ce6f0af232270c52eace2ec2ac949e93f4f85cf291f8d9913f5543e37838f6c3' where user_name='admin';
  
- INSERT INTO public.users( id, type, status, user_name, password, create_date, mod_date, active)
-    VALUES (uuid_generate_v4(), 'test','Active', 'test', '123', now(), now(),'T');
+ INSERT INTO public.users( id, type, status, user_name,  create_date, mod_date, active)
+    VALUES (uuid_generate_v4(), 'test','Active', 'test',  now(), now(),'T');
 
 update users set password='4c61e0aa42c9fc5c52a69909c8c0b4dcfc14b53112c988ff4a29753ed3b2a7b3' where user_name='test';
  */
@@ -151,7 +151,7 @@ COPY public.tempquest(type,code,answer,title,item1,item2,item3,item4,item5,item6
 	jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()
 	from public.tempquest where title!='﻿title')
 	
-
+alter table public.users add column roles text;
 alter table public.questions add column chapter text;
 alter table public.paper add column chapter text;
 update paper set type='Software Enginerring',chapter=title;
