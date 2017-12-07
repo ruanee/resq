@@ -8,13 +8,18 @@ var log = require('./log.js');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 	var data = log.save(req, 'user')
+	var dback = log.common(req);
+	dback.title='Users';
 	db.query2("select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,roles from public.users where active='T' ", [], function(error, rows) {
-		res.render('users', { title: 'Users' , rows: rows});
+		dback.rows = rows
+		res.render('users', dback);
 	})
 //	res.sendFile('weiui.html')
 });
 router.get('/show', function(req, res, next) {
 	var data = log.save(req, 'user')
+	var dback = log.common(req);
+	dback.title='Profile';
 	if(!data.id || data.id.trim() == '') {
 		res.redirect('/users/new');
 		return;
@@ -34,8 +39,9 @@ router.get('/show', function(req, res, next) {
 			}
 			arr.push(menu);
 		}
-//		console.log(arr);
-		res.render('userDetail', { title: 'Profile' , row: rows[0], menus: arr});
+		dback.row = rows[0];
+		dback.menus = arr;
+		res.render('userDetail', dback);
 	})
 });
 router.post('/update', function(req, res, next) {
@@ -46,7 +52,47 @@ router.post('/update', function(req, res, next) {
 	}
 	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3 where id=$4",
 			[data.status, data.roles, new Date(), data.id], function(error, rows) {
+		globals.userData[req.session.user].status=data.status;
+		globals.userData[req.session.user].roles=data.roles;
 		res.redirect('/users');
+	});
+	
+});
+router.post('/pass', function(req, res, next) {
+	var data = log.save(req, 'user')
+	var dback = log.common(req);
+	dback.message = "";
+	if(!req.session.user) {
+		dback.message = "请登录";
+	}
+	if(!data.password) {
+		dback.message = "输入密码";
+	}
+	if(req.session.user != 'admin') {
+		if(data.user != req.session.user) {
+			dback.message = "用户名不对";
+		}
+		if(data.password != data.password2) {
+			dback.message = "密码不匹配";
+		}
+		if(!data.cpassword) {
+			dback.message = "请输入当前密码";
+		}
+		if(crypto.createHmac('sha256', data.cpassword).update(globals.hashKey).digest('hex') != globals.userData[req.session.user].password) {
+			dback.message = "当前密码不正确";
+		}
+	} else {
+		
+	}
+	if(dback.message) {
+		res.jsonp(dback);
+		return;
+	}
+	db.query2("UPDATE public.users set password= $1,mod_date=$2 where user_name=$3",
+			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.user], function(error, rows) {
+		globals.userData[data.user].password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
+		res.jsonp(dback);
+		return;
 	});
 	
 });
@@ -86,8 +132,9 @@ router.post('/new', function(req, res, next) {
 			dback.message = "用户名已经存在";
 			res.render('user', dback);
 		} else {
-			db.asyncInsert("INSERT INTO public.users(id, type, status, user_name, password, create_date, mod_date,active) VALUES (uuid_generate_v4(), 'test', $1, $2, $3, now(), now(),'T') ON CONFLICT (id) DO UPDATE SET password=EXCLUDED.password,status=EXCLUDED.status,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date",
+			db.asyncInsert("INSERT INTO public.users(id, type, status, user_name, password, create_date, mod_date,active) VALUES (uuid_generate_v4(), 'Test', $1, $2, $3, now(), now(),'T') ON CONFLICT (id) DO UPDATE SET password=EXCLUDED.password,status=EXCLUDED.status,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date",
 					[data.stauts, data.username, crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex')]);
+			globals.userData[data.username]={type:'Test',roles:'',stauts:data.stauts,password:crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex')};
 			res.redirect('/login');
 		}
 	})

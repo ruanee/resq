@@ -10,6 +10,8 @@ var fs = require('fs'),
 /* GET home page. */
 	router.get('/', function(req, res, next) {
 		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pm_',s2=' PARTITION OF item_price_pm2 FOR VALUES FROM ('
+		var dback = log.common(req);
+		dback.title='试卷列表';
 //		fs.readFile('F:/work/FE/B2B/sync/pm.txt', {encoding: 'utf-8'}, function(err,data){
 //		    if (!err) {
 //		    	var lines = data.split("\n");
@@ -44,16 +46,20 @@ var fs = require('fs'),
 			      console.log(err.stack)
 			    } else {
 //			      console.log(result.rows[0])
-			        res.render('papers', { title: '试卷列表' , rows: result.rows});
+			    	dback.rows = result.rows
+			        res.render('papers', dback);
 			    }
 		   })
 		})
 	});
 	router.get('/id', function(req, res, next) {
 		var data = log.save(req, 'paper')
+		var dback = log.common(req);
+		dback.title='paper';
+		dback.rows = {};
 //		console.log(data)
 		if(!data.id) {
-			res.render('paper', { title: '试卷' , rows: {}});
+			res.render('paper', dback);
 			return;
 		}
    		db.pool.connect((err, client, done) => {
@@ -64,7 +70,8 @@ var fs = require('fs'),
 			      console.log(err.stack)
 			    } else {
 //			      console.log(result.rows[0])
-			      res.render('paper', { title: '试卷' , rows: result.rows[0]});
+		    	  dback.rows = result.rows[0];
+			      res.render('paper', dback);
 			    }
 		   })
 		})

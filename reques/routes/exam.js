@@ -23,6 +23,19 @@ router.get('/list', function(req, res, next) {
 		res.render('chapter', dback);
 	})
 });
+router.get('/user', function(req, res, next) {
+	var data = log.save(req, 'exam'), page = 0;
+	var dback = log.common(req);
+	dback.title = 'Profile';
+	db.query2("SELECT row_number() OVER(ORDER BY E.create_date desc) seq,P.type,P.title,E.paper,E.token,to_char(E.create_date,'yyyy-MM-dd HH:mm') createdate,E.user_name username FROM exam E left join paper P on E.paper=P.id where E.user_name=$1 order by E.create_date desc", [req.session.user], function(error, rows) {
+		if(rows.length == 0) {
+			dback.rows = [{username: req.session.user}];
+		} else {
+			dback.rows = rows;
+		}
+		res.render('profile', dback);
+	})
+});
 router.get('/go', function(req, res, next) {
 	var dback = log.common(req);
 	dback.title = '考试中';

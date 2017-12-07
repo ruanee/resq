@@ -7,6 +7,8 @@ const db = require('../db')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var data = log.save(req, 'perques')
+  var dback = log.common(req);
+  dback.title='题目列表';
 //  console.log(data)
 //  console.log(log.listQuestions())
 //  var ques = log.listQuestions();
@@ -17,8 +19,9 @@ router.get('/', function(req, res, next) {
 		    if (err) {
 		      console.log(err.stack)
 		    } else {
-		      console.log(result.rows[0])
-		      res.render('questions', { title: '题目列表' , rows: result.rows});
+//		      console.log(result.rows[0])
+		      dback.rows = result.rows
+		      res.render('questions', dback);
 		    }
 	   })
 	})

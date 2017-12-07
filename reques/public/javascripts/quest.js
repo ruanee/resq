@@ -210,6 +210,38 @@ function saveUser() {
     form.action="/users/new";
     form.submit();
 }
+function pass() {
+	var inputs = $('#pass').find('input');
+	for (var i = 0; i < inputs.length; i++) {
+		if(Strings.isEmpty(inputs[i].value)) {
+			inputs[i].setCustomValidity('请输入这个字段.');
+			return false;
+		} else {
+			inputs[i].setCustomValidity('');
+		}
+	}
+	var p1 = document.getElementById('password'), p2=document.getElementById('password2');
+	if (p2 && p1.value != p2.value) { 
+		p2.setCustomValidity('密码不匹配.');
+		return false;
+	} else {
+		p2 && p2.setCustomValidity('');
+	}
+	var data={};
+	data.user=document.getElementById('username').value;
+	data.password=p1.value;
+	data.password2=p2 && p2.value;
+	data.cpassword=document.getElementById('cpassword') && document.getElementById('cpassword').value;
+	
+	postData("POST", "/users/pass", data, function(obj) {
+		var msg = JSON.parse(obj.response).message;
+		if(!Strings.isEmpty(msg)) {
+			alert(msg);
+		} else {
+			$("#exampleModal").modal('hide');
+		}
+	});
+}
 function updateUser() {
 	var inputs = $('#main').find('input');
 	$('#roles')[0].value = "zz";

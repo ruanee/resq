@@ -9,9 +9,9 @@ var fs = require('fs'),
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	// console.log(data)
-	res.render('import', {
-		title : '导入'
-	});
+	var dback = log.common(req);
+	dback.title='导入';
+	res.render('import',dback);
 });
 
 module.exports = router;
