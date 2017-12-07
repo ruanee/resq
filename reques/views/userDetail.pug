@@ -14,6 +14,9 @@ block content
 						option(selected= row['status'] == 'Active') Active
 						option(selected= row['status'] != 'Active') Inactive
 				div(class="form-group")
+					label(for="type") 类型
+					input(type="input" id="type" name="type" value= row['type'] class="form-control" placeholder="type")
+				div(class="form-group")
 					label(for="roles") 权限
 					input(type="hidden" id="roles" name="roles" value= row['roles'] class="form-control" placeholder="Roles")
 				div(class="form-group")

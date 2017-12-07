@@ -24,7 +24,7 @@ router.get('/show', function(req, res, next) {
 		res.redirect('/users/new');
 		return;
 	}
-	db.query2("select id,user_name username,status,roles from public.users where id =$1 ", [data.id], function(error, rows) {
+	db.query2("select id,user_name username,status,roles,type from public.users where id =$1 ", [data.id], function(error, rows) {
 		if(rows.length == 0) {
 			res.redirect('/login');
 			return;
@@ -50,10 +50,16 @@ router.post('/update', function(req, res, next) {
 		res.redirect('/login');
 		return;
 	}
-	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3 where user_name=$4",
-			[data.status, data.roles, new Date(), data.username], function(error, rows) {
-		globals.userData[data.username].status=data.status;
-		globals.userData[data.username].roles=data.roles;
+	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3,type=$4 where id=$5",
+			[data.status, data.roles, new Date(), data.type, data.id], function(error, rows) {
+		if(data.user) {
+			var uu = globals.userData[data.user];
+			if(uu) {
+				uu.status=data.status;
+				uu.roles=data.roles;
+				uu.type=data.type;
+			}
+		}
 		res.redirect('/users');
 	});
 	
@@ -91,6 +97,12 @@ router.post('/pass', function(req, res, next) {
 	db.query2("UPDATE public.users set password= $1,mod_date=$2 where user_name=$3",
 			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.user], function(error, rows) {
 		globals.userData[data.user].password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
+		if(data.user) {
+			var uu = globals.userData[data.user];
+			if(uu) {
+				uu.password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
+			}
+		}
 		res.jsonp(dback);
 		return;
 	});
