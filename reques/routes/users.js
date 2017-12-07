@@ -50,10 +50,10 @@ router.post('/update', function(req, res, next) {
 		res.redirect('/login');
 		return;
 	}
-	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3 where id=$4",
-			[data.status, data.roles, new Date(), data.id], function(error, rows) {
-		globals.userData[req.session.user].status=data.status;
-		globals.userData[req.session.user].roles=data.roles;
+	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3 where user_name=$4",
+			[data.status, data.roles, new Date(), data.username], function(error, rows) {
+		globals.userData[data.username].status=data.status;
+		globals.userData[data.username].roles=data.roles;
 		res.redirect('/users');
 	});
 	
