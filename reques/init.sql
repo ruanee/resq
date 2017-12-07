@@ -90,6 +90,15 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE users ADD CONSTRAINT users_user_name UNIQUE (user_name);
+
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
 /**
 
 select * from request_log order by request_date desc limit 100;

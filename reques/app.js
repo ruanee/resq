@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var wechat = require('wechat');
 var path = require('path');
 var auth = require('./auth');
-var session = require('express-session');
+var session = require('express-session'), pgSession = require('connect-pg-simple')(session);
 var svgCaptcha = require('svg-captcha');
 var fileUpload = require('express-fileupload');
 var parseXlsx = require('excel');
@@ -42,9 +42,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(fileUpload({  limits: { fileSize: 50 * 1024 * 1024 },safeFileNames: true}));
 app.use(cookieParser());
 app.use(session({
+  store: new pgSession({
+	    pool : db.pool,                // Connection pool
+	    tableName : 'session'   // Use another table-name than the default "session" one
+	  }),
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'keyboard cat', cookie: { maxAge: 7200000 }
+  secret: 'keyboard cat', 
+  cookie: { maxAge: 7200000 }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'files')));
