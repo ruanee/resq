@@ -5,7 +5,7 @@ block content
 		section(class="row text-center placeholders")
 			each row in menus
 				div(class="col-6 col-sm-3 placeholder")
-					a(href= row['url']) #[img(src= row['src'] width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail")]
+					a(href= row['url']) #[img(src= row['src'] width="120" height="120" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail")]
 					h4= row.type
 					div(class="text-muted")= row.title
 

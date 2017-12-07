@@ -99,7 +99,7 @@ function exam(req,res,next,dback, data) {
 		    	var user = globals.userData[req.session.user];
 		      if(result.rows.length == 0) {
 		    	  dback.message = 'end';
-		      } else if(user.roles.indexOf(result.rows[0].type) == -1) {
+		      } else if(user && user.roles && user.roles.indexOf(result.rows[0].type) == -1) {
 		    	  dback.message = '系统察觉你没有购买此章节';
 		      } else {
 		    	  dback.message = '';

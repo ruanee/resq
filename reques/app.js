@@ -77,11 +77,11 @@ app.use('/wechat', wechat(config, function (req, res, next) {
   //console.log(req.wechat_token)
    if (message && message.MsgType == 'text') {
 	  var cnt = message.Content
-	  if (cnt === 'hehe') {
+	  if (cnt === '呵呵' || cnt === '购买' || cnt === '采购' || cnt === '升级' || cnt.toLowerCase() === 'purchase') {
      	    res.reply([
 	      	      {
-	      	        title: '刷刷刷',
-	      	        description: '我爱刷题',
+	      	        title: '我爱刷题',
+	      	        description: '欢迎来到我的小店',
 	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
 	      	        url: 'https://weidian.com/?userid=1291725186'
 	      	      }

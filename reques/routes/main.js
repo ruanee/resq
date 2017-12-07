@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
 	var dback = log.common(req);
 	dback.title='quiz';
 	var idx=0, arr=[];
-	var user = globals.userData[req.session.user];
-	if(req.session.user != 'admin' && user) {
+	var user = req.session && req.session.user ? globals.userData[req.session.user] : null;
+	if(req.session && req.session.user != 'admin' && user) {
 		for (var i = 0; i < globals.menus.length; i++) {
 			var menu = globals.menus[i];
 			if(user.roles && user.roles.indexOf(menu.type) == -1) continue;
