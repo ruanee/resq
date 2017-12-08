@@ -28,8 +28,8 @@ exports.common = function(req) {
 };
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
-	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id) values ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
-			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user,req.session.sessionId])
+	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id,remote_addr,msg) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
+			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user,req.session.sessionId,getClientAddress(req), req.sessionID])
 			return data;
 };
 exports.update = function(id, status, message) {
@@ -92,4 +92,8 @@ function buildParams(req, type) {
 function getCode(data, type) {
 	var code = "";
 	return code;
+}
+function getClientAddress(req) {
+    return (req.headers['x-forwarded-for'] || '').split(',')[0] 
+    	|| req.connection.remoteAddress;
 }
