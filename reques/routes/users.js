@@ -96,7 +96,6 @@ router.post('/pass', function(req, res, next) {
 	}
 	db.query2("UPDATE public.users set password= $1,mod_date=$2 where user_name=$3",
 			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.username], function(error, rows) {
-		globals.userData[data.user].password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
 		if(data.username) {
 			var uu = globals.userData[data.username];
 			if(uu) {
