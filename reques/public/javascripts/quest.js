@@ -228,11 +228,10 @@ function pass() {
 		p2 && p2.setCustomValidity('');
 	}
 	var data={};
-	data.user=document.getElementById('username').value;
+	data.username=document.getElementById('username').value;
 	data.password=p1.value;
 	data.password2=p2 && p2.value;
 	data.cpassword=document.getElementById('cpassword') && document.getElementById('cpassword').value;
-	data.type=document.getElementById('type') && document.getElementById('type').value;
 	
 	postData("POST", "/users/pass", data, function(obj) {
 		var msg = JSON.parse(obj.response).message;

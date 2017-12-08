@@ -15,6 +15,25 @@ router.get('/logout', function(req, res, next) {
 });
 router.post('/', function(req, res, next) {
 	var uname = req.body.username;
+	try {
+		var sid= req.sessionID, store = req.sessionStore;
+		if(sid && store) {
+			var sessions = store.sessions, times = 0;
+			for ( var p in sessions) {
+				var ses = JSON.parse(sessions[p]);
+				if(sid != p && ses.user == uname && ses.sessionId) {
+					times++;
+				}
+			}
+			if(times >= 1 && uname !='test') {
+				res.render('login', { title: '登录', message:"您的账号已经在别的地方登陆了!"});
+				return;
+			}
+		}
+	} catch(e) {
+		
+	}
+	
 	const hash = crypto.createHmac('sha256', req.body.password).update(globals.hashKey).digest('hex');
 //	console.log(hash);
 	if(uname && globals.userData && globals.userData[uname] && globals.userData[uname]["password"] == hash) {

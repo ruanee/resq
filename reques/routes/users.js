@@ -52,8 +52,8 @@ router.post('/update', function(req, res, next) {
 	}
 	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3,type=$4 where id=$5",
 			[data.status, data.roles, new Date(), data.type, data.id], function(error, rows) {
-		if(data.user) {
-			var uu = globals.userData[data.user];
+		if(data.username) {
+			var uu = globals.userData[data.username];
 			if(uu) {
 				uu.status=data.status;
 				uu.roles=data.roles;
@@ -75,7 +75,7 @@ router.post('/pass', function(req, res, next) {
 		dback.message = "输入密码";
 	}
 	if(req.session.user != 'admin') {
-		if(data.user != req.session.user) {
+		if(data.username != req.session.user) {
 			dback.message = "用户名不对";
 		}
 		if(data.password != data.password2) {
@@ -95,10 +95,10 @@ router.post('/pass', function(req, res, next) {
 		return;
 	}
 	db.query2("UPDATE public.users set password= $1,mod_date=$2 where user_name=$3",
-			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.user], function(error, rows) {
+			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.username], function(error, rows) {
 		globals.userData[data.user].password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
-		if(data.user) {
-			var uu = globals.userData[data.user];
+		if(data.username) {
+			var uu = globals.userData[data.username];
 			if(uu) {
 				uu.password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
 			}
