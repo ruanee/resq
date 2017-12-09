@@ -9,11 +9,13 @@ router.get('/', function(req, res, next) {
 	res.render('login', { title: '登录' });
 });
 router.get('/logout', function(req, res, next) {
+	var data = log.save(req, 'paper')
 	console.log('==========================> logout');
 	req.session.destroy();
 	res.redirect('/login');
 });
 router.post('/', function(req, res, next) {
+	var data = log.save(req, 'paper')
 	var uname = req.body.username;
 	var dback = {title: '登录'};
 	const hash = crypto.createHmac('sha256', req.body.password).update(globals.hashKey).digest('hex');
@@ -24,14 +26,18 @@ router.post('/', function(req, res, next) {
 		try {
 			var sid= req.sessionID, store = req.sessionStore;
 			if(sid && store) {
-				var sessions = store.sessions, times = 0;
+//				var deviceAgent = req.headers["user-agent"].toLowerCase();
+//				console.log("deviceAgent==============>"+deviceAgent);
+//				var agentID = deviceAgent.match(/(iphone|ipod|ipad|android)/);
+//				console.log("agentID==============>"+agentID);
+				var sessions = store.sessions, times = 0,pctimes = 0;
 				for ( var p in sessions) {
 					var ses = JSON.parse(sessions[p]);
 					if(sid != p && ses.user == uname && ses.sessionId) {
 						times++;
 					}
 				}
-				if(times >= 1 && uname !='test') {
+				if(times >= 2 && uname !='test') {
 					dback.message = "您的账号已经在别的地方登陆了!";
 					res.render('login', dback);
 					return;

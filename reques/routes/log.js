@@ -29,7 +29,7 @@ exports.common = function(req) {
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
 	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id,remote_addr,msg) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 
-			[data['__id'],req.method +" "+req.baseUrl+req.url,data, type,new Date(),req.session.user,req.session.sessionId,getClientAddress(req), req.sessionID])
+			[data['__id'],req.method +" "+req.baseUrl+req.url, JSON.stringify(data), type,new Date(),req.session.user,req.session.sessionId,getClientAddress(req), req.sessionID])
 			return data;
 };
 exports.update = function(id, status, message) {
@@ -86,6 +86,7 @@ function buildParams(req, type) {
 		data[p] = arg[p];
 	}
 //	data['__code'] = getCode(data, type);
+	data.userAgent = req.headers["user-agent"];
 	data['__id'] = guid();
 	return data;
 }
