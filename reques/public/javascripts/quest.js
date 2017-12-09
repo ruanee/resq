@@ -1,9 +1,9 @@
-//window.onload=function() {
-//	if(!Strings.isEmpty($("#user")[0].innerHTML)) 
-//		$("#reg")[0].style.display='none'; 
-//	else 
-//		$("#user")[0].style.display='none';
-//}
+window.onload=function() {
+	if(!Strings.isEmpty($("#userinfo")[0].innerHTML)) 
+		$("#newinfo")[0].style.display='none'; 
+	else 
+		$("#userinfo")[0].style.display='none';
+}
 function submit() {
 	popup();
     weui.form.validate('#form', function (error) {

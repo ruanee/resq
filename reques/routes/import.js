@@ -9,6 +9,7 @@ var fs = require('fs'),
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	// console.log(data)
+	var data = log.save(req, 'paper')
 	var dback = log.common(req);
 	dback.title='导入';
 	res.render('import',dback);
