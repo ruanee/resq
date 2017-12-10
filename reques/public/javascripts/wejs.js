@@ -47,7 +47,6 @@ function populate(jst) {
 	if(data.class == 'big' || data.class == 'input') {
 		document.getElementById('expdiv').style.display = '';
 	}
-	document.getElementById('expdiv').style.display = '';
 	qid = data.id;
 	token= row.token;
 	for (var p in data.choices) {
