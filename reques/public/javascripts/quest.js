@@ -107,33 +107,57 @@ function trimSpecial(str) {
 	}
 	return str;
 }
-function deleteQuestion() {
-	var data = {};
-	data.id = document.getElementById('id').value;
-	
-	postData("delete", "questions", data);
-	
-	closePopup();
-	
-	window.location.reload()
-	
-	return data;
+function deleteQuestion(obj) {
+	if(confirm("Are you sure you want to delete it?")) {
+    	var data = {};
+    	data.id = obj.name;
+    	
+    	postData("DELETE", "questions", data);
+    	
+    	window.location.reload()
+	} else {
+	    // Cancel button pressed...
+	}
 }
-
+function deletePaper(obj) {
+	if(confirm("Are you sure you want to delete it?")) {
+    	var data = {};
+    	data.id = obj.name;
+    	
+    	postData("DELETE", "paper", data);
+    	
+    	window.location.reload()
+	} else {
+	    // Cancel button pressed...
+	}
+}
 function postData(action,url, data, callback) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-    	  if(callback) {
-    		  callback.call(this, xhttp);
-    	  }
-      }
-    };
-    data = JSON.stringify(data);
-//    data = "{\"id\":\"123\",\"Order Number\":\"TEST00002\"}";
-    xhttp.open(action, url);
-    xhttp.setRequestHeader('Content-Type', 'application/json');
-    xhttp.send(data);
+	$.ajax({
+	  url: url,
+	  type: action,
+	  data: { _dto: JSON.stringify(data) },
+	  dataType: "json",
+	  success: function(res) {
+		  callback.call(this, res);
+	  },
+	  error: function(e) {
+		console.log(e.message);
+	  }
+	});
+	
+//    var xhttp = new XMLHttpRequest();
+//    xhttp.onreadystatechange = function() {
+//      if (this.readyState == 4 && this.status == 200) {
+//    	  if(callback) {
+//    		  callback.call(this, xhttp);
+//    	  }
+//      }
+//    };
+//    data = JSON.stringify(data);
+////    data = "{\"id\":\"123\",\"Order Number\":\"TEST00002\"}";
+//    xhttp.open(action, url);
+//    xhttp.setRequestHeader('Content-Type', 'application/json');
+//    xhttp.send(data);
 }
 function paper(obj) {
 	window.location.href='/paper/id?id='+obj.id;

@@ -18,7 +18,8 @@ function populate(jst) {
 	if(jst == '') return;
 	var row = null, data = {};
 	try {
-		row = JSON.parse(jst);
+		row = jst;
+//			JSON.parse(jst);
 	} catch(e) {
 		window.location.href='/';
 	}
@@ -133,7 +134,7 @@ function submit(direc) {
         		return;
             }
             ajax('GET','/exam/go',data,function (obj) {
-            	populate(obj.response)
+            	populate(obj)
                 loading.hide();
             });
         }
@@ -146,28 +147,41 @@ function submit(direc) {
     });
 }
 function ajax(action,url, data, callback) {
-    var xhttp = null;
-	if (window.XMLHttpRequest) {
-		xhttp = new XMLHttpRequest();
-	} else if (window.ActiveXObject) {
-		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-    	  if(callback) {
-    		  callback.call(this, xhttp);
-    	  }
-      }
-    };
-    if(action=='GET') {
-    	url = url +"?" + Object.keys(data).map(function(k) {
-    	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    	}).join('&');
-    	data = null;
-    } else {
-    	data = JSON.stringify(data);
-    }
-	xhttp.open(action, url, false);
-	xhttp.setRequestHeader('Content-Type', 'application/json');
-	xhttp.send(data);
+	$.ajax({
+	  url: url,
+	  type: action,
+	  data: data,
+	  dataType: "json",
+	  success: function(res) {
+		  callback.call(this, res);
+	  },
+	  error: function(e) {
+		console.log(e.message);
+	  }
+	});
+	
+//    var xhttp = null;
+//	if (window.XMLHttpRequest) {
+//		xhttp = new XMLHttpRequest();
+//	} else if (window.ActiveXObject) {
+//		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//	}
+//    xhttp.onreadystatechange = function() {
+//      if (this.readyState == 4 && this.status == 200) {
+//    	  if(callback) {
+//    		  callback.call(this, xhttp);
+//    	  }
+//      }
+//    };
+//    if(action=='GET') {
+//    	url = url +"?" + Object.keys(data).map(function(k) {
+//    	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+//    	}).join('&');
+//    	data = null;
+//    } else {
+//    	data = JSON.stringify(data);
+//    }
+//	xhttp.open(action, url, false);
+//	xhttp.setRequestHeader('Content-Type', 'application/json');
+//	xhttp.send(data);
 }

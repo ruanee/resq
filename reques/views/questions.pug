@@ -23,6 +23,7 @@ block content
                     if key == 'seq'
                         td(scope="row",style="min-width:20px;max-width:40px;white-space:nowrap;overflow:hidden;") 
                             button(id=row['id'],class="btn btn-info" onclick="popup(this)")= val
+                            button(name=row['id'],class="btn btn-warning" onclick="deleteQuestion(this)") 删除
                     else if key == 'choices'
                         td(scope="row",style="min-width:20px;max-width:100px;white-space:nowrap;overflow:hidden;")= JSON.stringify(val)
                     else if key == 'title'

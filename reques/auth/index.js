@@ -29,7 +29,7 @@ module.exports = function(req, res, next) {
 	}
 	
 	if (req.session.user != 'admin' 
-			&& (url.indexOf("/users") >= 0 || url.indexOf("/paper") >= 0 || url.indexOf("/questions") >= 0 || url.indexOf("/import") >= 0) ) {
+			&& (url.indexOf("/users") >= 0 || url.indexOf("/paper") >= 0 || url.indexOf("/questions") >= 0 || url.indexOf("/import") >= 0 || url.indexOf("/upload") >= 0) ) {
 		console.log(req.session.user +' unauthorized '+url);
 	    res.setHeader('Content-Type', 'text/html')
 	    res.write('<p>User: ' + req.session.user + '</p>')

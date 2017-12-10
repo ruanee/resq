@@ -137,14 +137,16 @@ var fs = require('fs'),
 	router.post('/', function(req, res, next) {
 //		console.log(req.body)
 		var data = log.save(req, 'edit')
-		log.saveQuestion(data);
-		res.jsonp({message: "Question is saved/updated succesfully", code: data['title']});
+		if(data.id) {
+		}
+		res.jsonp({message: "Paper is saved/updated succesfully", code: data['title']});
 	});
 	router.delete('/', function(req, res, next) {
-		console.log(req.body)
 		var data = log.save(req, 'delete')
-		log.deleteQuestion(data);
-		res.jsonp({message: "Question is deleted", code: data['title']});
+		if(data.id) {
+			db.asyncInsert("update paper set active='F',mod_date=$1 where id=$2", [new Date(),data.id])
+		}
+		res.jsonp({message: "Paper is deleted", code: data['title']});
 	});
 
 module.exports = router;

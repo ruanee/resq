@@ -85,6 +85,18 @@ function buildParams(req, type) {
 	for(var p in arg) {
 		data[p] = arg[p];
 	}
+	try {
+		var dto = data._dto;
+		if(dto) {
+			dto = JSON.parse(dto)
+			for(var p in dto) {
+				data[p] = dto[p];
+			}
+		}
+	} catch(e) {
+		
+	}
+
 //	data['__code'] = getCode(data, type);
 	data.userAgent = req.headers["user-agent"];
 	data['__id'] = guid();
