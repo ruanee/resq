@@ -4,6 +4,7 @@ window.onload=function() {
 	else 
 		$("#userinfo")[0].style.display='none';
 }
+var picpath ="files/pic/";
 function submit() {
 	popup();
     weui.form.validate('#form', function (error) {
@@ -34,28 +35,34 @@ function chapter() {
 		}
 	}
 }
+
 function saveQuestion() {
 	var data = {}, choices = {}, answer = {};
-	data.type ='期末考题';
+	data.type = trimSpecial(document.getElementById('type').value);
+	data.chapter = trimSpecial(document.getElementById('chapter').value);
+	data['class'] = trimSpecial(document.getElementById('class').value);
 	data.title = trimSpecial(document.getElementById('title').value);
-	data.code = '';
+	data['titlepic'] = trimSpecial(document.getElementById('titlepic').value);
+	data.code = '10000';
 //		document.getElementById('code').value;
-	var inputs = document.getElementsByTagName("INPUT");
+	var inputs = $('#choHeader').find('input');
+//		document.getElementsByTagName("INPUT");
 	for (var i = 0; i < inputs.length; i++) {
 		var id = inputs[i].id;
-		if(inputs[i].placeholder && id !='答案' && id !='id' && inputs[i].id !='' && inputs[i].value !='') {
+		if(inputs[i].placeholder && id !='id' && inputs[i].id !='' && inputs[i].value !='') {
 			choices[inputs[i].id] = trimSpecial(inputs[i].value);
 		}
 	}
 	data.choices = choices;
-	answer['ans'] = trimSpecial(document.getElementById('答案').value);
+	answer['ans'] = trimSpecial(document.getElementById('answer').value);
 	answer['explain'] = trimSpecial(document.getElementById('explain').value);
+	answer['anspic'] = trimSpecial(document.getElementById('anspic').value);
 	data.answer = answer;
 	data.id = document.getElementById('id').value;
 	data.active='T';
 	
 	postData("POST", "questions", data, function(obj) {
-		alert(JSON.parse(obj.response).message);
+//		alert(JSON.parse(obj.response).message);
 		closePopup();
 		window.location.reload();
 	});
@@ -64,21 +71,28 @@ function saveQuestion() {
 }
 function populateData(id) {
 	if(!id || id =='') return;
-	var row={}
+	row={}
 	  var rows = JSON.parse(document.getElementById('items').value);
 	  for (var i = 0; i < rows.length; i++) {
 		if(rows[i]['id'] == id) {
 			row = rows[i];
-			document.getElementById('id').value = row.id;
-			document.getElementById('title').value=row.title;
-			document.getElementById('答案').value=row.answer.ans;
-			document.getElementById('explain').value=row.answer.explain;
+			document.getElementById('id').value = trimSpecial(row.id);
+			document.getElementById('title').value=trimSpecial(row.title);
+			document.getElementById('type').value=trimSpecial(row.type);
+			document.getElementById('chapter').value=trimSpecial(row.chapter);
+			document.getElementById('class').value=trimSpecial(row.class);
+			document.getElementById('answer').value=trimSpecial(row.answer.ans);
+			document.getElementById('explain').value=trimSpecial(row.answer.explain);
+			document.getElementById('titlepic').value=trimSpecial(row.titlepic);
+			document.getElementById('anspic').value=trimSpecial(row.answer.anspic);
 			var choices = row.choices;
-			var inputs = document.getElementsByTagName("INPUT");
+			
+			var inputs = $('#choHeader').find('input');
+//				document.getElementsByTagName("INPUT");
 			for (var i = 0; i < inputs.length; i++) {
 				var id = inputs[i].id;
-				if(inputs[i].placeholder && id !='答案' && id !='id') {
-					inputs[i].value=choices[inputs[i].id];
+				if(inputs[i].placeholder && inputs[i].type =='text') {
+					inputs[i].value=trimSpecial(choices[inputs[i].id]);
 				}
 			}
 			break;
@@ -88,6 +102,8 @@ function populateData(id) {
 function trimSpecial(str) {
 	if(str) {
 		str = str.replaceAll("'", "\"");
+	} else {
+		str ="";
 	}
 	return str;
 }
@@ -128,14 +144,87 @@ function exam(obj) {
 function user(obj) {
 	window.location.href='/users/show?id='+obj.id;
 }
+function showPic(obj) {
+	var url = "";
+	if(obj.id == 'viewTitle') {
+		url = document.getElementById('titlepic').value;
+	} else {
+		url = document.getElementById('anspic').value;
+	}
+	if(url) {
+		window.open(picpath + url);
+	} else {
+		alert("没有图片");
+	}
+}
+function upload(obj) {
+	var data = {}, choices = {}, answer = {};
+	
+	var formData = new FormData();
+	var file = null;
+	if(obj.id == "titleBtn") {
+		file = $('#titleFile')[0].files[0]
+	} else if(obj.id == "ansBtn") {
+		file = $('#ansFile')[0].files[0];
+	}
+	if(!file) return;
+	formData.append('png', file);
+	formData.append('idx', document.getElementById('id').value);
+	$.ajax({
+	    url: '/upload2',
+	    type: 'POST',
+	    cache: false,
+	    data: formData,
+	    processData: false,
+	    contentType: false
+	}).done(function(res) {
+		if(obj.id == "titleBtn") {
+			document.getElementById('titlepic').value=trimSpecial(res.file);
+		} else if(obj.id == "ansBtn") {
+			document.getElementById('anspic').value=trimSpecial(res.file);
+		}
+	}).fail(function(res) {});
+
+	return data;
+}
 function editQuestion() {
 	  var buf = [];
+	  // buf.push('<form id="popup" enctype="multipart/form-data">');
 	  buf.push('<input id="id" type=hidden>');
+	  buf.push('<input id="titlepic" type=hidden>');
+	  buf.push('<input id="anspic" type=hidden>');
+
+	  buf.push('<div class="row">');
+		  buf.push('<div class="col-lg-4">');
+			  buf.push('<div class="form-group">');
+		      buf.push('    <input  id="type" class="form-control" placeholder="科目" required>');
+		      buf.push('</div>');
+		  buf.push('</div>');
+
+		  buf.push('<div class="col-lg-4">');
+			  buf.push('<div class="form-group">');
+			  buf.push('    <input  id="chapter" class="form-control" placeholder="章节" required>');
+		      buf.push('</div>');
+		  buf.push('</div>');
+	  
+		  buf.push('<div class="col-lg-4">');
+			  buf.push('<div class="form-group">');
+			  buf.push('    <input  id="class" class="form-control" placeholder="类型" required>');
+		      buf.push('</div>');
+		  buf.push('</div>');
+      buf.push('</div>');
+      
       buf.push('<div class="form-group">');
 //      buf.push('	<label for="title">题目</label>');
       buf.push('	<textarea id="title" class="form-control" placeholder="请输入题目描述" rows="6"></textarea>');
       buf.push('</div>');
 
+      buf.push('<div class="form-group">');
+ 	  buf.push('	<input  id="titleFile" type="file" name="titleFile" required>');
+ 	  buf.push('	<input  id="titleBtn" type="button" value="上传题目图片" onclick="upload(this)">');
+ 	  buf.push('		<button id="viewTitle" type="button" class="btn btn-info" onclick="showPic(this)">View</button>');
+ 	  buf.push('</div>');
+ 	  
 //      buf.push('<div class="form-group">');
 //      buf.push('	<label for="code">请输入代码</label>');
 //      buf.push('	<textarea id="code" class="form-control" placeholder="请输入题目描述(非必填)" rows="3"></textarea>');
@@ -152,11 +241,22 @@ function editQuestion() {
       
       buf.push('</div>');
       
-      buf.push(createChoice({code:'答案', placeholder:'请输入答案'}));
+//      buf.push(createChoice({code:'答案', placeholder:'请输入答案'}));
       
       buf.push('<div class="form-group">');
+      buf.push('    <span class="input-group-addon" id="basic-addon1">答案</span>');
+      buf.push('	<textarea id="answer" class="form-control" placeholder="请输入答案" rows="2"></textarea>');
+      buf.push('</div>');
+    
+      buf.push('<div class="form-group">');
+ 	  buf.push('	<input  id="ansFile" type="file" name="ansFile" required>');
+ 	  buf.push('	<input  id="ansBtn" type="button" value="上传答案图片" onclick="upload(this)">');
+ 	  buf.push('	<button id="viewAns" type="button" class="btn btn-info" onclick="showPic(this)">View</button>');
+ 	  buf.push('</div>');
+ 	  
+      buf.push('<div class="form-group">');
 //      buf.push('	<label for="explain">解释</label>');
-      buf.push('	<textarea id="explain" class="form-control" placeholder="请输入解释" rows="3"></textarea>');
+      buf.push('	<textarea id="explain" class="form-control" placeholder="请输入解释" rows="3" style="display:none;"></textarea>');
       buf.push('</div>');
       
       buf.push('<div class="form-group">');
@@ -164,12 +264,16 @@ function editQuestion() {
       buf.push('    <button type="button" class="btn btn-secondary" onclick="closePopup()">取消</button>');
       buf.push('    <button type="button" class="btn btn-primary" onclick="saveQuestion()">确定</button>');
       buf.push('</div>');
+
+	  // buf.push('</form>');
       
       var div = document.createElement("div");
+      div.setAttribute("id", "quesDiv");
       div.innerHTML = buf.join("");
       
       return div;
 }
+
 function closePopup() {
 	var bgObj = document.getElementById("bgDiv");
 	var msgObj = document.getElementById("msgDiv");
@@ -279,8 +383,8 @@ function createChoice(args) {
 
 function popup(obj){ 
 	   var msgw,msgh,bordercolor;
-	   msgw=360;//Width
-	   msgh=600;//Height 
+	   msgw=460;//Width
+	   msgh=700;//Height 
 //	   titleheight=25 //title Height
 	   bordercolor="#336699";//boder color
 	   titlecolor="#99CCFF";//title color

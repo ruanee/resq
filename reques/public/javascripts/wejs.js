@@ -2,7 +2,7 @@ window.onload=function() {
 	submit('');
 }
 var ans = {}, qid="",token="", rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-var Strings = {};
+var Strings = {}, picpath ="files/pic/";
 Strings.isEmpty = function (iStr) {
     if (typeof (iStr) == "undefined"
     		|| iStr == null 
@@ -36,10 +36,18 @@ function populate(jst) {
 		data = row.rows.data;
 	}
 	clear();
+	ans = data.answer;
+	ans.class = data.class;
 	//document.getElementById('id').value = data.id;
 	document.getElementById('page').value = row.page;
 	document.getElementById('title').innerHTML= (parseInt(row.page) + 1) + "." + data.title;
-	ans = data.answer;
+	if(data.titlepic) document.getElementById('titlepic').src =picpath + data.titlepic;
+	if(ans.anspic) document.getElementById('anspic').src =picpath + ans.anspic;
+	if(ans.ans) document.getElementById('exph').src = ans.ans;
+	if(data.class == 'big' || data.class == 'input') {
+		document.getElementById('expdiv').style.display = '';
+	}
+	document.getElementById('expdiv').style.display = '';
 	qid = data.id;
 	token= row.token;
 	for (var p in data.choices) {
@@ -64,7 +72,11 @@ function clear() {
 	ans = {};
 	qid="";
 	token="";
+	document.getElementById('titlepic').src ="";
+	document.getElementById('anspic').src ="";
 	document.getElementById('close').style.display = 'none';
+	document.getElementById('exparea').style.display = 'none';
+	document.getElementById('expdiv').style.display = 'none';
 	var inputs = document.getElementsByTagName('input');
 	for (var i = 0; i < inputs.length; i++) {
 		var it = inputs[i];
@@ -90,6 +102,9 @@ function next(){
 function close(){
 	window.location.href='/';
 }
+function exp() {
+	document.getElementById('exparea').style.display = '';
+}
 function submit(direc) {
     weui.form.validate('#form', function (error) {
         if (!error) {
@@ -113,7 +128,7 @@ function submit(direc) {
             data.anc=anc;
             data.qid=qid;
             data.token=token;
-            if(direc && direc=='next' && Strings.trim(ans.ans) != '' && answer != Strings.trim(ans.ans)) {
+            if(direc && direc=='next' && (!ans.class || ans.class == 'select') && Strings.trim(ans.ans) != '' && answer != Strings.trim(ans.ans)) {
         		weui.toast('正确答案是'+ans.ans, 1000);
         		loading.hide();
         		return;

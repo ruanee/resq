@@ -114,10 +114,10 @@ var fs = require('fs'),
 		sql = sql + "    jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()";
 		sql = sql + "    from public.tempquest where title!='﻿title' and (type,chapter) not in (select type,chapter from questions))";
 		db.query2(sql,[],function(){
-			db.query2("select distinct type,chapter from questions where (type,chapter) not in (select type,chapter from paper)", [], function(error, rows) {
+			db.query2("select distinct type,chapter from questions where active='T' and (type,chapter) not in (select type,chapter from paper where active='T')", [], function(error, rows) {
 				for (var i = 0; i < rows.length; i++) {
 					console.log(rows[i].type +";"+rows[i].chapter)
-					db.query2("select id,title,code,choices,answer,type,chapter FROM questions where active='T' and type=$1 and chapter=$2 order by cast(code as integer) ", [rows[i].type,rows[i].chapter], function(error, rows2) {
+					db.query2("select id,title,titlepic,code,choices,answer,type,chapter,class FROM questions where active='T' and type=$1 and chapter=$2 order by cast(code as integer) ", [rows[i].type,rows[i].chapter], function(error, rows2) {
 						if(rows2 && rows2[0]) {
 							console.log(rows2[0])
 							var paper = {},questions=[];

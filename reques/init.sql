@@ -26,6 +26,8 @@ CREATE TABLE public.questions
 (
   id character varying(255) NOT NULL,
   type character varying(255),
+  chapter text,
+  class text,
   title text,
   code text,
   choices jsonb,
@@ -126,6 +128,7 @@ CREATE TABLE public.tempquest
 (
   type text,
   chapter text,
+  class text,
   code text,
   title text,
   item1 text,
@@ -172,3 +175,7 @@ delete from paper where chapter is null
 select distinct code,type,chapter from questions where (type,chapter) not in (select type,chapter from paper)
 
 */
+alter table public.questions add column titlepic text, add column class text;
+update public.questions set class='select';
+
+alter table public.tempquest add column class text;

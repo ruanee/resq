@@ -12,6 +12,7 @@ var svgCaptcha = require('svg-captcha');
 var fileUpload = require('express-fileupload');
 var parseXlsx = require('excel');
 var db = require('./db');
+var log = require('./routes/log.js');
 
 var config = {
   token: 'xinshui',
@@ -42,10 +43,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(fileUpload({  limits: { fileSize: 50 * 1024 * 1024 },safeFileNames: true}));
 app.use(cookieParser());
 app.use(session({
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
+  rolling: true,
+  resave:true,
+  saveUninitialized: false,
   secret: 'keyboard cat', 
-  cookie: { maxAge: 7200000 }
+  cookie: { maxAge: 2 * 60 * 60 * 1000 }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'files')));
@@ -127,40 +129,63 @@ app.use('/wechat', wechat(config, function (req, res, next) {
        }
    } 
 }));
-app.post('/upload', function(req, res, next) {
+app.post('/upload2', function(req, res, next) {
 	if (!req.files)
 		return res.status(400).send('No files were uploaded.');
 
 	// The name of the input field (i.e. "sampleFile") is used to retrieve the
 	// uploaded file
-	let sampleFile = req.files.sampleFile;
+	let titlePng = req.files.png;
 
 	try {
-		db.asyncInsert('delete from tempquest',[])
-		
+		// db.asyncInsert('delete from tempquest',[])
+		var id = log.guid()+'.png';
 		// Use the mv() method to place the file somewhere on your server
-		var filePath = path.join(__dirname, 'public')+'/files/abc.xlsx';
-		sampleFile.mv(filePath, function(err) {
+		var filePath = path.join(__dirname, 'public')+'/files/pic/'+id;
+		titlePng.mv(filePath, function(err) {
 			if (err)
 				return res.status(500).send(err);
-			parseXlsx(filePath, '1', function(err, data) {
-				if(err) throw err;
-				//console.log(data)
-				var idx = 1;
-				for(var i =0;i<data.length; i++) {
-					if(data[i][1].trim() == '') continue;
-					console.log(i)
-					var col = 0;
-					var len = data[i].length
-					db.asyncInsert('insert into tempquest(type,chapter,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,create_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', 
-						[req.body.type,req.body.chapter,(idx++) + '',data[i][col++].trim(),data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),new Date()])	
-				}
-			});
-			res.render('import', { title : '导入' });
+
+			res.jsonp({ title : '成功', file: id});
 		});
 	} catch(e) {
 		console.error(e)
 	}
+});
+app.post('/upload', function(req, res, next) {
+  if (!req.files)
+    return res.status(400).send('No files were uploaded.');
+
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the
+  // uploaded file
+  let sampleFile = req.files.sampleFile;
+
+  try {
+    db.asyncInsert('delete from tempquest',[])
+    
+    // Use the mv() method to place the file somewhere on your server
+    var filePath = path.join(__dirname, 'public')+'/files/abc.xlsx';
+    sampleFile.mv(filePath, function(err) {
+      if (err)
+        return res.status(500).send(err);
+      parseXlsx(filePath, '1', function(err, data) {
+        if(err) throw err;
+        //console.log(data)
+        var idx = 1;
+        for(var i =0;i<data.length; i++) {
+          if(data[i][1].trim() == '') continue;
+          console.log(i)
+          var col = 0;
+          var len = data[i].length
+          db.asyncInsert('insert into tempquest(type,chapter,code,answer,title,item1,item2,item3,item4,item5,item6,item7,item8,create_date) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)', 
+            [req.body.type,req.body.chapter,(idx++) + '',data[i][col++].trim(),data[i][col++],data[i][col++],data[i][col++],data[i][col++],data[i][col++],(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),new Date()]) 
+        }
+      });
+      res.render('import', { title : '导入' });
+    });
+  } catch(e) {
+    console.error(e)
+  }
 });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

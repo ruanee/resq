@@ -24,6 +24,8 @@ html
         <div>
             h2= message
             <h3 id='title'>题目</h3>
+            div
+                img(src="",id="titlepic")
             <div class="page__code" id='code' style="display:none;">
             <pre>
             <span>public static void main(String args[]) {</span>
@@ -106,9 +108,18 @@ html
             <a id="prev" href="javascript:prev()" class="weui-btn weui-btn_mini weui-btn_primary weui-btn_plain-default">上一个</a>
             <a id="next" href="javascript:next(this)" class="weui-btn weui-btn_mini weui-btn_primary weui-btn_primary">下一个</a>
         </div>
-        <div id="close" class="weui-btn-area" style="display:none;">
-            <a id="next" href="javascript:close(this)" class="weui-btn weui-btn_warn">结束</a>
+        <div id="expdiv" class="weui-btn-area" style="display:none;">
+            <a id="expa" href="javascript:exp(this)" class="weui-btn weui-btn_plain-default">解析</a>
         </div>
+        div(id="exparea" style="display:none;")
+            div
+                h3(id='exph')
+            div
+                img(src="",id="anspic")
+        <div id="close" class="weui-btn-area" style="display:none;">
+            <a id="closea" href="javascript:close(this)" class="weui-btn weui-btn_warn">结束</a>
+        </div>
+        
 </div>
 
 </body>

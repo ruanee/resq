@@ -20,6 +20,7 @@ router.post('/', function(req, res, next) {
 	var dback = {title: '登录'};
 	const hash = crypto.createHmac('sha256', req.body.password).update(globals.hashKey).digest('hex');
 //	console.log(hash);
+	console.log("sessions==============>"+JSON.stringify(req.sessionStore.sessions));
 	if(uname && globals.userData && globals.userData[uname] && globals.userData[uname]["password"] == hash) {
 		
 		// protect only one user per login
@@ -33,7 +34,10 @@ router.post('/', function(req, res, next) {
 				var sessions = store.sessions, times = 0,pctimes = 0;
 				for ( var p in sessions) {
 					var ses = JSON.parse(sessions[p]);
-					if(sid != p && ses.user == uname && ses.sessionId) {
+					console.log("ses.cookie.expires==============>"+ses.cookie.expires);
+					console.log("ses.cookie.expires2==============>"+new Date(ses.cookie.expires));
+					if(sid != p && ses.user == uname && ses.sessionId 
+							&& ses.cookie.expires != null && new Date(ses.cookie.expires) > (new Date())) {
 						times++;
 					}
 				}
