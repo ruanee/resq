@@ -109,10 +109,10 @@ var fs = require('fs'),
 	router.get('/generate2', function(req, res, next) {
 		var data = log.save(req, 'paper')
 //		console.log(data)
-		var sql = " insert into questions(id, type,chapter,code, title, choices, answer,active, create_date, mod_date)";
-		sql = sql + " (select uuid_generate_v4(),type,chapter,code,title, jsonb_object('{A,B,C,D,E,F,G,H,I}'::text[],ARRAY[item1,item2,item3,item4,item5,item6,item7,item8,item9]) choices,";
+		var sql = " insert into questions(id, type,chapter,class,code, title, choices, answer,active, create_date, mod_date)";
+		sql = sql + " (select uuid_generate_v4(),type,chapter,class,code,title, jsonb_object('{A,B,C,D,E,F,G,H,I}'::text[],ARRAY[item1,item2,item3,item4,item5,item6,item7,item8,item9]) choices,";
 		sql = sql + "    jsonb_object('{ans,explain}'::text[],ARRAY[answer,explains]) answers,'T',now(),now()";
-		sql = sql + "    from public.tempquest where title!='﻿title' and (type,chapter) not in (select type,chapter from questions))";
+		sql = sql + "    from public.tempquest where title!='﻿title' and (type,chapter) not in (select distinct type,chapter from questions where active='T'))";
 		db.query2(sql,[],function(){
 			db.query2("select distinct type,chapter from questions where active='T' and (type,chapter) not in (select type,chapter from paper where active='T')", [], function(error, rows) {
 				for (var i = 0; i < rows.length; i++) {
