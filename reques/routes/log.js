@@ -26,6 +26,11 @@ exports.common = function(req) {
 	data.username=req.session.user;
 	return data;
 };
+exports.clone = function(a,req) {
+   var cdata = JSON.parse(JSON.stringify(a));
+   if(req) cdata.username=req.session.user;
+   return cdata;
+}
 exports.save = function(req, type) {
 	var data = buildParams(req, type);
 	db.asyncInsert('insert into request_log(id,url,params,"type",request_date,user_name,session_id,remote_addr,msg) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (id) DO UPDATE SET url=EXCLUDED.url, params=EXCLUDED.params, type=EXCLUDED.type, request_date=EXCLUDED.request_date', 

@@ -7,24 +7,24 @@ const db = require('../db')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var data = log.save(req, 'perques')
-  var dback = log.common(req);
+  var dback = log.clone(data,req);
   dback.title='题目列表';
 //  console.log(data)
 //  console.log(log.listQuestions())
 //  var ques = log.listQuestions();
-  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(create_date,'yyyy-MM-dd') FROM questions where active='T' ";
+  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(mod_date,'yyyy-MM-dd') FROM questions where active='T' ";
   var params =[], idx = 1;
-  if(data.type) {
-	  params.push(data.type);
+  if(data.types) {
+	  params.push(data.types);
 	  sql = sql + "and type=$" + idx++;
   }
   if(data.chapter) {
 	  params.push(data.chapter);
 	  sql = sql + "and chapter=$" + idx++;
   }
-  if(data.title) {
-	  params.push(data.title);
-	  sql = sql + "and title like $" + idx++;
+  if(data.titles) {
+	  params.push(data.titles);
+	  sql = sql + "and title like '%'||$" + idx++ +"||'%'";
   }
   sql = sql + " order by mod_date desc limit 30";
   db.query2(sql, params, function(err, rows) {

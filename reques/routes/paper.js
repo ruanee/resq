@@ -10,8 +10,31 @@ var fs = require('fs'),
 /* GET home page. */
 	router.get('/', function(req, res, next) {
 		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pm_',s2=' PARTITION OF item_price_pm2 FOR VALUES FROM ('
-		var dback = log.common(req);
-		dback.title='试卷列表';
+		var dback = log.clone(data,req);
+		  dback.title='试卷列表';
+		  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'yyyy-MM-dd') FROM paper where active='T' ";
+		  var params =[], idx = 1;
+		  if(data.types) {
+			  params.push(data.types);
+			  sql = sql + "and type=$" + idx++;
+		  }
+		  if(data.chapter) {
+			  params.push(data.chapter);
+			  sql = sql + "and chapter=$" + idx++;
+		  }
+		  if(data.titles) {
+			  params.push(data.titles);
+			  sql = sql + "and title like '%'||$" + idx++ +"||'%'";
+		  }
+		  sql = sql + " order by mod_date desc limit 30";
+		  db.query2(sql, params, function(err, rows) {
+			    if (err) {
+			      console.log(err.stack)
+			    } else {
+			      dback.rows = rows
+			      res.render('papers', dback);
+			    }
+		  });
 //		fs.readFile('F:/work/FE/B2B/sync/pm.txt', {encoding: 'utf-8'}, function(err,data){
 //		    if (!err) {
 //		    	var lines = data.split("\n");
@@ -37,20 +60,20 @@ var fs = require('fs'),
 //		        console.log(err);
 //		    }
 //		});
-   		db.pool.connect((err, client, done) => {
-		   if (err) throw err
-		   client.query("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,chapter,to_char(create_date,'yyyy-MM-dd') FROM paper where active='T'  order by type,chapter,create_date desc limit 30", 
-				   [], (err, result) => {
-			    done()
-			    if (err) {
-			      console.log(err.stack)
-			    } else {
-//			      console.log(result.rows[0])
-			    	dback.rows = result.rows
-			        res.render('papers', dback);
-			    }
-		   })
-		})
+		  
+//   		db.pool.connect((err, client, done) => {
+//		   if (err) throw err
+//		   client.query("SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'yyyy-MM-dd') FROM paper where active='T'  order by mod_date desc limit 30", 
+//				   [], (err, result) => {
+//			    done()
+//			    if (err) {
+//			      console.log(err.stack)
+//			    } else {
+//			    	dback.rows = result.rows
+//			        res.render('papers', dback);
+//			    }
+//		   })
+//		})
 	});
 	router.get('/id', function(req, res, next) {
 		var data = log.save(req, 'paper')

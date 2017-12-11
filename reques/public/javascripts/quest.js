@@ -131,11 +131,40 @@ function deletePaper(obj) {
 	    // Cancel button pressed...
 	}
 }
+function search(obj) {
+	var data = {};
+	var inputs = $('#searchdiv').find('input');
+	for (var i = 0; i < inputs.length; i++) {
+		var id = inputs[i].id;
+		if(inputs[i].value !='') {
+			data[inputs[i].id] = trimSpecial(inputs[i].value);
+		}
+	}
+//	postData("GET", "questions", data);
+	var url = "";
+	if(obj.id == "questionBtn") {
+		url = "/questions?";
+	} else if(obj.id == "paperBtn") {
+		url = "/paper?";
+	}
+	if(!url) {
+		return;
+	}
+	var url = url + Object.keys(data).map(function(k) {
+	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+	}).join('&');
+	window.location.href=url;
+}
 function postData(action,url, data, callback) {
+	if(action == "POST" || action == "DELETE") {
+		data = { _dto: JSON.stringify(data) };
+	} else {
+		
+	}
 	$.ajax({
 	  url: url,
 	  type: action,
-	  data: { _dto: JSON.stringify(data) },
+	  data: data,
 	  dataType: "json",
 	  success: function(res) {
 		  callback.call(this, res);
