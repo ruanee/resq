@@ -27,8 +27,9 @@ block content
 				//th(style="display:none;") id
 				th 题目
 				//th 代码
-				th 选项
-				th 创建时间
+				th 科目
+				th 章节
+				th 修改时间
 			tbody
 			each row in rows
 				tr
@@ -38,12 +39,12 @@ block content
 							button(id=row['id'],class="btn btn-info" onclick="popup(this)")= val
 							button(name=row['id'],class="btn btn-warning" onclick="deleteQuestion(this)") 删除
 					else if key == 'choices'
-						td(scope="row",style="min-width:20px;max-width:100px;white-space:nowrap;overflow:hidden;")= JSON.stringify(val)
+						//td(scope="row",style="min-width:20px;max-width:100px;white-space:nowrap;overflow:hidden;")= JSON.stringify(val)
 					else if key == 'title'
 						td(scope="row",style="min-width:160px;max-width:300px;white-space:nowrap;overflow:hidden;")= val
 					else if key == 'code'
 						//td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
-					else if key == 'id' || key == 'answer'
+					else if key == 'id' || key == 'answer' || key == 'class'  || key == 'titlepic'  || key == 'answer'
 						//td(scope="row",style="display:none;")= val
 					else
 						td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val

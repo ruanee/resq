@@ -3,8 +3,18 @@ window.onload=function() {
 		$("#newinfo")[0].style.display='none'; 
 	else 
 		$("#userinfo")[0].style.display='none';
+	$(document).on("click","tr td", function(e){
+//	    alert(e.target.innerHTML);
+		rowClick(e);
+	});
 }
 var picpath ="files/pic/";
+function rowClick(e) {
+	if(e.target.parentNode && e.target.parentNode.firstElementChild && e.target.parentNode.firstElementChild.firstElementChild 
+			&& e.target.parentNode.firstElementChild.firstElementChild.click) {
+		e.target.parentNode.firstElementChild.firstElementChild.click();
+	}
+}
 function submit() {
 	popup();
     weui.form.validate('#form', function (error) {
