@@ -14,7 +14,43 @@ router.get('/', function(req, res, next) {
 		dback.rows = rows
 		res.render('users', dback);
 	})
-//	res.sendFile('weiui.html')
+});
+router.get('/sessions', function(req, res, next) {
+	var data = log.save(req, 'sessions')
+	var dback = log.common(req);
+	dback.title='sessions';
+	var sid= req.sessionID, store = req.sessionStore, idx=1;
+	var sessions = store.sessions, rows=[];
+	for (var p in sessions) {
+		var row ={};
+		var ses = JSON.parse(sessions[p]);
+		row.seq=idx++;
+		row.user=ses.user;
+		row.id=p;
+		row.expires=ses.cookie.expires;
+		row.isExpired=new Date(ses.cookie.expires) > (new Date());
+		rows.push(row);
+	}
+	dback.rows=rows;
+	res.render('sessions', dback);
+});
+router.get('/sessions/destroy', function(req, res, next) {
+	var data = log.save(req, 'sessions')
+	var dback = log.common(req);
+	dback.msg='';
+	var sid= req.sessionID, store = req.sessionStore, idx=1;
+	var sessions = store.sessions;
+	for (var p in sessions) {
+		if(p == data.id) {
+			sessions[p].destroy(function(err) {
+				if(err) {
+					dback.msg='Error Happens';
+				}
+				dback.msg='Success';
+				res.jsonp(dback);
+			})
+		}
+	}
 });
 router.get('/show', function(req, res, next) {
 	var data = log.save(req, 'user')
@@ -123,11 +159,14 @@ router.post('/new', function(req, res, next) {
 	if(!data.captcha || !req.session.captcha || (data.captcha.toLowerCase() != req.session.captcha.toLowerCase())) {
 		dback.message = "验证码不匹配";
 	}
-	if(data.password != data.password2) {
+	if(!data.password || data.password != data.password2) {
 		dback.message = "密码不匹配";
 	}
 	if(!data.username || data.username == null || data.username.trim() == '') {
 		dback.message = "用户名不能为空";
+	}
+	if(data.username.length < 5 || data.username.length > 20 || data.password.length < 5 || data.password.length > 20) {
+		dback.message = "用户名或者密码长度不符合规则";
 	}
 	if(dback.message) {
 		dback.username=data.username;

@@ -17,6 +17,7 @@ function rowClick(e) {
 }
 function submit() {
 	popup();
+    
     weui.form.validate('#form', function (error) {
         if (!error) {
             var loading = weui.loading('提交中...');
@@ -71,7 +72,7 @@ function saveQuestion() {
 	data.id = document.getElementById('id').value;
 	data.active='T';
 	
-	postData("POST", "questions", data, function(obj) {
+	ajax("POST", "questions", data, function(obj) {
 //		alert(JSON.parse(obj.response).message);
 		closePopup();
 		window.location.reload();
@@ -122,7 +123,7 @@ function deleteQuestion(obj) {
     	var data = {};
     	data.id = obj.name;
     	
-    	postData("DELETE", "questions", data);
+    	ajax("DELETE", "questions", data);
     	
     	window.location.reload()
 	} else {
@@ -134,11 +135,23 @@ function deletePaper(obj) {
     	var data = {};
     	data.id = obj.name;
     	
-    	postData("DELETE", "paper", data);
+    	ajax("DELETE", "paper", data);
     	
     	window.location.reload()
 	} else {
 	    // Cancel button pressed...
+	}
+}
+function deleteSession(obj) {
+	if(confirm("Are you sure you want to tick the user?")) {
+		var data = {};
+		data.id = obj.name;
+		
+		ajax("GET", "/users/sessions/destroy", data, function() {
+			window.location.reload()
+		});
+		
+	} else {
 	}
 }
 function search(obj) {
@@ -165,7 +178,7 @@ function search(obj) {
 	}).join('&');
 	window.location.href=url;
 }
-function postData(action,url, data, callback) {
+function ajax(action,url, data, callback) {
 	if(action == "POST" || action == "DELETE") {
 		data = { _dto: JSON.stringify(data) };
 	} else {
@@ -203,6 +216,20 @@ function paper(obj) {
 }
 function exam(obj) {
 	window.location.href='/exam?id='+obj.id;
+}
+function reexam(obj) {
+	var data = {};
+    data.id = obj.id;
+    data.token=obj.name;
+    data.page = obj.getAttribute('page');
+    data.direction='prev';
+	window.location.href=buildUrl('/exam',data);
+}
+function buildUrl(url, data) {
+	url = url +"?" + Object.keys(data).map(function(k) {
+	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+	}).join('&');
+	return url;
 }
 function user(obj) {
 	window.location.href='/users/show?id='+obj.id;
@@ -340,8 +367,10 @@ function editQuestion() {
 function closePopup() {
 	var bgObj = document.getElementById("bgDiv");
 	var msgObj = document.getElementById("msgDiv");
-    document.body.removeChild(msgObj);
-    document.body.removeChild(bgObj); 
+//    document.body.removeChild(msgObj);
+//    document.body.removeChild(bgObj); 
+	bgObj && $(bgObj).remove();
+	msgObj && $(msgObj).remove();
 }
 function addChoice(args) {
 	
@@ -400,7 +429,7 @@ function pass() {
 	data.password2=p2 && p2.value;
 	data.cpassword=document.getElementById('cpassword') && document.getElementById('cpassword').value;
 	
-	postData("POST", "/users/pass", data, function(obj) {
+	ajax("POST", "/users/pass", data, function(obj) {
 		var msg = JSON.parse(obj.response).message;
 		if(!Strings.isEmpty(msg)) {
 			alert(msg);
@@ -445,6 +474,9 @@ function createChoice(args) {
 }
 
 function popup(obj){ 
+	if(document.createElement("div")) {
+		closePopup();
+	}
 	   var msgw,msgh,bordercolor;
 	   msgw=460;//Width
 	   msgh=700;//Height 
@@ -457,11 +489,11 @@ function popup(obj){
 	   var bgObj=document.createElement("div"); 
 	   bgObj.setAttribute('id','bgDiv'); 
 	   bgObj.style.position="absolute"; 
-	   bgObj.style.top="0"; 
+	   bgObj.style.top="0";
+	   bgObj.style.left="0"; 
 	   bgObj.style.background="#777"; 
 	   bgObj.style.filter="progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75"; 
 	   bgObj.style.opacity="0.6"; 
-	   bgObj.style.left="0"; 
 	   bgObj.style.width=sWidth + "px"; 
 	   bgObj.style.height=sHeight + "px"; 
 	   bgObj.style.zIndex = "10000"; 
@@ -511,7 +543,11 @@ function popup(obj){
 	   document.getElementById("msgDiv").appendChild(txt);
 	   
 	   populateData(obj.id)
-	} 
+	   
+	   	var bgObj = $('#bgDiv')[0],msgObj = $('#msgDiv')[0];
+	    bgObj.style.top=($(document).scrollTop() + 5) + 'px';
+	    msgObj.style.top=($(document).scrollTop() + 10) + 'px';
+	}
 function myEncodeURI(iStr) {
 	var oStr = "";
 	oStr = encodeURI(iStr);

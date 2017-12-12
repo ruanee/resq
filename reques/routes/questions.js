@@ -12,14 +12,14 @@ router.get('/', function(req, res, next) {
 //  console.log(data)
 //  console.log(log.listQuestions())
 //  var ques = log.listQuestions();
-  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(mod_date,'yyyy-MM-dd') FROM questions where active='T' ";
+  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(mod_date,'YYYY-MM-DD') FROM questions where active='T' ";
   var params =[], idx = 1;
   if(data.types) {
 	  params.push(data.types);
 	  sql = sql + "and type=$" + idx++;
   }
-  if(data.chapter) {
-	  params.push(data.chapter);
+  if(data.chapters) {
+	  params.push(data.chapters);
 	  sql = sql + "and chapter=$" + idx++;
   }
   if(data.titles) {

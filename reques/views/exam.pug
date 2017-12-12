@@ -17,9 +17,9 @@ html
     </head>
   <body ontouchstart>
     div
-        textarea(id="items",style="display:none;")= JSON.stringify(pid)
-        input(id="page",type="hidden",value= page)
-        input(id="id",type="hidden",value= pid)
+        textarea(id="items",style="display:none;")= JSON.stringify(data)
+        input(id="page",type="hidden",value= data.page)
+        input(id="id",type="hidden",value= data.id)
     <p id="bear"></p>
     <div id="form">
         <div>

@@ -12,14 +12,14 @@ var fs = require('fs'),
 		var data = log.save(req, 'paper'),sum=0, idx=1, s='',s1 = 'CREATE TABLE item_price_pm_',s2=' PARTITION OF item_price_pm2 FOR VALUES FROM ('
 		var dback = log.clone(data,req);
 		  dback.title='试卷列表';
-		  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'yyyy-MM-dd') FROM paper where active='T' ";
+		  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'YYYY-MM-DD') FROM paper where active='T' ";
 		  var params =[], idx = 1;
 		  if(data.types) {
 			  params.push(data.types);
 			  sql = sql + "and type=$" + idx++;
 		  }
-		  if(data.chapter) {
-			  params.push(data.chapter);
+		  if(data.chapters) {
+			  params.push(data.chapters);
 			  sql = sql + "and chapter=$" + idx++;
 		  }
 		  if(data.titles) {
@@ -63,7 +63,7 @@ var fs = require('fs'),
 		  
 //   		db.pool.connect((err, client, done) => {
 //		   if (err) throw err
-//		   client.query("SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'yyyy-MM-dd') FROM paper where active='T'  order by mod_date desc limit 30", 
+//		   client.query("SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,type,chapter,to_char(mod_date,'YYYY-MM-DD') FROM paper where active='T'  order by mod_date desc limit 30", 
 //				   [], (err, result) => {
 //			    done()
 //			    if (err) {

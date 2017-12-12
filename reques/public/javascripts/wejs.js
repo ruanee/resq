@@ -1,4 +1,9 @@
 window.onload=function() {
+	var items = document.getElementById('items').value;
+	if(!Strings.isEmpty(items)) {
+		items = JSON.parse(items);
+		token = items.token;
+	}
 	submit('');
 }
 var ans = {}, qid="",token="", rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;

@@ -179,3 +179,4 @@ alter table public.questions add column titlepic text, add column class text;
 update public.questions set class='select';
 
 alter table public.tempquest add column class text;
+alter table public.exam add column page integer default 1;

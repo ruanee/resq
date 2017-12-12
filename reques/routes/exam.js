@@ -7,6 +7,7 @@ const db = require('../db')
 router.get('/', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
 	var dback = log.common(req);
+	dback.data = data;
 	dback.title = '考试中';
 	if(!data.id) {
 		dback.message = '请先选择章节';
@@ -18,7 +19,7 @@ router.get('/list', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
 	var dback = log.common(req);
 	dback.title = '章节';
-	db.query2("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,title,to_char(create_date,'yyyy-MM-dd') createdate FROM paper where active='T' and type=$1 order by type,chapter,create_date desc", [data.type], function(error, rows) {
+	db.query2("SELECT row_number() OVER(ORDER BY type,chapter,create_date desc) seq,id,type,title,to_char(create_date,'YYYY-MM-DD') createdate FROM paper where active='T' and type=$1 order by type,chapter,create_date desc", [data.type], function(error, rows) {
 		dback.rows = rows;
 		res.render('chapter', dback);
 	})
@@ -27,7 +28,7 @@ router.get('/user', function(req, res, next) {
 	var data = log.save(req, 'exam'), page = 0;
 	var dback = log.common(req);
 	dback.title = 'Profile';
-	db.query2("SELECT row_number() OVER(ORDER BY E.create_date desc) seq,P.type,P.title,E.paper,E.token,to_char(E.create_date,'yyyy-MM-dd HH:mm') createdate,E.user_name username FROM exam E left join paper P on E.paper=P.id where E.user_name=$1 order by E.create_date desc", [req.session.user], function(error, rows) {
+	db.query2("SELECT row_number() OVER(ORDER BY E.mod_date desc) seq,P.type,P.title,E.paper,E.token,E.page,to_char(E.create_date,'YYYY-MM-DD HH24:MI') createdate,to_char(E.mod_date,'YYYY-MM-DD HH24:MI') moddate,E.user_name username FROM exam E left join paper P on E.paper=P.id where E.user_name=$1 order by E.mod_date desc", [req.session.user], function(error, rows) {
 		if(rows.length == 0) {
 			dback.rows = [{username: req.session.user}];
 		} else {
@@ -84,6 +85,7 @@ function exam(req,res,next,dback, data) {
 		answ[data.qid]={ans: data.answer, anc:data.anc};
 		exm.answer=JSON.stringify(answ);
 		exm.user=req.session.user;
+		exm.page=page;
 		log.saveExam(exm);
 	} else if(data.direction == 'prev') {
 		page = page - 1;

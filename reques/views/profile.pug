@@ -7,7 +7,7 @@ block content
 				h2(class="form-signin-heading") 用户信息
 				div(class="form-group")
 					label(for="username") 用户名
-					input(type="input" id="username" name="username" value= rows[0]['username'] class="form-control" placeholder="User Name" readonly)
+					input(type="input" id="username" name="username" value= rows[0]['username'] class="form-control" placeholder="User Name" readonly autofocus)
 	
 				<button type="button" hidden=true class="btn btn-lg btn-secondary btn-block" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">修改密码</button>
 	
@@ -19,17 +19,18 @@ block content
 								th #
 								th 科目
 								th 章节
-								th 时间
+								th 开始时间
+								th 结束时间
 						tbody
 							each row in rows
 								tr
 								each val, key in row
 									if key == 'seq'
 											td(scope="row",style="min-width:20px;max-width:60px;white-space:nowrap;overflow:hidden;") 
-													button(id=row['id'],class="btn btn-info" onclick="exam(this)")= val
+													button(id=row['paper']  name=row['token'] page=row['page'] class="btn btn-info" onclick="reexam(this)")= val
 									else if key == 'title'
 											td(scope="row",style="min-width:160px;max-width:300px;white-space:nowrap;overflow:hidden;")= val
-									else if key == 'id' || key == 'paper' || key == 'token'	|| key == 'username'
+									else if key == 'id' || key == 'paper' || key == 'token'	|| key == 'username' || key == 'page'
 											//td(scope="row",style="display:none;")= val
 									else
 											td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
@@ -47,15 +48,15 @@ block content
 								<form>
 									<div class="form-group">
 										<label for="cpassword" class="form-control-label">Current Password:</label>
-										<input type="text" class="form-control" id="cpassword" name="cpassword" required>
+										<input type="text" id="cpassword" name="cpassword" required>
 									</div>
 									<div class="form-group">
 										<label for="password" class="form-control-label">New Password:</label>
-										<input type="text" class="form-control" id="password" name="password" required>
+										<input type="text" id="password" name="password" required>
 									</div>
 									<div class="form-group">
 										<label for="password2" class="form-control-label">Verify New Password:</label>
-										<input type="text" class="form-control" id="password2" name="password2" required>
+										<input type="text" id="password2" name="password2" required>
 									</div>
 								</form>
 							</div>
