@@ -43,19 +43,18 @@ router.get('/sessions/destroy', function(req, res, next) {
 	var data = log.save(req, 'sessions')
 	var dback = log.common(req);
 	dback.msg='';
-	var sid= req.sessionID, store = req.sessionStore, idx=1;
-	var sessions = store.sessions;
-	for (var p in sessions) {
-		if(p == data.id) {
-			sessions[p].destroy(function(err) {
-				if(err) {
-					dback.msg='Error Happens';
-				}
-				dback.msg='Success';
-				res.jsonp(dback);
-			})
-		}
+	if(!data.id) {
+		dback.msg='参数不对';
+		res.jsonp(dback);
 	}
+	req.sessionStore.destroy(data.id,function(err) {
+		if(err) {
+			dback.msg='Error Happens';
+		} else {
+			dback.msg='成功了';
+		}
+		res.jsonp(dback);
+	})
 });
 router.get('/show', function(req, res, next) {
 	var data = log.save(req, 'user')
