@@ -7,6 +7,16 @@ window.onload=function() {
 //	    alert(e.target.innerHTML);
 		rowClick(e);
 	});
+	$('#searchdiv').find('input.form-control').bind("enterKey",function(e){
+		if(e.target.parentNode.parentNode.parentNode.lastElementChild.lastElementChild.firstElementChild.click) {
+			e.target.parentNode.parentNode.parentNode.lastElementChild.lastElementChild.firstElementChild.click();
+		}
+	});
+	$('#searchdiv').find('input.form-control').keyup(function(e){
+	    if(e.keyCode == 13) {
+	        $(this).trigger("enterKey");
+	    }
+	});
 }
 var picpath ="files/pic/";
 function rowClick(e) {
@@ -169,6 +179,8 @@ function search(obj) {
 		url = "/questions?";
 	} else if(obj.id == "paperBtn") {
 		url = "/paper?";
+	} else if(obj.id == "sessionsBtn") {
+		url = "/users/sessions?";
 	}
 	if(!url) {
 		return;

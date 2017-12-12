@@ -19,11 +19,16 @@ router.get('/sessions', function(req, res, next) {
 	var data = log.save(req, 'sessions')
 	var dback = log.common(req);
 	dback.title='sessions';
+	dback.users=data.users;
 	var sid= req.sessionID, store = req.sessionStore, idx=1;
 	var sessions = store.sessions, rows=[];
 	for (var p in sessions) {
 		var row ={};
 		var ses = JSON.parse(sessions[p]);
+		if(data.users) {
+			if(data.users!=ses.user) continue;
+		}
+		
 		row.seq=idx++;
 		row.user=ses.user;
 		row.id=p;
