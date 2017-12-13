@@ -1,8 +1,12 @@
 window.onload=function() {
 	var items = document.getElementById('items').value;
 	if(!Strings.isEmpty(items)) {
-		items = JSON.parse(items);
-		token = items.token;
+		try {
+			items = JSON.parse(items);
+			if(items && items.token) token = items.token;
+		} catch(e) {
+			window.location.href='/';
+		}
 	}
 	submit('');
 }

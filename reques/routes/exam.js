@@ -76,6 +76,9 @@ function exam(req,res,next,dback, data) {
 		page= parseInt(data.page)
 	}
 	token = data.token;
+	if(!token || token == ''){
+		token = req.session.sessionId;
+	}
 	if(data.direction == 'next') {
 		page = page + 1;
 		
@@ -89,10 +92,6 @@ function exam(req,res,next,dback, data) {
 		log.saveExam(exm);
 	} else if(data.direction == 'prev') {
 		page = page - 1;
-	} else {
-		//TODO; generate token for each exam
-//		token = data['__id'];
-		token = req.session.sessionId;
 	}
 	if(page < 0) {
 		dback.message = 'prevend';
