@@ -180,3 +180,4 @@ update public.questions set class='select';
 
 alter table public.tempquest add column class text;
 alter table public.exam add column page integer default 1;
+alter table public.users add column descrip text;

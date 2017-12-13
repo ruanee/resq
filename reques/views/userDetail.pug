@@ -2,27 +2,30 @@ extends header
 block content
 	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
 		div(class="container" id="main")
-			form(class="form-group" id="user")
+			form(id="user")
 				input(type="hidden" id="id" name="id" value= row['id'])
 				h2(class="form-signin-heading") 用户信息
-				div(class="form-group")
-					label(for="username") 用户名
+				div(class="input-group")
+					span(class="input-group-addon"  for="username") 用户名
 					input(type="input" id="username" name="username" value= row['username'] class="form-control" placeholder="User Name" readonly)
-				div(class="form-group")
-					label(for="roles") 状态
+				div(class="input-group")
+					span(class="input-group-addon"  for="roles") 状态
 					select(class="form-control" name="status")
 						option(selected= row['status'] == 'Active') Active
 						option(selected= row['status'] != 'Active') Inactive
-				div(class="form-group")
-					label(for="type") 类型
+				div(class="input-group")
+					span(class="input-group-addon"  for="type") 类型
 					input(type="input" id="type" name="type" value= row['type'] class="form-control" placeholder="type")
-				div(class="form-group")
+				div(class="input-group")
+					span(class="input-group-addon"  for="type") 类型
+					textarea(type="input" id="descrip" name="descrip" rows=5 class="form-control" placeholder="Description")= row['descrip']
+				div(class="input-group")
 					label(for="roles") 权限
 					input(type="hidden" id="roles" name="roles" value= row['roles'] class="form-control" placeholder="Roles")
-				div(class="form-group")
+				div(class="input-group")
 					each menu in menus
 						div(class="checkbox")
-							label(class="checkbox-inline")
+							span(class="input-group-addon"  class="checkbox-inline")
 								input(type="checkbox" name="menu" id= menu['type'] value= menu['type'] checked=(menu['checked']==='yes' ? "checked" : undefined))
 								= menu['title']
 				
@@ -40,8 +43,8 @@ block content
 					</div>
 					<div class="modal-body" id="pass">
 						<form>
-							<div class="form-group">
-								<label for="password" class="form-control-label">New Password:</label>
+							<div class="input-group">
+								<label class="input-group-addon"  for="password">New Password:</label>
 								<input type="text" class="form-control" id="password" name="password" required>
 							</div>
 						</form>

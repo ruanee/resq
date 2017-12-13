@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 	var data = log.save(req, 'user')
 	var dback = log.common(req);
 	dback.title='Users';
-	db.query2("select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,roles from public.users where active='T' ", [], function(error, rows) {
+	db.query2("select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,roles,descrip from public.users where active='T' ", [], function(error, rows) {
 		dback.rows = rows
 		res.render('users', dback);
 	})
@@ -64,7 +64,7 @@ router.get('/show', function(req, res, next) {
 		res.redirect('/users/new');
 		return;
 	}
-	db.query2("select id,user_name username,status,roles,type from public.users where id =$1 ", [data.id], function(error, rows) {
+	db.query2("select id,user_name username,status,roles,type,descrip from public.users where id =$1 ", [data.id], function(error, rows) {
 		if(rows.length == 0) {
 			res.redirect('/login');
 			return;
@@ -90,8 +90,8 @@ router.post('/update', function(req, res, next) {
 		res.redirect('/login');
 		return;
 	}
-	db.query2("UPDATE public.users set status= $1, roles=$2,mod_date=$3,type=$4 where id=$5",
-			[data.status, data.roles, new Date(), data.type, data.id], function(error, rows) {
+	db.query2("UPDATE public.users set status= $2, roles=$3,mod_date=$4,type=$5,descrip=$6 where id=$1",
+			[data.id, data.status, data.roles, new Date(), data.type, data.descrip], function(error, rows) {
 		if(data.username) {
 			var uu = globals.userData[data.username];
 			if(uu) {
