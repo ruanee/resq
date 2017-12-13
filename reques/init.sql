@@ -103,7 +103,7 @@ ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFE
 
 /**
 
-select user_name,session_id,request_date from request_log order by request_date desc limit 10;
+select user_name,session_id,params::jsonb->'userAgent',request_date from request_log order by request_date desc limit 10;
 
 update users set roles='Software Enginerring;Java;sql;SSH;NTC' where user_name ='test';
 

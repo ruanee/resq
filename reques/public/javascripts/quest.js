@@ -442,7 +442,7 @@ function pass() {
 	data.cpassword=document.getElementById('cpassword') && document.getElementById('cpassword').value;
 	
 	ajax("POST", "/users/pass", data, function(obj) {
-		var msg = JSON.parse(obj.response).message;
+		var msg = obj.message;
 		if(!Strings.isEmpty(msg)) {
 			alert(msg);
 		} else {
