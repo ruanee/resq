@@ -32,19 +32,21 @@ function populate(jst) {
 	} catch(e) {
 		window.location.href='/';
 	}
+//	window.scrollTo(0,document.body.scrollHeight);
+	var body = $("html, body");
 	if(row.message=='end' || row.message=='prevend') {
 		weui.toast('没有了', 1000);
 		document.getElementById('close').style.display = '';
-		window.scrollTo(0,document.body.scrollHeight);
+		body.animate({scrollTop:$(document).height()}, '100');
 		return;
 	} else if(!Strings.isEmpty(row.message)) {
 		weui.toast(row.message, 1500);
 		document.getElementById('close').style.display = '';
-		window.scrollTo(0,document.body.scrollHeight);
 		return;
 	} else {
 		data = row.rows.data;
 	}
+	body.animate({scrollTop:0}, '100');
 	clear();
 	ans = data.answer;
 	ans.class = data.class;
