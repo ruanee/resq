@@ -53,7 +53,10 @@ function populate(jst) {
 	//document.getElementById('id').value = data.id;
 	document.getElementById('page').value = row.page;
 	document.getElementById('title').innerHTML= (parseInt(row.page) + 1) + "." + data.title;
-	if(data.titlepic) document.getElementById('titlepic').src =picpath + data.titlepic;
+	if(data.titlepic) {
+		document.getElementById('titlepicDiv').style.display = '';
+		document.getElementById('titlepic').src =picpath + data.titlepic;
+	}
 	if(ans.anspic) document.getElementById('anspic').src =picpath + ans.anspic;
 	if(ans.ans) document.getElementById('exph').src = ans.ans;
 	if(data.class == 'big' || data.class == 'input') {
@@ -83,7 +86,8 @@ function clear() {
 	ans = {};
 	qid="";
 	token="";
-	document.getElementById('titlepic').src ="";
+	document.getElementById('titlepic').src ="#";
+	document.getElementById('titlepicDiv').style.display = 'none';
 	document.getElementById('anspic').src ="";
 	document.getElementById('close').style.display = 'none';
 	document.getElementById('exparea').style.display = 'none';
