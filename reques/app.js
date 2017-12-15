@@ -83,8 +83,8 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	  if (cnt === '呵呵' || cnt === '购买' || cnt === '采购' || cnt === '升级' || cnt.toLowerCase() === 'purchase') {
      	    res.reply([
 	      	      {
-	      	        title: '我爱刷题',
-	      	        description: '欢迎来到我的小店',
+	      	        title: '欢迎来到我的小店',
+	      	        description: '购买后，请先注册，然后发帐号名给老板，多谢',
 	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
 	      	        url: 'https://weidian.com/?userid=1291725186'
 	      	      }
@@ -102,7 +102,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	        title: '软件，技术，笔试',
 	        description: '经常练习',
 	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
-	        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
+	        url: 'http://www.diandianguo.net?FromUserName='+fromUserName
 	      }
 	    ]);
 	  }
@@ -114,7 +114,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	      	        title: '多谢关注',
 	      	        description: '我爱刷题',
 	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
-	      	        url: 'http://ruanee.hk1.mofasuidao.cn?FromUserName='+fromUserName
+	      	        url: 'http://www.diandianguo.net?FromUserName='+fromUserName
 	      	      }
 	      	    ]);
                break;
