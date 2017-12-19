@@ -57,8 +57,13 @@ function populate(jst) {
 		document.getElementById('titlepicDiv').style.display = '';
 		document.getElementById('titlepic').src =picpath + data.titlepic;
 	}
-	if(ans.anspic) document.getElementById('anspic').src =picpath + ans.anspic;
-	if(ans.ans) document.getElementById('exph').src = ans.ans;
+	if(ans.anspic) {
+		document.getElementById('anspicDiv').style.display = '';
+		document.getElementById('anspic').src =picpath + ans.anspic;
+	}
+	if(ans.ans) {
+		document.getElementById('exph').innerHTML = ans.ans;
+	}
 	if(data.class == 'big' || data.class == 'input') {
 		document.getElementById('expdiv').style.display = '';
 	}
@@ -89,6 +94,7 @@ function clear() {
 	document.getElementById('titlepic').src ="#";
 	document.getElementById('titlepicDiv').style.display = 'none';
 	document.getElementById('anspic').src ="";
+	document.getElementById('anspicDiv').style.display = 'none';
 	document.getElementById('close').style.display = 'none';
 	document.getElementById('exparea').style.display = 'none';
 	document.getElementById('expdiv').style.display = 'none';
