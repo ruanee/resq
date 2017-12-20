@@ -6,7 +6,7 @@ block content
 		form(id='uploadForm' action='/upload' method='post' encType="multipart/form-data")
 			div(class="form-group")
 				label(for="type") Type
-				input(type='text' id="type" name="type" placeholder="一级目录" required autofocus class="form-text text-muted")
+				input(type='text' id="type" name="type" value=type placeholder="一级目录" required autofocus class="form-text text-muted")
 			div(class="form-group")
 				label(for="chapter") Chapter
 				input(type='text' id="chapter" name="chapter" placeholder="章节" required class="form-text text-muted")

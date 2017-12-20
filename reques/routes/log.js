@@ -21,8 +21,11 @@ exports.guid = function()  {
 exports.list = function() {
 	const { rows } = db.query('SELECT url,request_date,params FROM request_log order by request_log desc limit 5', [])
 };
-exports.common = function(req) {
+exports.common = function(req, ldata) {
 	var data = {};
+	if(ldata) {
+		data = this.clone(ldata)
+	}
 	data.username=req.session.user;
 	return data;
 };

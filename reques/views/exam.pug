@@ -25,7 +25,7 @@ html
     <div id="form">
         <div>
             h2= message
-            <h3 id='title'>题目</h3>
+            <pre id='title' style="font-size: 1.17em;font-weight: 800;">题目</pre>
             div(id="titlepicDiv")
                 img(src="",id="titlepic")
             <div class="page__code" id='code' style="display:none;">
@@ -47,7 +47,7 @@ html
         </div>
 
 
-        <div class="weui-cells__title">请选择</div>
+        <div class="weui-cells__title"></div>
         <div id='choHeader' class="weui-cells weui-cells_checkbox">
             <label class="weui-cell weui-check__label" for="A" id="cA">
                 <div class="weui-cell__hd">
@@ -115,7 +115,7 @@ html
         </div>
         div(id="exparea" style="display:none;")
             div
-                pre(id='exph')
+                pre(id='exph' style="font-size: 1.1em;font-weight: 700;")
             div(id="anspicDiv")
                 img(src="",id="anspic")
         <div id="close" class="weui-btn-area" style="display:none;">

@@ -140,14 +140,33 @@ function deleteQuestion(obj) {
 	    // Cancel button pressed...
 	}
 }
+function deleteQuestions(obj) {
+	if(confirm("Are you sure you want to delete all questions?")) {
+		var data = buildSearch();
+		
+		ajax("DELETE", "questions/all", data, function(obj) {
+    		var msg = obj.message;
+    		if(!Strings.isEmpty(msg)) {
+    			alert(msg);
+    		}
+    		window.location.reload()
+    	});
+	} else {
+		// Cancel button pressed...
+	}
+}
 function deletePaper(obj) {
 	if(confirm("Are you sure you want to delete it?")) {
     	var data = {};
     	data.id = obj.name;
     	
-    	ajax("DELETE", "paper", data);
-    	
-    	window.location.reload()
+    	ajax("DELETE", "paper", data, function(obj) {
+    		var msg = obj.message;
+    		if(!Strings.isEmpty(msg)) {
+    			alert(msg);
+    		}
+    		window.location.reload()
+    	});
 	} else {
 	    // Cancel button pressed...
 	}
@@ -165,14 +184,7 @@ function deleteSession(obj) {
 	}
 }
 function search(obj) {
-	var data = {};
-	var inputs = $('#searchdiv').find('input');
-	for (var i = 0; i < inputs.length; i++) {
-		var id = inputs[i].id;
-		if(inputs[i].value !='') {
-			data[inputs[i].id] = trimSpecial(inputs[i].value);
-		}
-	}
+	var data = buildSearch();
 //	postData("GET", "questions", data);
 	var url = "";
 	if(obj.id == "questionBtn") {
@@ -189,6 +201,17 @@ function search(obj) {
 	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
 	}).join('&');
 	window.location.href=url;
+}
+function buildSearch() {
+	var data = {};
+	var inputs = $('#searchdiv').find('input');
+	for (var i = 0; i < inputs.length; i++) {
+		var id = inputs[i].id;
+		if(inputs[i].value !='') {
+			data[inputs[i].id] = trimSpecial(inputs[i].value);
+		}
+	}
+	return data;
 }
 function ajax(action,url, data, callback) {
 	if(action == "POST" || action == "DELETE") {

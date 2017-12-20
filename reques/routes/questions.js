@@ -12,21 +12,24 @@ router.get('/', function(req, res, next) {
 //  console.log(data)
 //  console.log(log.listQuestions())
 //  var ques = log.listQuestions();
-  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(mod_date,'YYYY-MM-DD') FROM questions where active='T' ";
+  var countSql = "SELECT COUNT(1) ", whereSql ="";
+  var sql = "SELECT row_number() OVER(ORDER BY mod_date desc) seq,id,title,titlepic,type,chapter,class,code,choices,answer,to_char(mod_date,'YYYY-MM-DD') ";
+  whereSql = " FROM questions where active='T' ";
   var params =[], idx = 1;
   if(data.types) {
 	  params.push(data.types);
-	  sql = sql + "and type=$" + idx++;
+	  whereSql = whereSql + "and type=$" + idx++;
   }
   if(data.chapters) {
 	  params.push(data.chapters);
-	  sql = sql + "and chapter=$" + idx++;
+	  whereSql = whereSql + "and chapter=$" + idx++;
   }
   if(data.titles) {
 	  params.push(data.titles);
-	  sql = sql + "and title like '%'||$" + idx++ +"||'%'";
+	  whereSql = whereSql + "and title like '%'||$" + idx++ +"||'%'";
   }
-  sql = sql + " order by mod_date desc limit 30";
+  countSql = countSql + whereSql;
+  sql = sql + whereSql + " order by mod_date desc limit 30";
   db.query2(sql, params, function(err, rows) {
 	    if (err) {
 	      console.log(err.stack)
@@ -53,6 +56,39 @@ router.delete('/', function(req, res, next) {
 	var data = log.save(req, 'delete')
 	log.deleteQuestion(data);
 	res.jsonp({message: "Question is deleted", code: data['title']});
+});
+router.delete('/all', function(req, res, next) {
+  console.log(req.body)
+  var data = log.save(req, 'delete')
+  var countSql = "SELECT COUNT(1) ", whereSql ="";
+  var sql = "UPDATE questions SET active='F' where active='T' ";
+  var params =[], idx = 1;
+  if(data.types) {
+	  params.push(data.types);
+	  whereSql = whereSql + "and type=$" + idx++;
+  }
+  if(data.chapters) {
+	  params.push(data.chapters);
+	  whereSql = whereSql + "and chapter=$" + idx++;
+  }
+  if(data.titles) {
+	  params.push(data.titles);
+	  whereSql = whereSql + "and title like '%'||$" + idx++ +"||'%'";
+  }
+  if(!whereSql) {
+	  res.jsonp({message: "Failed to delete questions, please input filter firstly", code: data['title']});
+	  return;
+  }
+  countSql = countSql + whereSql;
+  sql = sql + whereSql;
+  db.query2(sql, params, function(err, rows) {
+	    if (err) {
+	      console.log(err.stack)
+	    } else {
+	      res.jsonp({message: "Questions are deleted", code: data['title']});
+	    }
+  });
+	
 });
 
 module.exports = router;

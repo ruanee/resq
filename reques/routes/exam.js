@@ -52,7 +52,7 @@ router.get('/go', function(req, res, next) {
 		db.query2("SELECT id,row_number() OVER(ORDER BY type,chapter,create_date desc) seq,type,title, chapter,create_date FROM paper where active='T' and type in (select type from paper where id=$1) order by type,chapter,create_date desc", [data.id], function(error, rows) {
 			var needToPurchase = false;
 			for (var i = 0; i < rows.length; i++) {
-				if(rows[i].id == data.id && rows[i].seq > 4) {
+				if(rows[i].id == data.id && rows[i].seq > 1) {
 					needToPurchase = true;
 					break;
 				}

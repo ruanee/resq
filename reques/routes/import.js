@@ -10,7 +10,7 @@ var fs = require('fs'),
 router.get('/', function(req, res, next) {
 	// console.log(data)
 	var data = log.save(req, 'paper')
-	var dback = log.common(req);
+	var dback = log.common(req, data);
 	dback.title='导入';
 	res.render('import',dback);
 });
