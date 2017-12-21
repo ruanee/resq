@@ -118,6 +118,13 @@ function exam(req,res,next,dback, data) {
 		      } else {
 		    	  dback.message = '';
 		    	  dback.rows = result.rows[0];
+		    	  var ua = dback.rows.uanswer;
+		    	  if(ua) {
+		    		  var qid = dback.rows.data.id;
+		    		  var uao = {};
+		    		  uao[qid] = ua[qid];
+		    		  dback.rows.uanswer = uao; 
+		    	  }
 		      }
 		      res.jsonp(dback);
 		    }
