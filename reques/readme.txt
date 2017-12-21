@@ -54,6 +54,10 @@ sudo -u postgres createdb test
 sudo -u postgres psql quest
 pg_restore -h localhost -p 5432 -U postgres -d test -v "/root/pg/db.backup"
 
+sudo su - dbadmin
+pg_restore --dbname cis_new --verbose /home/myname/cis.backup
+pg_dump quest > /root/pg/quest5.backup
+pg_dump quest > /home/dbadmin/quest5.backup
 --- install git
 sudo apt install git
 

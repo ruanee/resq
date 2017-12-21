@@ -11,7 +11,7 @@ const globals = require('../globals');
 router.get('/', function(req, res, next) {
 	log.save(req, 'home');
 	var dback = log.common(req);
-	dback.title='quiz';
+	dback.title='小刚微知';
 	var idx=0, arr=[];
 	var user = req.session && req.session.user ? globals.userData[req.session.user] : null;
 	if(req.session && req.session.user != 'admin' && user) {
