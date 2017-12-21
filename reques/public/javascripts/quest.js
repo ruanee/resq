@@ -4,7 +4,6 @@ window.onload=function() {
 	else 
 		$("#userinfo")[0].style.display='none';
 	$(document).on("click","tr td", function(e){
-//	    alert(e.target.innerHTML);
 		rowClick(e);
 	});
 	$('#searchdiv').find('input.form-control').bind("enterKey",function(e){
@@ -36,7 +35,6 @@ function submit() {
                 weui.toast('提交成功', 1000);
             }, 500);
         }
-        // return true; // 当return true时，不会显示错误
     }, {
         regexp: {
             IDNUM: /(?:^\d{15}$)|(?:^\d{18}$)|^\d{17}[\dXx]$/,
@@ -231,20 +229,6 @@ function ajax(action,url, data, callback) {
 		console.log(e.message);
 	  }
 	});
-	
-//    var xhttp = new XMLHttpRequest();
-//    xhttp.onreadystatechange = function() {
-//      if (this.readyState == 4 && this.status == 200) {
-//    	  if(callback) {
-//    		  callback.call(this, xhttp);
-//    	  }
-//      }
-//    };
-//    data = JSON.stringify(data);
-////    data = "{\"id\":\"123\",\"Order Number\":\"TEST00002\"}";
-//    xhttp.open(action, url);
-//    xhttp.setRequestHeader('Content-Type', 'application/json');
-//    xhttp.send(data);
 }
 function paper(obj) {
 	window.location.href='/paper/id?id='+obj.id;
@@ -402,8 +386,6 @@ function editQuestion() {
 function closePopup() {
 	var bgObj = document.getElementById("bgDiv");
 	var msgObj = document.getElementById("msgDiv");
-//    document.body.removeChild(msgObj);
-//    document.body.removeChild(bgObj); 
 	bgObj && $(bgObj).remove();
 	msgObj && $(msgObj).remove();
 }
@@ -542,39 +524,13 @@ function popup(obj){
 	   msgObj.style.left = "2%"; 
 	   msgObj.style.top = "2%"; 
 	   msgObj.style.font="12px/1.6em Verdana, Geneva, Arial, Helvetica, sans-serif"; 
-//	   msgObj.style.marginLeft = "-225px" ; 
-//	   msgObj.style.marginTop = -75+document.documentElement.scrollTop+"px"; 
 	   msgObj.style.width = msgw + "px"; 
 	   msgObj.style.height =msgh + "px"; 
 	   msgObj.style.textAlign = "center"; 
 	   msgObj.style.lineHeight ="25px"; 
 	   msgObj.style.zIndex = "10001"; 
-//	   var title=document.createElement("h4"); 
-//	   title.setAttribute("id","msgTitle"); 
-//	   title.setAttribute("align","right"); 
-//	   title.style.margin="0"; 
-//	   title.style.padding="3px"; 
-//	   title.style.background=bordercolor; 
-//	   title.style.filter="progid:DXImageTransform.Microsoft.Alpha(startX=20, startY=20, finishX=100, finishY=100,style=1,opacity=75,finishOpacity=100);"; 
-//	   title.style.opacity="0.75"; 
-//	   title.style.border="1px solid " + bordercolor; 
-//	   title.style.height="18px"; 
-//	   title.style.font="12px Verdana, Geneva, Arial, Helvetica, sans-serif"; 
-//	   title.style.color="white"; 
-//	   title.style.cursor="pointer"; 
-//	   title.innerHTML="Close"; 
-//	   title.onclick=function(){ 
-//	          document.body.removeChild(bgObj); 
-//	          document.getElementById("msgDiv").removeChild(title); 
-//	          document.body.removeChild(msgObj); 
-//	        } 
 	   document.body.appendChild(msgObj); 
-//	   document.getElementById("msgDiv").appendChild(title); 
 	   var txt=editQuestion();
-//		   document.createElement("p"); 
-//	   txt.style.margin="1em 0" 
-//	   txt.setAttribute("id","msgTxt"); 
-//	   txt.innerHTML=str; 
 	   document.getElementById("msgDiv").appendChild(txt);
 	   
 	   populateData(obj.id)
