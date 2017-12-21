@@ -134,13 +134,18 @@ router.post('/pass', function(req, res, next) {
 		res.jsonp(dback);
 		return;
 	}
+	console.log(data.password);
+	var pass = crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
+	console.log(pass);
 	db.query2("UPDATE public.users set password= $1,mod_date=$2 where user_name=$3",
-			[crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex'), new Date(), data.username], function(error, rows) {
+			[pass, new Date(), data.username], function(error, rows) {
+		console.log(data.username);
 		if(data.username) {
 			var uu = globals.userData[data.username];
 			if(uu) {
-				uu.password=crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex');
+				uu.password=pass;
 			}
+			console.log(uu);
 		}
 		res.jsonp(dback);
 		return;
