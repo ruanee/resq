@@ -91,9 +91,9 @@ function clear() {
 	ans = {};
 	qid="";
 	token="";
-	document.getElementById('titlepic').src ="#";
+//	document.getElementById('titlepic').src ="";
 	document.getElementById('titlepicDiv').style.display = 'none';
-	document.getElementById('anspic').src ="";
+//	document.getElementById('anspic').src ="";
 	document.getElementById('anspicDiv').style.display = 'none';
 	document.getElementById('close').style.display = 'none';
 	document.getElementById('exparea').style.display = 'none';
