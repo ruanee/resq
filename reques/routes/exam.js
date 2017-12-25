@@ -71,6 +71,19 @@ router.get('/go', function(req, res, next) {
 
 });
 function exam(req,res,next,dback, data) {
+	if(!data.token || data.token == ''){
+		db.query2("SELECT * FROM exam where paper=$1 and user_name=$2 order by mod_date desc limit 1", [data.id, req.session.user], function(error, rows) {
+			if(rows.length > 0) {
+				data.token = rows[0].token;
+				data.page = rows[0].page;
+			}
+			exam2(req,res,next,dback, data);
+		});
+	} else {
+		exam2(req,res,next,dback, data);
+	}
+}
+function exam2(req,res,next,dback, data) {
 	var page = 0, token ="";
 	if(data.page) {
 		page= parseInt(data.page)
