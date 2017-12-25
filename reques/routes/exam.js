@@ -76,7 +76,10 @@ function exam(req,res,next,dback, data) {
 		db.query2("SELECT * FROM exam where paper=$1 and user_name=$2 order by mod_date desc limit 1", [data.id, req.session.user], function(error, rows) {
 			if(rows.length > 0) {
 				data.token = rows[0].token;
-				data.page = rows[0].page;
+				data.page = rows[0].page - 1;
+				if(data.page < 0) {
+					data.page = 1;
+				}
 			}
 			exam2(req,res,next,dback, data);
 		});
