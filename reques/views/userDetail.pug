@@ -7,7 +7,7 @@ block content
 				h2(class="form-signin-heading") 用户信息
 				div(class="input-group")
 					span(class="input-group-addon"  for="username") 用户名
-					input(type="input" id="username" name="username" value= row['username'] class="form-control" placeholder="User Name" readonly)
+					input(type="text" id="username" name="username" value= row['username'] class="form-control" placeholder="User Name" readonly)
 				div(class="input-group")
 					span(class="input-group-addon"  for="roles") 状态
 					select(class="form-control" name="status")
@@ -15,10 +15,10 @@ block content
 						option(selected= row['status'] != 'Active') Inactive
 				div(class="input-group")
 					span(class="input-group-addon"  for="type") 类型
-					input(type="input" id="type" name="type" value= row['type'] class="form-control" placeholder="type")
+					input(type="text" id="type" name="type" value= row['type'] class="form-control" placeholder="type")
 				div(class="input-group")
 					span(class="input-group-addon"  for="type") 类型
-					textarea(type="input" id="descrip" name="descrip" rows=5 class="form-control" placeholder="Description")= row['descrip']
+					textarea(type="text" id="descrip" name="descrip" rows=5 class="form-control" placeholder="Description")= row['descrip']
 				div(class="input-group")
 					label(for="roles") 权限
 					input(type="hidden" id="roles" name="roles" value= row['roles'] class="form-control" placeholder="Roles")

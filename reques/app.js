@@ -39,17 +39,17 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(compression());
+app.use(compression({filter: shouldCompress}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(fileUpload({  limits: { fileSize: 50 * 1024 * 1024 },safeFileNames: true}));
+app.use(fileUpload({  limits: { fileSize: 5 * 1024 * 1024 },safeFileNames: true}));
 app.use(cookieParser());
 app.use(session({
   rolling: true,
   resave:true,
   saveUninitialized: false,
   secret: 'keyboard cat', 
-  cookie: { maxAge: 2 * 60 * 60 * 1000 }
+  cookie: { maxAge: 30 * 60 * 1000 }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'files')));
@@ -206,5 +206,15 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    return false
+  }
+  var encoding = res.getHeader('Content-Encoding') || '';
+  if (encoding.indexOf('gzip') != -1 || encoding.indexOf('deflate') != -1) {
+	  return true
+  }
+ 
+  return compression.filter(req, res)
+}
 module.exports = app;

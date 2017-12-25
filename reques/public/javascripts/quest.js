@@ -418,7 +418,7 @@ function saveUser() {
     } else {
     	p2.setCustomValidity('');
     }
-    var form = document.forms[1];
+    var form = $('#signForm')[0];
     form.method="post";
     form.action="/users/new";
     form.submit();

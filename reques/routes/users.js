@@ -154,7 +154,7 @@ router.post('/pass', function(req, res, next) {
 });
 router.get('/new', function(req, res, next) {
 	var data = log.save(req, 'user')
-	res.render('user', { title: 'Profile' });
+	res.render('sign', { title: 'Profile' });
 });
 router.get('/reset', function(req, res, next) {
 	globals.userData=null;
@@ -179,7 +179,7 @@ router.post('/new', function(req, res, next) {
 	}
 	if(dback.message) {
 		dback.username=data.username;
-		res.render('user', dback);
+		res.render('sign', dback);
 		return;
 	}
 	
@@ -189,7 +189,7 @@ router.post('/new', function(req, res, next) {
 	db.query2("select 1 from public.users where user_name=$1 ", [data.username], function(error, rows) {
 		if(rows && rows.length > 0) {
 			dback.message = "用户名已经存在";
-			res.render('user', dback);
+			res.render('sign', dback);
 		} else {
 			db.asyncInsert("INSERT INTO public.users(id, type, status, user_name, password, create_date, mod_date,active) VALUES (uuid_generate_v4(), 'Test', $1, $2, $3, now(), now(),'T') ON CONFLICT (id) DO UPDATE SET password=EXCLUDED.password,status=EXCLUDED.status,active=EXCLUDED.active, mod_date=EXCLUDED.mod_date",
 					[data.stauts, data.username, crypto.createHmac('sha256', data.password).update(globals.hashKey).digest('hex')]);
