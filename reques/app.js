@@ -102,7 +102,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	    res.reply([
 	      {
 	        title: '软件，技术，笔试',
-	        description: '测试帐号:test; 秘密:123',
+	        description: '测试帐号:test; 密码:123',
 	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
 	        url: 'http://www.diandianguo.net?FromUserName='+fromUserName
 	      }
@@ -114,7 +114,7 @@ app.use('/wechat', wechat(config, function (req, res, next) {
 	       	    res.reply([
 	      	      {
 	      	        title: '多谢关注',
-	      	        description: '测试帐号:test; 秘密:123',
+	      	        description: '测试帐号:test; 密码:123',
 	      	        picurl: 'https://mmbiz.qpic.cn/mmbiz_jpg/0Anic82Ccs0uqKSH6Hrf5jUzlDh4fBCCQ3lK9sSCYib8gvuTib0gjViauTr4JXlU4glIcKE1CO4j6GiaG60PcNBetzw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1',
 	      	        url: 'http://www.diandianguo.net?FromUserName='+fromUserName
 	      	      }
