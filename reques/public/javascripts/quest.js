@@ -471,7 +471,7 @@ function updateUser() {
 		}
 	}
 	$('#roles')[0].value = roles;
-    var form = document.forms[1];
+    var form = $('#user')[0];
     form.method="post";
     form.action="/users/update";
     form.submit();
