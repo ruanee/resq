@@ -3,10 +3,6 @@ extends header
 block content
 	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
 		section(class="row text-center placeholders")
-			div(class="col-6 col-sm-3 placeholder")
-				a(href= "https://weidian.com/?userid=1291725186") #[img(src= "data:image/gif;base64,R0lGODlhAQABAIABAADcgwAAACwAAAAAAQABAAACAkQBADs=" width="120" height="120" class="img-fluid rounded-circle" alt="Purchase")]
-				h4  帐号购买
-				div(class="text-muted") 帐号购买
 			each row in menus
 				div(class="col-6 col-sm-3 placeholder")
 					a(href= row['url']) #[img(src= row['src'] width="120" height="120" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail")]

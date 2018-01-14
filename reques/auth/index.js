@@ -18,7 +18,7 @@ module.exports = function(req, res, next) {
 	}
 	
 	var url = req.url;
-	if (url =="/" || url.indexOf("/?") >= 0 || url.indexOf("/captcha") >= 0 || url.indexOf("/users/new") >= 0 
+	if (url.indexOf("/?") >= 0 || url.indexOf("/captcha") >= 0 || url.indexOf("/users/new") >= 0 
 			|| url.indexOf("/login") >= 0 || url.indexOf('wechat?signature') >= 0) {
 		return next();
 	}
