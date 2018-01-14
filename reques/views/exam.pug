@@ -11,7 +11,7 @@ html
         |#footer{position:fixed;right:0;bottom:0;left:0;z-index:1030;height:25px;text-align:center!important;color:#0056b3;background-color:#343a40!important;}
     </style>
     </head>
-  <body ontouchstart>
+  <body ontouchstart oncopy="return false;" oncontextmenu="event.returnValue=false" onselectstart="event.returnValue=false">
     div
         textarea(id="items",style="display:none;")= JSON.stringify(data)
         input(id="page",type="hidden",value= data.page)

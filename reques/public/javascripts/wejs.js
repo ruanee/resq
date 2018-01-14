@@ -1,4 +1,5 @@
 window.onload=function() {
+	document.body.onselectstart=document.body.oncontextmenu=function(){ return false;};
 	var items = document.getElementById('items').value;
 	if(!Strings.isEmpty(items)) {
 		try {
