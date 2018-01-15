@@ -10,7 +10,24 @@ router.get('/', function(req, res, next) {
 	var data = log.save(req, 'user')
 	var dback = log.common(req);
 	dback.title='Users';
-	db.query2("select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,roles,descrip from public.users where active='T' ", [], function(error, rows) {
+	
+	  var sql = "select id,row_number() OVER(ORDER BY user_name) seq,user_name username,status,type,roles,descrip from public.users where active='T' ";
+	  var params =[], idx = 1;
+	  if(data.types) {
+		  params.push(data.types);
+		  sql = sql + "and type=$" + idx++;
+	  }
+	  if(data.usernames) {
+		  params.push(data.usernames);
+		  sql = sql + "and user_name=$" + idx++;
+	  }
+	  if(data.descrips) {
+		  params.push(data.descrips);
+		  sql = sql + "and descrip like '%'||$" + idx++ +"||'%'";
+	  }
+	  sql = sql + " order by mod_date desc limit 30";
+	
+	db.query2(sql, params, function(error, rows) {
 		dback.rows = rows
 		res.render('users', dback);
 	})
@@ -98,6 +115,19 @@ router.post('/update', function(req, res, next) {
 				uu.status=data.status;
 				uu.roles=data.roles;
 				uu.type=data.type;
+			}
+			
+			if(data.status != 'Active') {
+				var store = req.sessionStore, sessions = store.sessions;
+				for (var p in sessions) {
+					var ses = JSON.parse(sessions[p]);
+					if(data.username == ses.user) {
+						store.destroy(p,function(err) {
+							if(err) {
+							}
+						})
+					}
+				}
 			}
 		}
 		res.redirect('/users');

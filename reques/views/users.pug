@@ -1,32 +1,48 @@
 extends header
 
 block content
-    main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
-      h2 试卷
-      div
-          textarea(id="items",style="display:none;")= JSON.stringify(rows)
-      div(class="table-responsive")
-        table(id="table1" class="table table-hover")
-          thead
-            tr
-              th
-                  button(class="btn btn-info" onclick="user(this)") 添加
-              th 用户名
-              th 状态
-              th 权限
-              th 描述
-          tbody
-            each row in rows
-                tr
-                each val, key in row
-                    if key == 'seq'
-                        td(scope="row",style="width:10px;white-space:nowrap;overflow:hidden;") 
-                            button(id=row['id'],class="btn btn-info" onclick="user(this)")= val
-                    else if key == 'id' || key == 'answer'
-                        //td(scope="row",style="display:none;")= val
-                    else if key == 'username' || key == 'status'
-                        td(scope="row",style="width:60px;white-space:nowrap;overflow:hidden;")= val
-                    else
-                        td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
-    
-            include footer
+	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
+		h2 试卷
+		div
+			textarea(id="items",style="display:none;")= JSON.stringify(rows)
+	
+		div(class="row" id="searchdiv")
+			div(class="col-lg-3")
+				div(class="form-group")
+					input(id="usernames" name="usernames" value= usernames class="form-control" placeholder="用户名" )
+			div(class="col-lg-3")
+				div(class="form-group")
+					input(id="types" name="types" value= types class="form-control" placeholder="类型" )
+			div(class="col-lg-3")
+				div(class="form-group")
+					input(id="descrips" name="descrips" value= descrips class="form-control" placeholder="描述" )
+			div(class="col-lg-3")
+				div(class="form-group")
+					button(id="usersBtn" class="btn btn-primary" onclick="search(this)") 查询
+								
+		div(class="table-responsive")
+		table(id="table1" class="table table-hover")
+			thead
+			tr
+				th
+					button(class="btn btn-info" onclick="user(this)") 添加
+				th 用户名
+				th 状态
+				th 类型
+				th 权限
+				th 描述
+			tbody
+			each row in rows
+				tr
+				each val, key in row
+					if key == 'seq'
+						td(scope="row",style="width:10px;white-space:nowrap;overflow:hidden;") 
+							button(id=row['id'],class="btn btn-info" onclick="user(this)")= val
+					else if key == 'id' || key == 'answer'
+						//td(scope="row",style="display:none;")= val
+					else if key == 'username' || key == 'status'
+						td(scope="row",style="width:60px;white-space:nowrap;overflow:hidden;")= val
+					else
+						td(scope="row",style="max-width:120px;white-space:nowrap;overflow:hidden;")= val
+		
+	include footer

@@ -191,6 +191,8 @@ function search(obj) {
 		url = "/paper?";
 	} else if(obj.id == "sessionsBtn") {
 		url = "/users/sessions?";
+	} else if(obj.id == "usersBtn") {
+		url = "/users?";
 	}
 	if(!url) {
 		return;

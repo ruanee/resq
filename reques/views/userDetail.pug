@@ -15,9 +15,9 @@ block content
 						option(selected= row['status'] != 'Active') Inactive
 				div(class="input-group")
 					span(class="input-group-addon"  for="type") 类型
-					input(type="text" id="type" name="type" value= row['type'] class="form-control" placeholder="type")
+					input(type="text" id="type" name="type" value= row['type'] class="form-control" placeholder="Test")
 				div(class="input-group")
-					span(class="input-group-addon"  for="type") 类型
+					span(class="input-group-addon"  for="type") 描述
 					textarea(type="text" id="descrip" name="descrip" rows=5 class="form-control" placeholder="Description")= row['descrip']
 				div(class="input-group")
 					label(for="roles") 权限

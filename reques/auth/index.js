@@ -5,7 +5,7 @@ const db = require('../db')
 module.exports = function(req, res, next) {
 //	console.log("req.url by auth==============>" + req.url );
 	if(!globals.userData) {
-		db.query2("select user_name username,password,type,roles from public.users where active='T' and status ='Active'", [], 
+		db.query2("select user_name username,password,type,roles,status from public.users where active='T' and status ='Active'", [], 
 			function(error, rows) {
 				if(!error) {
 					globals.userData = {};
