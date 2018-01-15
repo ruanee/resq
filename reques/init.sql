@@ -121,6 +121,22 @@ update users set password='ce6f0af232270c52eace2ec2ac949e93f4f85cf291f8d9913f554
     VALUES (uuid_generate_v4(), 'test','Active', 'test',  now(), now(),'T');
 
 update users set password='4c61e0aa42c9fc5c52a69909c8c0b4dcfc14b53112c988ff4a29753ed3b2a7b3' where user_name='test';
+
+-- wrong questions
+SELECT P.data->>'class',(P.data->>'answer'):: jsonb ->>'ans' ans, E.answ->>'ans' wans,P.*,E.qid,E.answ FROM (
+	SELECT id,type,title,jsonb_array_elements(questions) as data
+	FROM paper where active='T') P
+LEFT JOIN (select user_name,keys as qid,(answer->>keys) :: jsonb as answ,paper,token,answer ans from (
+	SELECT user_name,paper,token,jsonb_each_text(answer),jsonb_object_keys(answer) keys,answer
+	FROM exam ) A
+) E on P.id=E.paper and E.qid=P.data->>'id'
+where (P.data->>'answer'):: jsonb ->>'ans' != E.answ->>'ans'
+and E.user_name='admin'
+order by type,title
+limit 500
+
+
+
  */
 --drop TABLE public.tempquest;
 --delete from tempquest;
@@ -173,6 +189,9 @@ update paper set chapter=title;
 delete from paper where chapter is null
 
 select distinct code,type,chapter from questions where (type,chapter) not in (select type,chapter from paper)
+
+update public.questions set active='F' where type='Computer Networking';
+update public.paper set active='F' where type='Computer Networking';
 
 */
 alter table public.questions add column titlepic text, add column class text;
