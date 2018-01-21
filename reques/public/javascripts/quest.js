@@ -16,6 +16,54 @@ window.onload=function() {
 	        $(this).trigger("enterKey");
 	    }
 	});
+	if($('#jsGrid') && $('#jsGrid').length > 0) {
+	    $("#jsGrid").jsGrid({
+	        width: "100%",
+	        height: "auto",
+	 
+	        autoload: true,
+	        inserting: true,
+	        editing: true,
+	        sorting: true,
+	        paging: true,
+	        pageLoading: true,
+	 
+//	        data: [],
+	        controller: {
+	        	loadData: function(filter) {
+		            return $.ajax({
+		                type: "GET",
+		                url: "/users/menus",
+		                data: filter
+		            });
+		        },
+		        
+		        insertItem: function(item) {
+		            return $.ajax({
+		                type: "POST",
+		                url: "/users/menus",
+		                data: item
+		            });
+		        },
+		        
+		        updateItem: function(item) {
+		            return $.ajax({
+		                type: "PUT",
+		                url: "/users/menus",
+		                data: item
+		            });
+		        }
+	        },
+	        pageIndex: 1,
+	        pageSize: 20,
+	        fields: [
+	            { title:"主标题",name: "type", type: "text", width: 150, validate: "required" },
+	            { title: "副标题", name: "title",type: "text", width: 50 },
+	            { title: "显示",name: "active", type: "checkbox",  sorting: false },
+	            { type: "control" }
+	        ]
+	    });
+	}
 }
 var picpath ="files/pic/";
 function rowClick(e) {

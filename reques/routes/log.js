@@ -84,7 +84,7 @@ exports.saveExam = function(data) {
 };
 function buildParams(req, type) {
 	var data = {};
-	if(req.method == 'POST' || req.method == 'DELETE') {
+	if(req.method == 'PUT' || req.method == 'POST' || req.method == 'DELETE') {
 		data = req.body
 	} else {
 		data = req.params

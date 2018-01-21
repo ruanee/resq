@@ -182,6 +182,34 @@ router.post('/pass', function(req, res, next) {
 	});
 	
 });
+router.get('/menu', function(req, res, next) {
+	var data = log.save(req, 'menu')
+	res.render('menu', { title: 'Menu' });
+});
+router.get('/menus', function(req, res, next) {
+	var data = log.save(req, 'menu')
+	console.log(data);
+	var dback = {};
+	dback.data=globals.menus;
+	dback.itemsCount=globals.menus.length;
+	res.jsonp(dback);
+});
+router.post('/menus', function(req, res, next) {
+	var data = log.save(req, 'menu')
+//	var dback = {};
+//	dback.data=globals.menus;
+//	dback.itemsCount=globals.menus.length;
+	res.jsonp(data);
+});
+router.put('/menus', function(req, res, next) {
+	var data = log.save(req, 'menu')
+	console.log(data);
+	console.log(req.body);
+//	var dback = {};
+//	dback.data=globals.menus;
+//	dback.itemsCount=globals.menus.length;
+	res.jsonp(data);
+});
 router.get('/new', function(req, res, next) {
 	var data = log.save(req, 'user')
 	res.render('sign', { title: 'Profile' });
