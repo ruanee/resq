@@ -15,16 +15,15 @@ module.exports = function(req, res, next) {
 					}
 				}
 		});
-		
+	}
+	if(!globals.menus) {
 		db.query2("select config from settings where id ='WF'", [], 
 			function(error, rows) {
 				if(!error) {
-					globals.userData = {};
 					globals.menus=rows[0]['config'];
 				}
 		});
 	}
-	
 	var url = req.url;
 	if (url.indexOf("/?") >= 0 || url.indexOf("/captcha") >= 0 || url.indexOf("/users/new") >= 0 
 			|| url.indexOf("/login") >= 0 || url.indexOf('wechat?signature') >= 0) {
