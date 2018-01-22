@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
 	var data = log.save(req, 'paper')
 	var dback = log.common(req, data);
 	dback.title='导入';
+	dback.menus = globals.menus;
 	res.render('import',dback);
 });
 

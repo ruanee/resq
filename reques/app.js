@@ -183,7 +183,8 @@ app.post('/upload', function(req, res, next) {
             [req.body.type,req.body.chapter,(idx++) + '',data[i][col++].trim(),data[i][col++].trim(),data[i][col++],(len>= 3 ? data[i][col++] : ''),(len>= 4 ? data[i][col++] : ''),(len>= 5 ? data[i][col++] : ''),(len>= 6 ? data[i][col++] : ''),(len>= 7 ? data[i][col++] : ''),(len>= 8 ? data[i][col++] : ''),(len>= 9 ? data[i][col++] : ''),(len>= 10 ? data[i][col++] : ''),(len>= 11 ? data[i][col++] : ''),new Date()]) 
         }
       });
-      res.render('import', { title : '导入' });
+//      res.render('import', { title : '导入'});
+      res.redirect('/paper/generate2');
     });
   } catch(e) {
     console.error(e)

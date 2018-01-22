@@ -5,8 +5,10 @@ block content
 		h2 上传文件
 		form(id='uploadForm' action='/upload' method='post' encType="multipart/form-data")
 			div(class="form-group")
-				label(for="type") Type
-				input(type='text' id="type" name="type" value=type placeholder="一级目录" required autofocus class="form-text text-muted")
+				label(for="type") 主标题
+				select(class="form-control" required name="type")
+					each menu in menus
+						option=menu['type']
 			div(class="form-group")
 				label(for="chapter") Chapter
 				input(type='text' id="chapter" name="chapter" placeholder="章节" required class="form-text text-muted")
