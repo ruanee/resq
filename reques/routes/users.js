@@ -199,17 +199,41 @@ router.post('/menus', function(req, res, next) {
 //	var dback = {};
 //	dback.data=globals.menus;
 //	dback.itemsCount=globals.menus.length;
+	saveMenu(data);
 	res.jsonp(data);
 });
 router.put('/menus', function(req, res, next) {
 	var data = log.save(req, 'menu')
 	console.log(data);
 	console.log(req.body);
+	saveMenu(data);
 //	var dback = {};
 //	dback.data=globals.menus;
 //	dback.itemsCount=globals.menus.length;
 	res.jsonp(data);
 });
+function saveMenu(data) {
+	var flag = true;
+	for (var i = 0; i < globals.menus.length; i++) {
+		var menu = globals.menus[i];
+		if(menu['type'] == data['type']) {
+			menu['title'] = data['title'];
+			flag = false;
+			break;
+		}
+	}
+	
+	if(flag) {
+		var menu = {};
+		menu['title'] = data['title'];
+		menu['type'] = data['type'];
+		globals.menus.push(menu);
+	}
+	
+	db.asyncInsert('update settings set config=$1  where id=$2', 
+			[JSON.stringify(globals.menus), 'WF']);
+	
+};
 router.get('/new', function(req, res, next) {
 	var data = log.save(req, 'user')
 	res.render('sign', { title: 'Profile' });

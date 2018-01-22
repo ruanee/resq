@@ -16,13 +16,13 @@ router.get('/', function(req, res, next) {
 	var user = req.session && req.session.user ? globals.userData[req.session.user] : null;
 	if(req.session && req.session.user != 'admin' && user) {
 		for (var i = 0; i < globals.menus.length; i++) {
-			var menu = globals.menus[i];
+			var menu = JSON.parse(JSON.stringify(globals.menus[i]));
 			if(user.roles && user.roles.indexOf(menu.type) == -1) continue;
 			buildMenu(arr, menu, idx++);
 		}
 	} else {
 		for (var i = 0; i < globals.menus.length; i++) {
-			var menu = globals.menus[i];
+			var menu = JSON.parse(JSON.stringify(globals.menus[i]));
 			buildMenu(arr, menu, idx++);
 		}
 	}

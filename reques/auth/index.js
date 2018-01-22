@@ -14,7 +14,15 @@ module.exports = function(req, res, next) {
 						globals.userData[row['username']] = row;
 					}
 				}
-			});
+		});
+		
+		db.query2("select config where id ='WF'", [], 
+			function(error, rows) {
+				if(!error) {
+					globals.userData = {};
+					globals.menus=rows[0];
+				}
+		});
 	}
 	
 	var url = req.url;

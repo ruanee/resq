@@ -101,6 +101,21 @@ CREATE TABLE "session" (
 WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
+
+CREATE TABLE public.settings
+(
+  id character varying(255) NOT NULL,
+  config jsonb,
+  CONSTRAINT settings_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+
+
+INSERT INTO public.settings( id, config)
+    VALUES ('WF', '[{"type":"专升本","title":"Networking"},{"type":"Computer Networking","title":"计算机网络"},{"type":"Software Enginerring","title":"软件工程"},{"type":"Java","title":"基础习题"},{"type":"sql","title":"Oracle"},{"type":"SSH","title":"SSH"},{"type":"NTC","title":"NTC"}]'::jsonb);
+    
 /**
 
 select user_name,session_id,params::jsonb->'userAgent',request_date from request_log order by request_date desc limit 10;
