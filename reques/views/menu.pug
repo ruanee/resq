@@ -3,20 +3,5 @@ extends header
 block content
 	main(role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3")
 		h2 科目菜单
-		div
-			textarea(id="items",style="display:none;")= JSON.stringify(rows)
-		div(class="row" id="searchdiv")
-			div(class="col-lg-3")
-				div(class="form-group")
-					input(id="types" name="types" value= types class="form-control" placeholder="科目" )
-			div(class="col-lg-3")
-				div(class="form-group")
-					input(id="chapters" name="chapters" value= chapter class="form-control" placeholder="章节" )
-			div(class="col-lg-3")
-				div(class="form-group")
-					input(id="titles" name="titles" value= titles class="form-control" placeholder="题目" )
-			div(class="col-lg-3")
-				div(class="form-group")
-					button(id="paperBtn" class="btn btn-primary" onclick="search(this)") 查询
 		div(id="jsGrid" class="table-responsive")
-		include footer2
+		include footer

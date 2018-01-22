@@ -20,7 +20,7 @@ window.onload=function() {
 	    $("#jsGrid").jsGrid({
 	        width: "100%",
 	        height: "auto",
-	 
+	        filtering: true,
 	        autoload: true,
 	        inserting: true,
 	        editing: true,
