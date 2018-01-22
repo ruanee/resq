@@ -16,11 +16,11 @@ module.exports = function(req, res, next) {
 				}
 		});
 		
-		db.query2("select config where id ='WF'", [], 
+		db.query2("select config from settings where id ='WF'", [], 
 			function(error, rows) {
 				if(!error) {
 					globals.userData = {};
-					globals.menus=rows[0];
+					globals.menus=rows[0]['config'];
 				}
 		});
 	}

@@ -188,7 +188,7 @@ router.get('/menu', function(req, res, next) {
 });
 router.get('/menus', function(req, res, next) {
 	var data = log.save(req, 'menu')
-	console.log(data);
+//	console.log(data);
 	var dback = {};
 	dback.data=globals.menus;
 	dback.itemsCount=globals.menus.length;
@@ -204,8 +204,8 @@ router.post('/menus', function(req, res, next) {
 });
 router.put('/menus', function(req, res, next) {
 	var data = log.save(req, 'menu')
-	console.log(data);
-	console.log(req.body);
+//	console.log(data);
+//	console.log(req.body);
 	saveMenu(data);
 //	var dback = {};
 //	dback.data=globals.menus;
